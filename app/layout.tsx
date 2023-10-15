@@ -3,8 +3,6 @@
 import { Open_Sans } from 'next/font/google'
 import { useLocalStorage } from 'usehooks-ts'
 import { ThemeProvider } from 'styled-components'
-import { DefaultSeo } from 'next-seo'
-import SEO from '@/next-seo.config'
 import NextProgress from 'next-progress'
 
 import StyledComponentsRegistry from '@/lib/registry'
@@ -30,7 +28,6 @@ export default function RootLayout({
     <html lang="en">
       <body className={font.className}>
         <StyledComponentsRegistry>
-          <DefaultSeo {...SEO} />
           <NextProgress
             color={progressColor}
             delay={300}
