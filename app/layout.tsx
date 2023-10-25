@@ -5,7 +5,7 @@ import { useLocalStorage } from 'usehooks-ts'
 import { ThemeProvider } from 'styled-components'
 import NextProgress from 'next-progress'
 
-import StyledComponentsRegistry from '@/lib/registry'
+import StyledComponentsRegistry from '@/lib/styled_components/registry'
 
 import { defaultTheme } from '@/styles/themes/default-theme'
 import GlobalStyles from '@/styles/themes/global-styles'

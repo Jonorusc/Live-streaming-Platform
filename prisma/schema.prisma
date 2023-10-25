@@ -1,0 +1,87 @@
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  email          String       @unique
+  username       String       @unique
+  profile        Profile?
+  channel        Channel?
+  follows        Follower[]
+  subscriptions  Subscriber[]
+  email_verified Boolean      @default(false)
+  deactivated    Boolean      @default(false)
+  last_login     DateTime     @default(now())
+  created_at     DateTime     @default(now())
+  updated_at     DateTime     @updatedAt
+}
+
+model Profile {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String   @unique @db.ObjectId
+  avatar     String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Channel {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  owner       User         @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId     String       @unique @db.ObjectId
+  followers   Follower[]
+  subscribers Subscriber[]
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @updatedAt
+}
+
+enum FollowerRole {
+  VIEWER
+  STREAMER
+  MODERATOR
+}
+
+enum FollowerRank {
+  NEW
+  REGULAR
+  ENTHUSIAST
+  FAN
+  SUPER_FAN
+}
+
+model Follower {
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  role       FollowerRole @default(VIEWER)
+  rank       FollowerRank @default(NEW)
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String       @db.ObjectId
+  channel    Channel      @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  channelId  String       @db.ObjectId
+  created_at DateTime     @default(now())
+  updated_at DateTime     @updatedAt
+}
+
+// enum SubscriberTier {
+//   TIER_1
+//   TIER_2
+//   TIER_3
+// }
+
+model Subscriber {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  // subTier   SubscriberTier @default(TIER_1)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String   @db.ObjectId
+  channel    Channel  @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  channelId  String   @db.ObjectId
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
