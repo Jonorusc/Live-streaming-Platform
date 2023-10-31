@@ -9,10 +9,7 @@
       "version": "detect"
     }
   },
-  "extends": [
-    "next/core-web-vitals",
-    "plugin:storybook/recommended"
-  ],
+  "extends": ["next/core-web-vitals", "plugin:storybook/recommended"],
   "rules": {
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
