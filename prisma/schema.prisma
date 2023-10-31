@@ -11,6 +11,7 @@ datasource db {
 
 model User {
   id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  firebase_id    String       @unique
   email          String       @unique
   username       String       @unique
   profile        Profile?
