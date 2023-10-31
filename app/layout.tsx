@@ -1,6 +1,6 @@
 'use client'
 
-import { Open_Sans } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import { useLocalStorage } from 'usehooks-ts'
 import { ThemeProvider } from 'styled-components'
 import NextProgress from 'next-progress'
@@ -12,7 +12,7 @@ import GlobalStyles from '@/styles/themes/global-styles'
 
 import { ModalProvider } from '@/components/providers/modal-provider'
 
-const font = Open_Sans({ subsets: ['latin'] })
+const font = Inter({ subsets: ['latin'] })
 export default function RootLayout({
   children
 }: {
