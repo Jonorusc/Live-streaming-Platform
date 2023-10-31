@@ -6,6 +6,8 @@ import styled, { css } from 'styled-components'
 
 import type { COLORS } from '@/components/ui/types'
 
+import React from 'react'
+
 interface IconProps extends Omit<LucideProps, 'color'> {
   name?: keyof typeof dynamicIconImports
   color?: COLORS
@@ -18,7 +20,7 @@ const Wrapper = styled.div<IconProps>`
   `}
 `
 
-const Icon = ({ name, ...props }: IconProps) => {
+const Icon = React.memo(({ name, ...props }: IconProps) => {
   if (!name) return null
 
   const LucideIcon = dynamic(dynamicIconImports[name])
@@ -28,6 +30,8 @@ const Icon = ({ name, ...props }: IconProps) => {
       <LucideIcon {...props} />
     </Wrapper>
   )
-}
+})
+
+Icon.displayName = 'Icon'
 
 export default Icon

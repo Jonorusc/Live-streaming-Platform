@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components'
 import { lighten } from 'polished'
 
-export const Wrapper = styled.div<{ error?: boolean }>`
-  ${({ theme, error }) => css`
+export const Wrapper = styled.div<{ $error?: boolean }>`
+  ${({ theme, $error }) => css`
     color: ${theme.palette.text.base};
     background-color: ${theme.palette.background};
     vertical-align: baseline;
@@ -23,7 +23,7 @@ export const Wrapper = styled.div<{ error?: boolean }>`
       width: inherit;
       padding: 0.5rem 1rem;
       box-shadow: inset 0 0 0 1px
-        ${error ? theme.palette.error : theme.palette.grey};
+        ${$error ? theme.palette.error : theme.palette.grey};
       border-radius: 0.5rem;
       line-height: 1.5;
       border: solid 0.1rem transparent;
@@ -31,14 +31,14 @@ export const Wrapper = styled.div<{ error?: boolean }>`
 
       &:focus {
         outline: solid 0.2rem ${
-          error ? theme.palette.error : theme.palette.primary
+          $error ? theme.palette.error : theme.palette.primary
         };
         outline-offset: -0.1rem;
-        border-color: ${error ? theme.palette.error : theme.palette.primary};
+        border-color: ${$error ? theme.palette.error : theme.palette.primary};
         box-shadow:
-          0 0 0 0.2rem ${error ? theme.palette.error : theme.palette.primary};,
+          0 0 0 0.2rem ${$error ? theme.palette.error : theme.palette.primary};,
           inset 0 0 0 0.2rem ${
-            error ? theme.palette.error : theme.palette.primary
+            $error ? theme.palette.error : theme.palette.primary
           };
       }
 
@@ -56,7 +56,7 @@ export const Wrapper = styled.div<{ error?: boolean }>`
       &:not(:focus):hover {
         border-color: ${lighten(
           0.1,
-          error ? theme.palette.error : theme.palette.grey
+          $error ? theme.palette.error : theme.palette.grey
         )};
       }
 

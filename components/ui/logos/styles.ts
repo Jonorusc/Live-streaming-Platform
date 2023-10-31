@@ -2,12 +2,12 @@ import styled, { css, keyframes } from 'styled-components'
 
 import { ANIMATIONS } from '@/components/ui/types'
 
-export const Figure = styled.figure<{ fillColor?: string }>`
-  ${({ theme, fillColor }) => css`
+export const Figure = styled.figure<{ $fillColor?: string }>`
+  ${({ theme, $fillColor }) => css`
     display: inline-flex;
     -webkit-box-align: center;
     align-items: center;
-    fill: ${fillColor || theme.palette.primary};
+    fill: ${$fillColor || theme.palette.primary};
   `}
 `
 const blink = keyframes`

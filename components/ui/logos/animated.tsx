@@ -49,7 +49,7 @@ export const TwitchAnimated = ({
   }, [])
 
   return (
-    <Figure fillColor={fillColor}>
+    <Figure $fillColor={fillColor}>
       <Svg
         ref={svg}
         overflow="visible"

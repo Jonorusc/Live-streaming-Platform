@@ -15,33 +15,33 @@ type WrapperProps = Omit<ButtonProps, 'children'>
 export const Wrapper = styled.button<WrapperProps>`
   ${({
     theme,
-    bgcolor,
-    hoverColor,
-    color,
-    fontSize,
-    fontWeight,
-    width,
-    padding,
-    position,
-    top,
-    left,
-    bottom,
-    right,
-    error,
+    $bgcolor,
+    $hoverColor,
+    $color,
+    $fontSize,
+    $fontWeight,
+    $width,
+    $padding,
+    $position,
+    $top,
+    $left,
+    $bottom,
+    $right,
+    $error,
     disabled,
-    border,
-    borderColor,
-    borderSize
+    $border,
+    $borderColor,
+    $borderSize
   }) => css`
-    ${border && !error
+    ${$border && !$error
       ? css`
-          ${!!borderColor
+          ${!!$borderColor
             ? css`
-                border: ${`${borderSize}px`} solid
-                  ${theme.palette[borderColor as COLORS]};
+                border: ${`${$borderSize}px`} solid
+                  ${theme.palette[$borderColor as COLORS]};
               `
             : css`
-                border: ${`${borderSize}px`} solid ${theme.palette.primary};
+                border: ${`${$borderSize}px`} solid ${theme.palette.primary};
               `};
         `
       : css`
@@ -52,51 +52,51 @@ export const Wrapper = styled.button<WrapperProps>`
     cursor: pointer;
     transition: opacity 0.3s ease-in-out;
 
-    ${!!bgcolor &&
+    ${!!$bgcolor &&
     css`
-      background-color: ${lighten(0.1, theme.palette[bgcolor as COLORS])};
+      background-color: ${lighten(0.1, theme.palette[$bgcolor as COLORS])};
     `};
-    ${!!color &&
+    ${!!$color &&
     css`
-      color: ${theme.palette[color]};
+      color: ${theme.palette[$color]};
     `};
-    ${!!fontSize &&
+    ${!!$fontSize &&
     css`
-      font-size: calc(${theme.font.size[fontSize]} - 0.2rem);
+      font-size: calc(${theme.font.size[$fontSize]} - 0.2rem);
     `};
-    ${!!fontWeight &&
+    ${!!$fontWeight &&
     css`
-      font-weight: ${theme.font[fontWeight]};
+      font-weight: ${theme.font[$fontWeight]};
     `};
-    ${!!padding &&
+    ${!!$padding &&
     css`
-      padding: ${theme.spacing[padding]};
+      padding: ${theme.spacing[$padding]};
     `};
 
-    width: ${width || 'auto'};
+    width: ${$width || 'auto'};
 
-    ${!!position &&
+    ${!!$position &&
     css`
-      position: ${position};
+      position: ${$position};
 
-      ${!!top &&
+      ${!!$top &&
       css`
-        top: ${top};
+        top: ${$top};
       `};
 
-      ${!!left &&
+      ${!!$left &&
       css`
-        left: ${left};
+        left: ${$left};
       `};
 
-      ${!!bottom &&
+      ${!!$bottom &&
       css`
-        bottom: ${bottom};
+        bottom: ${$bottom};
       `};
 
-      ${!!right &&
+      ${!!$right &&
       css`
-        right: ${right};
+        right: ${$right};
       `};
     `}
 
@@ -107,25 +107,25 @@ export const Wrapper = styled.button<WrapperProps>`
     `};
 
     &:hover {
-      ${error &&
+      ${$error &&
       css`
         background-color: ${lighten(0.2, theme.palette.error)};
       `}
 
       ${!disabled &&
-      !error &&
+      !$error &&
       css`
-        ${!!hoverColor
+        ${!!$hoverColor
           ? css`
               background-color: ${darken(
                 0.1,
-                theme.palette[hoverColor as COLORS]
+                theme.palette[$hoverColor as COLORS]
               )};
             `
           : css`
               background-color: ${darken(
                 0.1,
-                theme.palette[bgcolor as COLORS]
+                theme.palette[$bgcolor as COLORS]
               )};
             `}
       `}
@@ -134,19 +134,19 @@ export const Wrapper = styled.button<WrapperProps>`
     &:focus,
     &:active {
       outline: solid 0.2rem
-        ${error ? theme.palette.error : theme.palette[bgcolor as COLORS]};
+        ${$error ? theme.palette.error : theme.palette[$bgcolor as COLORS]};
       outline-offset: -0.1rem;
-      border-color: ${error
+      border-color: ${$error
         ? theme.palette.error
-        : theme.palette[bgcolor as COLORS]};
+        : theme.palette[$bgcolor as COLORS]};
       box-shadow:
         0 0 0 0.2rem
-          ${error ? theme.palette.error : theme.palette[bgcolor as COLORS]},
+          ${$error ? theme.palette.error : theme.palette[$bgcolor as COLORS]},
         inset 0 0 0 0.2rem
-          ${error ? theme.palette.error : theme.palette[bgcolor as COLORS]};
+          ${$error ? theme.palette.error : theme.palette[$bgcolor as COLORS]};
     }
 
-    ${error &&
+    ${$error &&
     css`
         background-color: ${lighten(0.1, theme.palette.error)};
         outline: solid 0.2rem ${darken(0.1, theme.palette.error)};
