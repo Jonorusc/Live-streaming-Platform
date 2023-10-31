@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // output: 'export', // for next export static site
   reactStrictMode: true,
   swcMinify: true,
   compiler: {
