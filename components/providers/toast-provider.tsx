@@ -3,13 +3,11 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 
-import SignUpModal from '@/components/modals/sign-up'
+import { useToast } from '@/hooks/use-toast'
 
-import { useModal } from '@/hooks/use-modal'
-
-export const ModalProvider = () => {
+export const ToastProvider = () => {
   const [isMounted, setIsMounted] = useState(false)
-  const { isOpen, type } = useModal()
+  const { toasts, show } = useToast()
 
   useEffect(() => {
     setIsMounted(true)
@@ -21,7 +19,9 @@ export const ModalProvider = () => {
 
   return (
     <AnimatePresence>
-      {isOpen && type === 'signup' && <SignUpModal />}
+      {/* {show && toasts.map((toast) => (
+        <Toast key={toast.id} message={toast.message} position={toast.position} />
+      ))} */}
     </AnimatePresence>
   )
 }
