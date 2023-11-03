@@ -1,4 +1,3 @@
-// https://zustand-demo.pmnd.rs/
 import { create } from 'zustand'
 
 export type ModalType = 'signin' | 'signup'
