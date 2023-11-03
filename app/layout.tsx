@@ -11,6 +11,7 @@ import { defaultTheme } from '@/styles/themes/default-theme'
 import GlobalStyles from '@/styles/themes/global-styles'
 
 import { ModalProvider } from '@/components/providers/modal-provider'
+import { ToastProvider } from '@/components/providers/toast-provider'
 
 const font = Inter({ subsets: ['latin'] })
 export default function RootLayout({
@@ -37,6 +38,7 @@ export default function RootLayout({
           <ThemeProvider theme={theme}>
             <GlobalStyles />
             <ModalProvider />
+            <ToastProvider />
             {children}
           </ThemeProvider>
         </StyledComponentsRegistry>
