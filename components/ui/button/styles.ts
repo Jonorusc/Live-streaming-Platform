@@ -3,12 +3,7 @@ import { darken, lighten } from 'polished'
 
 import { ButtonProps } from '@/components/ui/button'
 
-import type {
-  COLORS,
-  FONT_SIZE,
-  FONT_WEIGHT,
-  PADDING
-} from '@/components/ui/types'
+import type { COLORS } from '@/components/ui/types'
 
 type WrapperProps = Omit<ButtonProps, 'children'>
 

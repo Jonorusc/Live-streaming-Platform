@@ -1,9 +1,10 @@
+'use client'
 import { useEffect, useState, useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { TEXTFIELD_TYPES } from '@/components/ui/types'
 import { SVGLogo } from '@/components/ui/logos/svg'
-import passwordStrength from '@/utils/passwordStrength'
+import passwordStrength from '@/utils/password-strength'
 import Flex from '@/components/ui/flex'
 
 import ReactLoading from 'react-loading'
@@ -49,7 +50,6 @@ const TextField = React.memo(
     // Update the value of the field
     useEffect(() => {
       setValue(name, value)
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [name, value])
 
     // Determine the response status
@@ -74,7 +74,6 @@ const TextField = React.memo(
         )
       }
       return null
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loading, $error, $success, value])
 
     // Debounce the setLoading function

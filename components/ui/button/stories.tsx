@@ -10,51 +10,51 @@ const meta: Meta<typeof Button> = {
   tags: ['autodocs'],
   args: {
     children: 'Button',
-    bgcolor: 'primary',
-    color: 'dark',
-    fontSize: 'medium',
-    fontWeight: 'bold',
-    error: false,
+    $bgcolor: 'primary',
+    $color: 'dark',
+    $fontSize: 'medium',
+    $fontWeight: 'bold',
+    $error: false,
     disabled: false
   },
   argTypes: {
-    bgcolor: {
+    $bgcolor: {
       control: {
         type: 'select'
       },
       options: ['primary', 'secondary', 'grey', 'transparent']
     },
-    color: {
+    $color: {
       control: {
         type: 'select'
       },
       options: ['primary', 'secondary', 'dark', 'light', 'grey']
     },
-    borderColor: {
+    $borderColor: {
       control: {
         type: 'select'
       },
       options: ['primary', 'secondary', 'dark', 'light', 'grey', 'transparent']
     },
-    fontSize: {
+    $fontSize: {
       control: {
         type: 'select'
       },
       options: ['small', 'medium', 'large']
     },
-    fontWeight: {
+    $fontWeight: {
       control: {
         type: 'select'
       },
       options: ['normal', 'bold']
     },
-    padding: {
+    $padding: {
       control: {
         type: 'select'
       },
       options: ['small', 'medium', 'large', 'none']
     },
-    position: {
+    $position: {
       control: {
         type: 'select'
       },

@@ -1,24 +1,20 @@
+'use client'
+import { Wrapper } from './styles'
+
 import dynamic from 'next/dynamic'
 import { LucideProps } from 'lucide-react'
 import dynamicIconImports from 'lucide-react/dynamicIconImports'
-
-import styled, { css } from 'styled-components'
+import ReactLoading from 'react-loading'
+import { defaultTheme } from '@/styles/themes/default-theme'
 
 import type { COLORS } from '@/components/ui/types'
 
-import React from 'react'
+import React, { Suspense } from 'react'
 
-interface IconProps extends Omit<LucideProps, 'color'> {
+export interface IconProps extends Omit<LucideProps, 'color'> {
   name?: keyof typeof dynamicIconImports
   color?: COLORS
 }
-
-const Wrapper = styled.div<IconProps>`
-  ${({ theme, color, size }) => css`
-    color: ${color ? theme.palette[color] : theme.palette.text.base};
-    height: ${size ? `${size}px` : 'auto'};
-  `}
-`
 
 const Icon = React.memo(({ name, ...props }: IconProps) => {
   if (!name) return null
@@ -26,8 +22,19 @@ const Icon = React.memo(({ name, ...props }: IconProps) => {
   const LucideIcon = dynamic(dynamicIconImports[name])
 
   return (
-    <Wrapper {...props}>
-      <LucideIcon {...props} />
+    <Wrapper color={props.color} size={props.size}>
+      <Suspense
+        fallback={
+          <ReactLoading
+            type="spin"
+            color={defaultTheme.palette.accent}
+            height={16}
+            width={16}
+          />
+        }
+      >
+        <LucideIcon {...props} />
+      </Suspense>
     </Wrapper>
   )
 })

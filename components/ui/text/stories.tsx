@@ -11,7 +11,10 @@ export default {
   },
   args: {
     label: 'Label',
-    type: 'text'
+    type: 'text',
+    $response: false,
+    $error: '',
+    $success: false
   },
   argTypes: {
     type: {

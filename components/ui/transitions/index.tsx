@@ -31,7 +31,6 @@ const PageTransition = ({
   //     router.events.off('routeChangeStart', handleRouteChangeStart)
   //     router.events.off('routeChangeComplete', handleRouteChangeComplete)
   //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [])
 
   return (

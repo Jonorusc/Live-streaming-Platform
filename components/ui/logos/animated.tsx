@@ -1,3 +1,4 @@
+'use client'
 import { useRef, useEffect } from 'react'
 
 import { Figure, Svg } from './styles'
@@ -44,8 +45,6 @@ export const TwitchAnimated = ({
       svgElement.addEventListener('mouseenter', animate)
       svgElement.removeEventListener('mouseleave', stop)
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
