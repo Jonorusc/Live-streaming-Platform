@@ -1,27 +1,45 @@
-// components/themes/defaultTheme.tsx
 import { DefaultTheme } from 'styled-components'
 export const defaultTheme: DefaultTheme = {
-  name: 'default',
-  bodyColor: '#F2F4F9',
+  name: 'light',
   containerMaxWidth: '136.6rem', // laptop pro 15" width
   htmlFontSize: '62.5%', // 1rem = 10px
   palette: {
-    primary: '#6441a5',
-    secondary: '#2094FD',
+    text: {
+      base: '#0e0e10',
+      secondary: '#53535f',
+      label: '#18181b'
+    },
+    background: '#f7f7f8',
+    surface: '#efeff1',
+    primary: '#9147ff',
+    secondary: '#41a564',
+    analogous1: '#6441a5',
+    analogous2: '#4164a5',
+    triadic1: '#a54164',
+    triadic2: '#64a541',
+    splitComplementary1: '#41a564',
+    splitComplementary2: '#a56441',
     green: '#31C975',
-    blueGreen: '#00A19D',
-    dark: '#344352',
     lightGreen: '#D4F4E2',
-    grey: '#B4BDC7',
-    darker: '#141C22',
+    blueGreen: '#00A19D',
+    dark: '#1f1f23',
+    darker: '#0e0e10',
+    grey: '#B4BDc7',
     darkenBlue: '#194B78',
     whiteSmoke: '#f5f5f5',
     black: '#000000',
-    error: '#ff7474'
+    red: '#e91916',
+    warn: '#ffd37a',
+    info: '#1f69ff',
+    success: '#00f593',
+    error: '#eb0400',
+    accent: '#9147ff',
+    transparent: 'transparent'
   },
   font: {
-    family: 'Open Sans ,sans-serif',
+    family: 'Inter, Open Sans ,sans-serif',
     size: {
+      xsmall: '1.3rem',
       small: '1.6rem',
       medium: '2.4rem',
       large: '3.2rem',
