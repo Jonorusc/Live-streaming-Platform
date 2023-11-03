@@ -15,7 +15,8 @@ import Button from '@/components/ui/button'
 import Grid from '@/components/ui/grid'
 import TextField from '@/components/ui/text'
 import Flex from '@/components/ui/flex'
-import passwordStrength from '@/utils/passwordStrength'
+import passwordStrength from '@/utils/password-strength'
+import { useToast } from '@/hooks/use-toast'
 
 const schema = z.object({
   username: z
@@ -35,21 +36,23 @@ const schema = z.object({
         message: 'This username is already taken'
       }
     ),
-  email: z.string().email({ message: 'Invalid email address' })
-  .refine(
-    async (email) => {
-      if (email.length < 6) return false
-      try {
-        await axios.get('/api/users', { params: { email } })
-        return false
-      } catch {
-        return true
+  email: z
+    .string()
+    .email({ message: 'Invalid email address' })
+    .refine(
+      async (email) => {
+        if (email.length < 6) return false
+        try {
+          await axios.get('/api/users', { params: { email } })
+          return false
+        } catch {
+          return true
+        }
+      },
+      {
+        message: 'This email is already linked to an account'
       }
-    },
-    {
-      message: 'This email is already linked to an account'
-    }
-  ),
+    ),
   password: z
     .string()
     .min(6, { message: 'Password must be at least 6 characters' })
@@ -69,6 +72,7 @@ type SignUpFormValues = z.infer<typeof schema>
 export type SignUpModalProps = {}
 const SignUpModal = (props: SignUpModalProps) => {
   const { onClose, onOpen } = useModal()
+  const { addToast } = useToast()
 
   const methods = useForm<SignUpFormValues>({
     resolver: zodResolver(schema),
@@ -82,8 +86,21 @@ const SignUpModal = (props: SignUpModalProps) => {
 
       // send notification and close the modal
       onClose()
-    } catch(error) {
-      console.log(error)
+      addToast({
+        id: Date.now(),
+        type: 'info',
+        message: 'Account created successfully. Enjoy Twitch!',
+        position: 'top-left',
+        timeout: 5000
+      })
+    } catch (error) {
+      addToast({
+        id: Date.now(),
+        type: 'info',
+        message: 'An error occurred while creating your account. Try again.',
+        position: 'top-left',
+        timeout: 5000
+      })
     }
     onClose()
   }
@@ -95,7 +112,7 @@ const SignUpModal = (props: SignUpModalProps) => {
           $position="absolute"
           $top="1rem"
           $right="1rem"
-          $hoverColor="grey"
+          $hoverColor="surface"
           onClick={onClose}
         >
           <Grid $placeItems="center">
@@ -149,7 +166,7 @@ const SignUpModal = (props: SignUpModalProps) => {
                   <Button
                     $fontSize="small"
                     $color="primary"
-                    $hoverColor="grey"
+                    $hoverColor="surface"
                     $fontWeight="semiBold"
                     onClick={() => {
                       onClose()

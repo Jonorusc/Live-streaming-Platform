@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components'
-import { lighten } from 'polished'
-import {motion} from 'framer-motion'
+import { motion } from 'framer-motion'
 
 import { Wrapper as Button } from '@/components/ui/button/styles'
 
@@ -13,7 +12,7 @@ export const ModalSignUp = styled(motion.div).attrs({
       type: 'spring',
       stiffness: 200,
       damping: 20,
-      duration: 1,
+      duration: 1
     }
   }
 })`
@@ -23,12 +22,6 @@ export const ModalSignUp = styled(motion.div).attrs({
 
     @media screen and (max-width: 414px) {
       width: 100%;
-    }
-
-    ${Button}:not([type='submit']) {
-      &:hover {
-        background-color: ${lighten(0.2, theme.palette.grey)};
-      }
     }
 
     form {

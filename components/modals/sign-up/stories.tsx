@@ -7,8 +7,7 @@ const meta: Meta<typeof SignUpModal> = {
   parameters: {
     layout: 'centered'
   },
-  tags: ['autodocs'],
-  args: {}
+  tags: ['autodocs']
 } satisfies Meta<typeof SignUpModal>
 
 export default meta
