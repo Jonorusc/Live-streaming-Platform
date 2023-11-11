@@ -11,6 +11,8 @@ export const ModalWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    /* blur filter */
+    backdrop-filter: blur(0.2rem);
 
     > div {
       background-color: ${theme.palette.background};
