@@ -24,7 +24,9 @@ export const defaultTheme: DefaultTheme = {
     blueGreen: '#00A19D',
     dark: '#1f1f23',
     darker: '#0e0e10',
-    grey: '#B4BDc7',
+    darkGrey: '#adadb838',
+    grey: '#53535f',
+    lightGrey: '#848494',
     darkenBlue: '#194B78',
     whiteSmoke: '#f5f5f5',
     black: '#000000',
@@ -33,7 +35,7 @@ export const defaultTheme: DefaultTheme = {
     info: '#1f69ff',
     success: '#00f593',
     error: '#eb0400',
-    accent: '#9147ff',
+    accent: '#6441a5',
     transparent: 'transparent'
   },
   font: {
@@ -60,7 +62,7 @@ export const defaultTheme: DefaultTheme = {
       large: '6px 6px 6px'
     },
     box: {
-      small: '1px 1px 15px -4px',
+      small: '0px 2px 7px -4px',
       medium: '1px 1px 9px 0px',
       large: '1px 1px 13px 3px'
     }

@@ -25,6 +25,16 @@ const GlobalStyles = createGlobalStyle`
         height: 0;
       }
     }
+
+    a {
+      text-decoration: none;
+      color: ${theme.palette.primary};
+      font-size: calc(${theme.font.size.xsmall} - 0.1rem);
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   `};
 
 `

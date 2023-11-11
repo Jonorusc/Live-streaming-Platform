@@ -24,7 +24,9 @@ export const darkTheme: DefaultTheme = {
     blueGreen: '#00A19D',
     dark: '#1f1f23',
     darker: '#0e0e10',
-    grey: '#53535f7a',
+    darkGrey: '#adadb838',
+    grey: '#adadb8',
+    lightGrey: '#848494',
     darkenBlue: '#194B78',
     whiteSmoke: '#f5f5f5',
     black: '#000000',
@@ -33,7 +35,7 @@ export const darkTheme: DefaultTheme = {
     info: '#1f69ff',
     success: '#00f593',
     error: '#eb0400',
-    accent: '#9147ff',
+    accent: '#6441a5',
     transparent: 'transparent'
   },
   font: {
