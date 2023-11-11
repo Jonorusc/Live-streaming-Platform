@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 
 import SignUpModal from '@/components/modals/sign-up'
+import SignInModal from '@/components/modals/sign-in'
 
 import { useModal } from '@/hooks/use-modal'
 
@@ -22,6 +23,7 @@ export const ModalProvider = () => {
   return (
     <AnimatePresence>
       {isOpen && type === 'signup' && <SignUpModal />}
+      {isOpen && type === 'signin' && <SignInModal />}
     </AnimatePresence>
   )
 }
