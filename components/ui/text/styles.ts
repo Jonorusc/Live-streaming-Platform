@@ -9,7 +9,26 @@ export const Wrapper = styled.div<{ $error?: boolean }>`
     width: 100%;
     margin-bottom: ${theme.spacing.large};
 
-    & > input {
+    /* takes the div which have aria-label="input" */
+    & > div[aria-label='password'] {
+      position: relative;
+
+      svg {
+        position: absolute;
+        top: 50%;
+        right: 1rem;
+        transform: translateY(-50%);
+        cursor: pointer;
+        opacity: 0.5;
+        z-index: ${theme.layers.overlay};
+      }
+    }
+
+
+    & > div {
+      width: 100%;
+      > input {
+      transform: translateZ(0);
       background-color: transparent;
       color: ${theme.palette.text.base};
       font-family: inherit;
@@ -100,8 +119,10 @@ export const Error = styled.p`
     font-size: calc(${theme.font.size.small} - 0.4rem);
     font-weight: ${theme.font.bold};
     margin-top: 0.5rem;
+    line-height: 1.2;
     white-space: pre-wrap;
     text-align: justify;
+    transform: translateZ(0);
 
     &::before {
       content: '⚠ ';

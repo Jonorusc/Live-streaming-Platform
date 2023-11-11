@@ -1,13 +1,31 @@
+'use client'
+
+import { DefaultTheme } from 'styled-components'
 import { Figure } from './styles'
+import { useReadLocalStorage } from 'usehooks-ts'
 
-export type SVGProps = 'fail' | 'success' | 'warning'
+export type SVGTYPES = 'fail' | 'success' | 'warning' | 'info'
 
-export const SVGLogo = ({ type }: { type: SVGProps }) => {
-  switch (type) {
+export type SVGProps = {
+  $type: SVGTYPES
+  $size?: number
+}
+
+export const SVGLogo = ({ $type, $size = 18 }: SVGProps) => {
+  const theme: DefaultTheme | null = useReadLocalStorage('theme')
+
+  const colors = {
+    fail: theme?.colors?.error || '#eb0400',
+    success: theme?.colors?.success || '#00f593',
+    warning: theme?.colors?.warning || '#fba12e',
+    info: theme?.colors?.info || '#1f69ff'
+  }
+
+  switch ($type) {
     case 'fail': {
       return (
-        <Figure $fillColor="#eb0400">
-          <svg width="18" height="18" viewBox="0 0 20 20">
+        <Figure $fillColor={colors.fail}>
+          <svg width={$size} height={$size} viewBox="0 0 20 20">
             <path
               fillRule="evenodd"
               d="M2 10a8 8 0 1 0 16 0 8 8 0 0 0-16 0zm12 1V9H6v2h8z"
@@ -19,8 +37,8 @@ export const SVGLogo = ({ type }: { type: SVGProps }) => {
     }
     case 'success': {
       return (
-        <Figure $fillColor="#00f593">
-          <svg width="18" height="18" viewBox="0 0 20 20">
+        <Figure $fillColor={colors.success}>
+          <svg width={$size} height={$size} viewBox="0 0 20 20">
             <path
               fillRule="evenodd"
               d="M10 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm3 5 1.5 1.5L9 14l-3.5-3.5L7 9l2 2 4-4z"
@@ -32,8 +50,8 @@ export const SVGLogo = ({ type }: { type: SVGProps }) => {
     }
     case 'warning': {
       return (
-        <Figure $fillColor="#fba12e">
-          <svg width="18" height="18" viewBox="0 0 20 20" x="0px" y="0px">
+        <Figure $fillColor={colors.warning}>
+          <svg width={$size} height={$size} viewBox="0 0 20 20" x="0px" y="0px">
             <g>
               <path
                 fillRule="evenodd"
@@ -41,6 +59,16 @@ export const SVGLogo = ({ type }: { type: SVGProps }) => {
                 clipRule="evenodd"
               ></path>
             </g>
+          </svg>
+        </Figure>
+      )
+    }
+    case 'info': {
+      return (
+        <Figure $fillColor={colors.info}>
+          <svg height={$size} viewBox="0 0 48 48" width={$size}>
+            <path d="M0 0h48v48h-48z" fill="none" />
+            <path d="M24 4c-11.05 0-20 8.95-20 20s8.95 20 20 20 20-8.95 20-20-8.95-20-20-20zm2 30h-4v-12h4v12zm0-16h-4v-4h4v4z" />
           </svg>
         </Figure>
       )

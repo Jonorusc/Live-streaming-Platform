@@ -14,7 +14,8 @@ export default {
     type: 'text',
     $response: false,
     $error: '',
-    $success: false
+    $success: false,
+    $loading: false
   },
   argTypes: {
     type: {

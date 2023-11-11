@@ -6,7 +6,8 @@ import type {
   HEIGHT,
   JUSTIFY,
   ALIGN,
-  PLACEITEMS
+  PLACEITEMS,
+  COLORS
 } from '@/components/ui/types'
 
 const Grid = styled.div<{
@@ -22,8 +23,10 @@ const Grid = styled.div<{
   $margin?: string
   $width?: WIDTH
   $height?: HEIGHT
+  $background?: COLORS
 }>`
   ${({
+    theme,
     $columns,
     $rows,
     $placeItems,
@@ -35,7 +38,8 @@ const Grid = styled.div<{
     $padding,
     $margin,
     $width,
-    $height
+    $height,
+    $background
   }) => css`
     display: grid;
     gap: ${$gap || '0'};
@@ -45,6 +49,7 @@ const Grid = styled.div<{
     margin: ${$margin || '0'};
     width: ${$width || 'auto'};
     height: ${$height || 'auto'};
+    background-color: ${theme.palette[$background!] || 'transparent'};
 
     ${!!$columns && `grid-template-columns: ${$columns};`}
     ${!!$rows && `grid-template-rows: ${$rows};`};

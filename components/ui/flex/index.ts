@@ -8,7 +8,8 @@ import type {
   ALIGNCONTENT,
   ALINGSELF,
   DIRECTION,
-  JUSTIFY
+  JUSTIFY,
+  COLORS
 } from '@/components/ui/types'
 
 const Flex = styled.div<{
@@ -24,8 +25,10 @@ const Flex = styled.div<{
   $margin?: string
   $width?: WIDTH
   $height?: HEIGHT
+  $background?: COLORS
 }>`
   ${({
+    theme,
     $direction,
     $align,
     $alingSelf,
@@ -36,7 +39,8 @@ const Flex = styled.div<{
     $padding,
     $margin,
     $width,
-    $height
+    $height,
+    $background
   }) => css`
     display: flex;
     flex-direction: ${$direction || 'row'};
@@ -50,8 +54,9 @@ const Flex = styled.div<{
     ${!!$align && `align-items: ${$align};`}
     ${!!$alingSelf && `align-self: ${$alingSelf};`}
     justify-content: ${$justify || 'unset'};
+    background-color: ${theme.palette[$background!] || 'transparent'};
 
-    @media screen and (max-width: 414px) {
+    @media (max-width: 414px) {
       width: 100%;
     }
   `}
