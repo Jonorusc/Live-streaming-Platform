@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export', // for next export static site
+  // output: 'export', // for next export static site
   reactStrictMode: true,
   swcMinify: true,
   compiler: {
@@ -30,9 +30,18 @@ const nextConfig = {
     //   },
     // },
   },
-  transpilePackages: ['lucide-react']
-  // experimental: {
-  //   serverActions: true
-  // }
+  transpilePackages: ['lucide-react'],
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.pravatar.cc'
+      }
+    ]
+  }
 }
 module.exports = nextConfig

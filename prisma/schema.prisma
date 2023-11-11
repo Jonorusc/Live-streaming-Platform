@@ -35,13 +35,17 @@ model Profile {
 }
 
 model Channel {
-  id          String       @id @default(auto()) @map("_id") @db.ObjectId
-  owner       User         @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  ownerId     String       @unique @db.ObjectId
-  followers   Follower[]
-  subscribers Subscriber[]
-  created_at  DateTime     @default(now())
-  updated_at  DateTime     @updatedAt
+  id              String       @id @default(auto()) @map("_id") @db.ObjectId
+  owner           User         @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId         String       @unique @db.ObjectId
+  followers       Follower[]
+  subscribers     Subscriber[]
+  description     String?
+  streaming_title String?
+  streaming_game  String?
+  streaming       Boolean      @default(false)
+  created_at      DateTime     @default(now())
+  updated_at      DateTime     @updatedAt
 }
 
 enum FollowerRole {
