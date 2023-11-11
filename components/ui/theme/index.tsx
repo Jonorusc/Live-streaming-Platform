@@ -32,9 +32,15 @@ const ThemeSwitcher = () => {
       </Flex>
       <AnimatePresence>
         {isOpen && (
-          <List $x={position.x} $y={position.y}>
+          <List
+            $x={position.x}
+            $y={position.y}
+            onClick={(e) => {
+              e.stopPropagation()
+            }}
+          >
             <ListItem
-              onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+              onClick={(e) => {
                 e.stopPropagation()
                 setCurrentTheme(defaultTheme)
                 setIsOpen(false)

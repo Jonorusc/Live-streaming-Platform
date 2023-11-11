@@ -26,13 +26,7 @@ export const List = styled(motion.ul).attrs({
   initial: { opacity: 0, y: -15 },
   animate: {
     opacity: 1,
-    y: 0,
-    transition: {
-      type: 'spring',
-      stiffness: 200,
-      damping: 20,
-      duration: 100
-    }
+    y: 0
   },
   exit: {
     opacity: 0,
