@@ -98,7 +98,8 @@ export const Wrapper = styled.button<WrapperProps>`
     ${disabled &&
     css`
       cursor: not-allowed;
-      opacity: 0.5;
+      background-color: #adadb838;
+      color: #848494;
     `};
 
     &:hover {

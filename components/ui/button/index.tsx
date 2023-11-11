@@ -29,7 +29,6 @@ export type ButtonProps = {
   $left?: string
   $bottom?: string
   $error?: boolean
-  disabled?: boolean
   children?: React.ReactNode
 } & React.ButtonHTMLAttributes<HTMLButtonElement>
 const Button = React.memo(
@@ -52,7 +51,8 @@ const Button = React.memo(
     $bottom = 'unset',
     $error = false,
     disabled = false,
-    children
+    children,
+    ...props
   }: ButtonProps) => {
     return (
       <S.Wrapper
@@ -74,6 +74,7 @@ const Button = React.memo(
         $bottom={$bottom}
         $error={$error}
         disabled={disabled}
+        {...props}
       >
         {children}
       </S.Wrapper>
