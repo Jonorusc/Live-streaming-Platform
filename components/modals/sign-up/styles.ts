@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components'
 import { motion } from 'framer-motion'
 
 import { Wrapper as Button } from '@/components/ui/button/styles'
+import Flex from '@/components/ui/flex'
 
 export const ModalSignUp = styled(motion.div).attrs({
   initial: { opacity: 0, scale: 0.5 },
@@ -14,21 +15,27 @@ export const ModalSignUp = styled(motion.div).attrs({
       damping: 20,
       duration: 1
     }
-  }
+  },
+  exit: { opacity: 0, scale: 0.5 }
 })`
   ${({ theme }) => css`
     position: relative;
     box-sizing: border-box;
 
-    @media screen and (max-width: 414px) {
+    @media (max-width: 414px) {
       width: 100%;
     }
 
     form {
-      ${Button}:first-child {
+      ${Button}:not([type='submit']) {
         &:hover {
           color: ${theme.palette.text.label};
           transition: background 100ms ease-in;
+        }
+      }
+      & > ${Flex} {
+        @media (max-width: 414px) {
+          flex-direction: column;
         }
       }
     }
