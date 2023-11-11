@@ -7,6 +7,9 @@ import GlobalStyles from '../styles/themes/global-styles'
 
 const preview: Preview = {
   parameters: {
+    nextjs: {
+      appDirectory: true
+    },
     actions: { argTypesRegex: '^on[A-Z].*' },
     controls: {
       matchers: {
