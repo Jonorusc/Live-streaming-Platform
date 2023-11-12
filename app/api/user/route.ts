@@ -6,7 +6,7 @@ export async function GET(req: Request) {
   const token = cookies().get('user_token_id')
 
   if (!token) {
-    return new NextResponse('Unauthorized', { status: 401 })
+    return NextResponse.json({ error: { message: 'Unauthorized' } })
   }
 
   const firebase_id = token.value
