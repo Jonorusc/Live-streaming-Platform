@@ -62,7 +62,7 @@ export const useToast = create<ToastProps>((set, get) => ({
     if (!get().toasts.length) return
     set((state) => ({
       toasts: state.toasts.filter((toast) => toast.id !== id),
-      show: state.toasts.length > 1
+      show: state.toasts.length > 0
     }))
   },
   pauseToast: (id: number) => {
