@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers'
 
 import { db } from '@/lib/db'
-import { signup } from '@/lib/firebase/auth'
+import { signup, signout } from '@/lib/firebase/auth'
 
 // I'm using an object here to make it easier to add more props later if needed.
 export const createUser = async ({
@@ -86,8 +86,6 @@ export const authenticateUser = async (firebase_id: string) => {
       path: '/'
     })
 
-    console.log(cookies().get('user_token_id'))
-
     if (!user) {
       return { error: { message: 'Internal Error' } }
     }
@@ -95,6 +93,20 @@ export const authenticateUser = async (firebase_id: string) => {
     return user
   } catch (error) {
     return { error: { message: error } }
+  }
+}
+
+export const signOutUser = async () => {
+  try {
+    const success = await signout()
+    if (!success) {
+      return { error: { message: 'Internal Error' } }
+    }
+    cookies().delete('user_token_id')
+
+    return success
+  } catch {
+    return { error: { message: 'Internal Error' } }
   }
 }
 
@@ -116,7 +128,7 @@ export const verifyUserName = async (username: string) => {
     })
 
     if (!user) {
-      return { error: { message: 'Internal Error' } }
+      return user
     }
 
     return user
@@ -141,7 +153,7 @@ export const verifyUserEmail = async (email: string) => {
     })
 
     if (!user) {
-      return { error: { message: 'Internal Error' } }
+      return user
     }
 
     return user
