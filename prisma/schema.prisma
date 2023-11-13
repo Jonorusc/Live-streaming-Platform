@@ -36,6 +36,7 @@ model Profile {
 
 model Channel {
   id              String       @id @default(auto()) @map("_id") @db.ObjectId
+  name            String       @unique
   owner           User         @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId         String       @unique @db.ObjectId
   followers       Follower[]

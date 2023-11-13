@@ -12,6 +12,7 @@ export const Wrapper = styled.div`
     font-size: ${theme.font.size.xsmall};
     cursor: pointer;
     width: fit-content;
+    z-index: ${theme.layers.overlay};
     transition:
       background,
       box-shadow 100ms ease-in;
@@ -41,7 +42,6 @@ export const List = styled(motion.ul).attrs({
     background-color:;
     flex-direction: column;
     gap: 1rem;
-    z-index: ${theme.layers.overlay};
     background: ${theme.palette.surface};
     transition: background 100ms ease-in;
     list-style: none;

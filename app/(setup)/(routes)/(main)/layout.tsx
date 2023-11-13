@@ -1,3 +1,4 @@
+import NoSsr from '@/components/NoSsr'
 export const metadata = {
   title: 'Twitch Clone',
   description: 'A Clone of Twitch made with Next.js and TypeScript'
@@ -8,5 +9,5 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  return <>{children}</>
+  return <NoSsr>{children}</NoSsr>
 }

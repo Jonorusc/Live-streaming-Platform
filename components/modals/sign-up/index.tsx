@@ -11,6 +11,8 @@ import { useModal } from '@/hooks/use-modal'
 import passwordStrength from '@/utils/password-strength'
 import { useFormStatus } from 'react-dom'
 import { useSWRConfig } from 'swr'
+import { tempEmailDomains } from '@/utils/temp-emails'
+import { createUser, verifyUserName, verifyUserEmail } from '@/actions/user'
 // components
 import { ModalWrapper } from '@/components/modals'
 import { Twitch } from '@/components/ui/logos'
@@ -23,7 +25,6 @@ import Flex from '@/components/ui/flex'
 import { useToast } from '@/hooks/use-toast'
 import useClickOutside from '@/hooks/use-clickoutside'
 import ReactLoading from 'react-loading'
-import { createUser, verifyUserName, verifyUserEmail } from '@/actions/user'
 
 export type SignUpModalProps = {}
 const SignUpModal = (props: SignUpModalProps) => {
@@ -46,8 +47,9 @@ const SignUpModal = (props: SignUpModalProps) => {
           // if there is an account in the response so we dont let the username available to be used
           // in other words, if the username is already taken (return false because is the way react hook form works)
           try {
-            await verifyUserName(username)
-            return false
+            const user = await verifyUserName(username)
+            if (user) return false
+            return true
           } catch {
             return true
           }
@@ -60,11 +62,19 @@ const SignUpModal = (props: SignUpModalProps) => {
       .string()
       .email({ message: 'Invalid email address' })
       .refine(
+        (email) => {
+          const domain = email.split('@')[1]
+          return !tempEmailDomains.includes(domain)
+        },
+        { message: 'Temporary emails are not allowed' }
+      )
+      .refine(
         async (email) => {
           if (email.length < 6) return false
           try {
-            await verifyUserEmail(email)
-            return false
+            const user = await verifyUserEmail(email)
+            if (user) return false
+            return true
           } catch {
             return true
           }
@@ -89,7 +99,7 @@ const SignUpModal = (props: SignUpModalProps) => {
 
   const methods = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-    mode: 'onBlur'
+    mode: 'all'
   })
 
   const { getFieldState, formState } = methods
@@ -98,16 +108,19 @@ const SignUpModal = (props: SignUpModalProps) => {
     try {
       await createUser(data)
       mutate('/api/user')
+
       addToast({
         id: Date.now(),
         type: 'success',
         position: 'top-right',
-        timeout: 5000,
+        timeout: 8000,
         data: {
-          message: 'Account created successfully. Enjoy Twitch!'
+          title: 'Account created successfully',
+          message: 'Verification email sent successfully. Check your inbox!'
         }
       })
       onClose()
+      onOpen('signin')
     } catch (error) {
       setAuthError('An error occurred while creating your account. Try again.')
     }
@@ -167,7 +180,7 @@ const SignUpModal = (props: SignUpModalProps) => {
                 <Flex
                   $align="center"
                   $justify="space-between"
-                  $margin="10rem 0 0 0"
+                  $margin="8.5rem 0 0 0"
                 >
                   <Button
                     $fontSize="small"

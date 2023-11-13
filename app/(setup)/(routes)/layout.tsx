@@ -3,7 +3,6 @@
 import { Inter } from 'next/font/google'
 import { useLocalStorage } from 'usehooks-ts'
 import { ThemeProvider } from 'styled-components'
-import NextProgress from 'next-progress'
 
 import StyledComponentsRegistry from '@/lib/styled_components/registry'
 
@@ -20,28 +19,18 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   const [theme] = useLocalStorage('theme', defaultTheme)
-  const [progressColor] = useLocalStorage(
-    'progressColor',
-    defaultTheme.palette.primary
-  )
 
   return (
     <html lang="en">
       <body className={font.className}>
-        <StyledComponentsRegistry>
-          <NextProgress
-            color={progressColor}
-            delay={300}
-            height={3}
-            options={{ showSpinner: false }}
-          />
-          <ThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}>
+          <StyledComponentsRegistry>
             <GlobalStyles />
             <ModalProvider />
             <ToastProvider />
             {children}
-          </ThemeProvider>
-        </StyledComponentsRegistry>
+          </StyledComponentsRegistry>
+        </ThemeProvider>
       </body>
     </html>
   )

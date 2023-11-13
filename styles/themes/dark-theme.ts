@@ -29,6 +29,7 @@ export const darkTheme: DefaultTheme = {
     lightGrey: '#848494',
     darkenBlue: '#194B78',
     whiteSmoke: '#f5f5f5',
+    white: '#ffffff',
     black: '#000000',
     red: '#bb1411',
     warn: '#ffd37a',

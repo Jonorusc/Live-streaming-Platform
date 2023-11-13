@@ -36,6 +36,10 @@ export const ModalSignUp = styled(motion.div).attrs({
       & > ${Flex} {
         @media (max-width: 414px) {
           flex-direction: column;
+          row-gap: 1.3rem;
+          ${Button} {
+            width: 100%;
+          }
         }
       }
     }

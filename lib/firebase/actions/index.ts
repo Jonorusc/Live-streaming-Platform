@@ -11,7 +11,7 @@ import {
   confirmPasswordReset,
   deleteUser
 } from 'firebase/auth'
-import { app_config, generateOOBCode } from '@/utils/firebase'
+import { app_config } from '@/utils/firebase'
 
 const app = initializeApp(app_config)
 const auth = getAuth(app)
@@ -53,44 +53,60 @@ export const updateemail = (newEmail: string): Promise<String> => {
 }
 
 // send email verification
-export const sendemailverification = (): Promise<String> => {
-  return new Promise<String>((resolve, reject) => {
+export const sendemailverification = (): Promise<String | null> => {
+  return new Promise((resolve, reject) => {
     const user = auth.currentUser
-    const mainUrl = process.env.NEXT_PUBLIC_URL || window.location.origin
-    const mode = 'verifyEmail'
-    const oobCode = generateOOBCode(10)
     if (user) {
-      sendEmailVerification(user, {
-        url: `${mainUrl}/auth/verify-email?mode=${mode}&oobCode=${oobCode}`
-      })
+      sendEmailVerification(user)
         .then(() => {
-          resolve('Please check your email for verification. Thank you!')
+          resolve('Verification email sent successfully. Check your inbox!')
         })
         .catch((error) => {
-          reject(error.message)
+          reject(null)
         })
     } else {
-      reject('No user found.')
+      reject(null)
     }
   })
 }
 
 // handle email verification
-export const handleverifyemail = (actionCode: string): Promise<string> => {
-  return new Promise<string>((resolve, reject) => {
+export const handleverifyemail = (
+  actionCode: string
+): Promise<{ success: true; error?: { message: string } }> => {
+  return new Promise((resolve, reject) => {
     applyActionCode(auth, actionCode)
-      .then(() => {
-        resolve('Email address has been verified.')
+      .then(async () => {
+        resolve({ success: true })
       })
-      .catch((error) => {
+      .catch(async (error) => {
         switch (error.code) {
-          case AuthErrorCodes.EXPIRED_OOB_CODE:
-            reject(
-              'Code is invalid or expired. Please verify your email address again.'
-            )
+          case AuthErrorCodes.EXPIRED_OOB_CODE: {
+            reject({
+              success: false,
+              error: {
+                message: 'Code is expired. Please resend verification email.'
+              }
+            })
             break
+          }
+          case AuthErrorCodes.INVALID_OOB_CODE: {
+            reject({
+              success: false,
+              error: {
+                message:
+                  'This code has already been used. Please resend verification email.'
+              }
+            })
+            break
+          }
           default:
-            reject(error.message)
+            reject({
+              success: false,
+              error: {
+                message: error.message
+              }
+            })
             break
         }
       })
@@ -98,19 +114,16 @@ export const handleverifyemail = (actionCode: string): Promise<string> => {
 }
 
 // send password reset email
-export const sendpasswordresetemail = (email: string): Promise<String> => {
-  return new Promise<String>((resolve, reject) => {
-    const mainUrl = process.env.NEXT_PUBLIC_URL || window.location.origin
-    const mode = 'resetPassword'
-    const oobCode = generateOOBCode(10)
-    sendPasswordResetEmail(auth, email, {
-      url: `${mainUrl}/auth/reset-password?mode=${mode}&oobCode=${oobCode}`
-    })
+export const sendpasswordresetemail = (
+  email: string
+): Promise<String | null> => {
+  return new Promise((resolve, reject) => {
+    sendPasswordResetEmail(auth, email)
       .then(() => {
         resolve('Please check your email for reset password. Thank you!')
       })
       .catch((error) => {
-        reject(error.message)
+        reject(null)
       })
   })
 }
@@ -119,30 +132,52 @@ export const sendpasswordresetemail = (email: string): Promise<String> => {
 export const handlepasswordreset = (
   actionCode: string,
   newPassword: string
-): Promise<string> => {
-  return new Promise<string>((resolve, reject) => {
+): Promise<{ success: true; error?: { message: string } }> => {
+  return new Promise((resolve, reject) => {
     verifyPasswordResetCode(auth, actionCode)
       .then((email) => {
         // you can use email to send a notification to user that their password has been reset
         confirmPasswordReset(auth, actionCode, newPassword)
           .then(() => {
-            resolve(
-              'Your password has been reset. Please login with your new password.'
-            )
+            resolve({
+              success: true
+            })
           })
-          .catch((error) => {
-            reject(error.message)
+          .catch(() => {
+            reject({
+              success: false,
+              error: {
+                message: 'Something went wrong. Please try again later.'
+              }
+            })
           })
       })
       .catch((error) => {
         switch (error.code) {
           case AuthErrorCodes.EXPIRED_OOB_CODE:
-            reject(
-              'Code is invalid or expired. Please reset your password again.'
-            )
+            reject({
+              success: false,
+              error: {
+                message: 'Code is expired. Please reset your password again.'
+              }
+            })
             break
+          case AuthErrorCodes.INVALID_OOB_CODE:
+            reject({
+              success: false,
+              error: {
+                message: 'Code is invalid. Please reset your password again.'
+              }
+            })
+            break
+
           default:
-            reject(error.message)
+            reject({
+              success: false,
+              error: {
+                message: 'Something went wrong. Please try again later.'
+              }
+            })
             break
         }
       })

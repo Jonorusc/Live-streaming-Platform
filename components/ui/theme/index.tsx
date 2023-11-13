@@ -28,7 +28,8 @@ const ThemeSwitcher = () => {
   return (
     <Wrapper onClick={handleClick} ref={wrapperRef}>
       <Flex $align="center" $gapY="1rem">
-        <Icon name="sun-moon" size={18} /> <span>Themes</span>
+        <Icon name="sun-moon" size={18} />
+        <span>Themes</span>
       </Flex>
       <AnimatePresence>
         {isOpen && (

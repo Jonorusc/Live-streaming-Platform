@@ -13,12 +13,15 @@ export const ModalWrapper = styled.div`
     align-items: center;
     /* blur filter */
     backdrop-filter: blur(0.2rem);
+    z-index: ${theme.layers.alwaysOnTop};
 
     > div {
       background-color: ${theme.palette.background};
       position: relative;
       border-radius: 0.4rem;
-      z-index: ${theme.layers.alwaysOnTop};
+      @media (max-width: 414px) {
+        translate: 0 -1.2rem;
+      }
     }
   `}
 `

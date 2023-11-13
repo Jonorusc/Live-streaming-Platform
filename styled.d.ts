@@ -31,6 +31,7 @@ declare module 'styled-components' {
       lightGrey: string
       darkenBlue: string
       whiteSmoke: string
+      white: string
       black: string
       red: string
       warn: string

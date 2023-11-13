@@ -82,6 +82,9 @@ export const ToastContainer = styled.div<{ $position: POSITION }>`
     @media (max-width: 768px) {
       width: 20rem;
     }
+    @media (max-width: 414px) {
+      width: 100%;
+    }
 
     ${$position.includes('top') &&
     css`

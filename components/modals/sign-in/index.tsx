@@ -141,7 +141,9 @@ const SignInModal = (props: SignInModalProps) => {
                   $margin="2rem 0 2rem 0"
                   $gapX="1.3rem"
                 >
-                  <Link href="/user/account-recovery">Trouble logging in?</Link>
+                  <Link href="/user/account-recovery" onClick={onClose}>
+                    Trouble logging in?
+                  </Link>
 
                   <Button
                     type="submit"

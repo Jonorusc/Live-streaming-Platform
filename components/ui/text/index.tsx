@@ -67,7 +67,7 @@ const TextField = React.memo(
       } else if (type === 'password' && !$error && value) {
         const { strength, color } = passwordStrength(value)
         return (
-          <Flex $align="center" $gapY="0.5rem">
+          <Flex $align="center" $gapY="0.5rem" $justify="flex-end">
             {strength === 'Weak' && <SVGLogo $type="fail" />}
             {strength === 'Medium' && <SVGLogo $type="warning" />}
             {strength === 'Strong' && <SVGLogo $type="success" />}
