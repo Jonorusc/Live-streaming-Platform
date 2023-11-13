@@ -1,0 +1,100 @@
+import styled, { css } from 'styled-components'
+import { darken, lighten } from 'polished'
+
+import { TyprographyProps } from '@/components/ui/typography'
+
+import type { COLORS } from '@/components/ui/types'
+
+type WrapperProps = Omit<TyprographyProps, 'children'>
+
+export const Wrapper = styled.span<WrapperProps>`
+  ${({
+    theme,
+    $bgcolor,
+    $hoverColor,
+    $color,
+    $fontSize,
+    $fontWeight,
+    $width,
+    $margin,
+    $position,
+    $top,
+    $left,
+    $bottom,
+    $right,
+    $border,
+    $borderColor,
+    $borderSize
+  }) => css`
+    border: none;
+    display: block;
+    margin: 0;
+    ${$border &&
+    css`
+      ${$borderColor
+        ? css`
+            border: ${`${$borderSize ?? Number(1)}px`} solid
+              ${theme.palette[$borderColor as COLORS]};
+          `
+        : css`
+            border: ${`${$borderSize ?? Number(1)}px`} solid
+              ${theme.palette.primary};
+          `};
+    `};
+
+    ${$bgcolor &&
+    css`
+      background-color: ${lighten(0.1, theme.palette[$bgcolor as COLORS])};
+    `};
+    ${$color &&
+    css`
+      color: ${theme.palette[$color]};
+    `};
+    ${!!$fontSize &&
+    css`
+      font-size: ${theme.font.size[$fontSize]};
+    `};
+    ${!!$fontWeight &&
+    css`
+      font-weight: ${theme.font[$fontWeight]};
+    `};
+    ${$margin &&
+    css`
+      margin: ${theme.spacing[$margin]};
+    `};
+
+    width: ${$width || 'auto'};
+
+    ${!!$position &&
+    css`
+      position: ${$position};
+
+      ${!!$top &&
+      css`
+        top: ${$top};
+      `};
+
+      ${!!$left &&
+      css`
+        left: ${$left};
+      `};
+
+      ${!!$bottom &&
+      css`
+        bottom: ${$bottom};
+      `};
+
+      ${!!$right &&
+      css`
+        right: ${$right};
+      `};
+    `}
+
+    &:hover {
+      ${$hoverColor &&
+      css`
+        color: ${darken(0.1, theme.palette[$hoverColor as COLORS])};
+      `}
+    }
+  `};
+`
