@@ -78,6 +78,7 @@ export const ToastContainer = styled.div<{ $position: POSITION }>`
     height: 100vh;
     user-select: none;
     pointer-events: none;
+    margin-top: 5rem;
 
     @media (max-width: 768px) {
       width: 20rem;

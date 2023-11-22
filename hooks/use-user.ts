@@ -7,9 +7,9 @@ const options = {
   shouldRetryOnError: false
 }
 
-type UserProps = User & {
-  profile?: Profile
-  channel?: Channel
+type UserProps = Omit<User, 'firebase_id' | 'id'> & {
+  profile?: Profile | null
+  channel?: Channel | null
   follows?: Follower[]
   subscribers?: Subscriber[]
 }

@@ -12,6 +12,7 @@ const useMenuPosition = (
 
   const handleClick = useCallback(
     (event: MouseEvent<HTMLElement>) => {
+      event.stopPropagation()
       const target = event.target as HTMLElement
       const clickX = event.clientX
       const clickY = event.clientY
@@ -25,12 +26,12 @@ const useMenuPosition = (
       let offsetY = clickY
 
       if (parentRect) {
-        if (clickX + menuW > screenW) {
-          offsetX = parentRect.left - menuW
+        if (clickX + menuW >= screenW) {
+          offsetX = parentRect.left - menuW / 2
         }
 
-        if (clickY + menuH > screenH) {
-          offsetY = parentRect.top - menuH
+        if (clickY + menuH >= screenH) {
+          offsetY = parentRect.top - menuH / 2
         }
       }
 

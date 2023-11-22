@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import { darken, lighten } from 'polished'
+import { lighten } from 'polished'
 
 import { TyprographyProps } from '@/components/ui/typography'
 
@@ -21,6 +21,7 @@ export const Wrapper = styled.span<WrapperProps>`
     $top,
     $left,
     $bottom,
+    $lineHeight,
     $right,
     $border,
     $borderColor,
@@ -54,13 +55,17 @@ export const Wrapper = styled.span<WrapperProps>`
     css`
       font-size: ${theme.font.size[$fontSize]};
     `};
+    ${!!$lineHeight &&
+    css`
+      line-height: ${$lineHeight};
+    `};
     ${!!$fontWeight &&
     css`
       font-weight: ${theme.font[$fontWeight]};
     `};
     ${$margin &&
     css`
-      margin: ${theme.spacing[$margin]};
+      margin: ${$margin};
     `};
 
     width: ${$width || 'auto'};
@@ -93,7 +98,7 @@ export const Wrapper = styled.span<WrapperProps>`
     &:hover {
       ${$hoverColor &&
       css`
-        color: ${darken(0.1, theme.palette[$hoverColor as COLORS])};
+        color: ${theme.palette[$hoverColor]};
       `}
     }
   `};

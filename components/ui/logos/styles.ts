@@ -2,12 +2,16 @@ import styled, { css, keyframes } from 'styled-components'
 
 import { ANIMATIONS } from '@/components/ui/types'
 
-export const Figure = styled.figure<{ $fillColor?: string }>`
-  ${({ theme, $fillColor }) => css`
+export const Figure = styled.figure<{
+  $fillColor?: string
+  $pointer?: boolean
+}>`
+  ${({ theme, $fillColor, $pointer }) => css`
     display: inline-flex;
     -webkit-box-align: center;
     align-items: center;
     fill: ${$fillColor || theme.palette.primary};
+    cursor: ${$pointer ? 'pointer' : 'default'};
   `}
 `
 const blink = keyframes`
@@ -29,19 +33,19 @@ const animationsModifiers = {
 }
 
 export const Svg = styled.svg<{
-  animateOnHover?: boolean
-  animationName?: ANIMATIONS
-  elementClass?: string
+  $animateonhover?: boolean
+  $animationName?: ANIMATIONS
+  $elementClass?: string
 }>`
-  ${({ animateOnHover, animationName, elementClass }) => css`
-    ${animateOnHover &&
+  ${({ $animateonhover, $animationName, $elementClass }) => css`
+    ${$animateonhover &&
     css`
-      .${elementClass} {
+      .${$elementClass} {
         animation-duration: 0.2s;
         animation-iteration-count: 2;
-        ${animationName &&
+        ${$animationName &&
         animationsModifiers[
-          animationName as keyof typeof animationsModifiers
+          $animationName as keyof typeof animationsModifiers
         ]()}
         animation-play-state: paused;
         transform-origin: 0% 35%;
@@ -49,14 +53,14 @@ export const Svg = styled.svg<{
       }
 
       &:hover {
-        .${elementClass} {
+        .${$elementClass} {
           animation-play-state: running;
         }
       }
 
       /* if is not in hover */
       &:not(:hover) {
-        .${elementClass} {
+        .${$elementClass} {
           animation: none;
         }
       }

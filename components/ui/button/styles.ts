@@ -1,3 +1,5 @@
+'use client'
+
 import styled, { css } from 'styled-components'
 import { darken, lighten } from 'polished'
 
@@ -49,7 +51,7 @@ export const Wrapper = styled.button<WrapperProps>`
 
     ${!!$bgcolor &&
     css`
-      background-color: ${lighten(0.1, theme.palette[$bgcolor as COLORS])};
+      background-color: ${theme.palette[$bgcolor as COLORS]};
     `};
     ${!!$color &&
     css`
@@ -103,6 +105,7 @@ export const Wrapper = styled.button<WrapperProps>`
     `};
 
     &:hover {
+      filter: brightness(1.1);
       ${$error &&
       css`
         background-color: ${lighten(0.2, theme.palette.error)};
@@ -110,20 +113,9 @@ export const Wrapper = styled.button<WrapperProps>`
 
       ${!disabled &&
       !$error &&
+      $hoverColor !== undefined &&
       css`
-        ${!!$hoverColor
-          ? css`
-              background-color: ${darken(
-                0.1,
-                theme.palette[$hoverColor as COLORS]
-              )};
-            `
-          : css`
-              background-color: ${darken(
-                0.1,
-                theme.palette[$bgcolor as COLORS]
-              )};
-            `}
+        background-color: ${darken(0.1, theme.palette[$hoverColor as COLORS])};
       `}
     }
 

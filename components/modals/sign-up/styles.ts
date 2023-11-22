@@ -29,7 +29,7 @@ export const ModalSignUp = styled(motion.div).attrs({
     form {
       ${Button}:not([type='submit']) {
         &:hover {
-          color: ${theme.palette.text.label};
+          color: ${theme.palette.text.label}!important;
           transition: background 100ms ease-in;
         }
       }

@@ -1,16 +1,39 @@
-import styled, { css } from 'styled-components'
+import styled, { DefaultTheme, css } from 'styled-components'
 import { lighten } from 'polished'
+import { COLORS } from '@/components/ui/types'
 
-export const Wrapper = styled.div<{ $error?: boolean }>`
-  ${({ theme, $error }) => css`
+const backgroundModifier = (theme: DefaultTheme) => {
+  switch (theme.name) {
+    case 'dark': {
+      return css`
+        background: url('/svg/x-button-dark.svg') no-repeat center center;
+      `
+    }
+    case 'light': {
+      return css`
+        background: url('/svg/x-button-light.svg') no-repeat center center;
+      `
+    }
+    default: {
+      return css`
+        background: url('/svg/x-button-light.svg') no-repeat center center;
+      `
+    }
+  }
+}
+
+export const Wrapper = styled.div<{ $error?: boolean; $bgColor?: COLORS }>`
+  ${({ theme, $error, $bgColor }) => css`
     color: ${theme.palette.text.base};
-    background-color: ${theme.palette.background};
+    background-color: ${
+      $bgColor ? theme.palette[$bgColor] : theme.palette.background
+    };
     vertical-align: baseline;
     width: 100%;
     margin-bottom: ${theme.spacing.large};
 
     /* takes the div which have aria-label="input" */
-    & > div[aria-label='password'] {
+    & > div[aria-label='action-button'] {
       position: relative;
 
       svg {
@@ -23,7 +46,13 @@ export const Wrapper = styled.div<{ $error?: boolean }>`
         z-index: ${theme.layers.overlay};
       }
     }
-
+    
+    input[type="search"]::-webkit-search-cancel-button {
+      -webkit-appearance: none; 
+      height: 2rem;
+      width: 2rem;
+      ${backgroundModifier(theme)}
+    }
 
     & > div {
       width: 100%;
@@ -78,9 +107,8 @@ export const Wrapper = styled.div<{ $error?: boolean }>`
           $error ? theme.palette.error : theme.palette.grey
         )};
       }
-
     }
-  `}
+  }`}
 `
 
 export const Top = styled.div`

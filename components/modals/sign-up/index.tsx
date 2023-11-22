@@ -11,7 +11,7 @@ import { useModal } from '@/hooks/use-modal'
 import passwordStrength from '@/utils/password-strength'
 import { useFormStatus } from 'react-dom'
 import { useSWRConfig } from 'swr'
-import { tempEmailDomains } from '@/utils/temp-emails'
+import { tempEmailDomains, invalidUsernames } from '@/utils/invalid-things'
 import { createUser, verifyUserName, verifyUserEmail } from '@/actions/user'
 // components
 import { ModalWrapper } from '@/components/modals'
@@ -25,6 +25,7 @@ import Flex from '@/components/ui/flex'
 import { useToast } from '@/hooks/use-toast'
 import useClickOutside from '@/hooks/use-clickoutside'
 import ReactLoading from 'react-loading'
+import NoSsr from '@/components/NoSsr'
 
 export type SignUpModalProps = {}
 const SignUpModal = (props: SignUpModalProps) => {
@@ -40,10 +41,20 @@ const SignUpModal = (props: SignUpModalProps) => {
   const schema = z.object({
     username: z
       .string()
-      .min(6, { message: 'Username must be at least 6 characters' })
+      .min(5, { message: 'Username must be at least 5 characters' })
+      .max(25, { message: 'Username must be at most 25 characters' })
+      .regex(/^[a-zA-Z0-9_]*$/, {
+        message: 'Username cannot have spaces or special characters'
+      })
+      .refine(
+        (username) => {
+          return !invalidUsernames.includes(username)
+        },
+        { message: "This username isn't allowed" }
+      )
       .refine(
         async (username) => {
-          if (username.length < 6) return false
+          if (username.length < 5) return false
           // if there is an account in the response so we dont let the username available to be used
           // in other words, if the username is already taken (return false because is the way react hook form works)
           try {
@@ -127,107 +138,113 @@ const SignUpModal = (props: SignUpModalProps) => {
   }
 
   return (
-    <ModalWrapper>
-      <S.ModalSignUp ref={modalRef}>
-        <Button
-          $position="absolute"
-          $top="1rem"
-          $right="1rem"
-          $hoverColor="surface"
-          onClick={onClose}
-        >
-          <Grid $placeItems="center">
-            <Icon name="x" size={24} />
-          </Grid>
-        </Button>
-        <Flex $direction="column" $width="50rem" $padding="5rem 3rem 2rem 3rem">
-          <Flex $gapY="1.3rem" $align="center" $alingSelf="center">
-            <Twitch />
-            <h4>Join Twitch Today</h4>
-          </Flex>
+    <NoSsr>
+      <ModalWrapper>
+        <S.ModalSignUp ref={modalRef}>
+          <Button
+            $position="absolute"
+            $top="1rem"
+            $right="1rem"
+            $hoverColor="surface"
+            onClick={onClose}
+          >
+            <Grid $placeItems="center">
+              <Icon name="x" size={24} />
+            </Grid>
+          </Button>
           <Flex
             $direction="column"
-            $gapY="1.3rem"
-            $width="100%"
-            $margin="2.5rem 0 0 0"
+            $width="50rem"
+            $padding="5rem 3rem 2rem 3rem"
           >
-            <FormProvider {...methods}>
-              <form onSubmit={methods.handleSubmit(onSubmit)}>
-                <TextField
-                  label="Username"
-                  name="username"
-                  $error={formState.errors?.username?.message || ''}
-                  $success={!getFieldState('username').invalid}
-                  $response
-                  required
-                />
-                <TextField
-                  label="Email"
-                  name="email"
-                  $error={formState.errors?.email?.message || ''}
-                  $success={!getFieldState('email').invalid}
-                  $response
-                  required
-                />
-                <TextField
-                  label="Password"
-                  name="password"
-                  type="password"
-                  $error={formState.errors?.password?.message || ''}
-                  $response
-                  required
-                />
-                <Flex
-                  $align="center"
-                  $justify="space-between"
-                  $margin="8.5rem 0 0 0"
-                >
-                  <Button
-                    $fontSize="small"
-                    $color="primary"
-                    $hoverColor="surface"
-                    $fontWeight="semiBold"
-                    onClick={() => {
-                      onClose()
-                      onOpen('signin')
-                    }}
+            <Flex $gapY="1.3rem" $align="center" $alingSelf="center">
+              <Twitch />
+              <h4>Join Twitch Today</h4>
+            </Flex>
+            <Flex
+              $direction="column"
+              $gapY="1.3rem"
+              $width="100%"
+              $margin="2.5rem 0 0 0"
+            >
+              <FormProvider {...methods}>
+                <form onSubmit={methods.handleSubmit(onSubmit)}>
+                  <TextField
+                    label="Username"
+                    name="username"
+                    $error={formState.errors?.username?.message || ''}
+                    $success={!getFieldState('username').invalid}
+                    $response
+                    required
+                  />
+                  <TextField
+                    label="Email"
+                    name="email"
+                    $error={formState.errors?.email?.message || ''}
+                    $success={!getFieldState('email').invalid}
+                    $response
+                    required
+                  />
+                  <TextField
+                    label="Password"
+                    name="password"
+                    type="password"
+                    $error={formState.errors?.password?.message || ''}
+                    $response
+                    required
+                  />
+                  <Flex
+                    $align="center"
+                    $justify="space-between"
+                    $margin="8.5rem 0 0 0"
                   >
-                    Already a Twitch user? Log In
-                  </Button>
-                  <Button
-                    type="submit"
-                    $bgcolor="primary"
-                    $hoverColor="primary"
-                    $color="whiteSmoke"
-                    $fontSize="small"
-                    $fontWeight="semiBold"
-                    disabled={
-                      !methods.formState.isValid ||
-                      methods.formState.isSubmitting
-                    }
-                  >
-                    {methods.formState.isSubmitting || server.pending ? (
-                      <Flex $align="center" $justify="center" $gapY="0.3rem">
-                        <ReactLoading
-                          type="spin"
-                          color="#B4BDc7"
-                          height={16}
-                          width={16}
-                        />
-                        <span>Creating...</span>
-                      </Flex>
-                    ) : (
-                      'Sign Up'
-                    )}
-                  </Button>
-                </Flex>
-              </form>
-            </FormProvider>
+                    <Button
+                      $fontSize="small"
+                      $color="primary"
+                      $hoverColor="surface"
+                      $fontWeight="semiBold"
+                      onClick={() => {
+                        onClose()
+                        onOpen('signin')
+                      }}
+                    >
+                      Already a Twitch user? Log In
+                    </Button>
+                    <Button
+                      type="submit"
+                      $bgcolor="primary"
+                      $hoverColor="primary"
+                      $color="whiteSmoke"
+                      $fontSize="small"
+                      $fontWeight="semiBold"
+                      disabled={
+                        !methods.formState.isValid ||
+                        methods.formState.isSubmitting
+                      }
+                    >
+                      {methods.formState.isSubmitting || server.pending ? (
+                        <Flex $align="center" $justify="center" $gapY="0.3rem">
+                          <ReactLoading
+                            type="spin"
+                            color="#B4BDc7"
+                            height={16}
+                            width={16}
+                          />
+                          <span>Creating...</span>
+                        </Flex>
+                      ) : (
+                        'Sign Up'
+                      )}
+                    </Button>
+                  </Flex>
+                </form>
+              </FormProvider>
+            </Flex>
+            {authError && <Error>{authError}</Error>}
           </Flex>
-          {authError && <Error>{authError}</Error>}
-        </Flex>
-      </S.ModalSignUp>
-    </ModalWrapper>
+        </S.ModalSignUp>
+      </ModalWrapper>
+    </NoSsr>
   )
 }
 

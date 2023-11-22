@@ -67,7 +67,7 @@ export type POSITION =
   | 'unset'
 
 export type ANIMATIONS = 'blink' | 'rotate' | 'scale' | 'shake' | 'slide'
-export type TEXTFIELD_TYPES = 'text' | 'password' | 'email'
+export type TEXTFIELD_TYPES = 'text' | 'password' | 'email' | 'search'
 export type TYPOGRAPHY_TYPES =
   | 'h1'
   | 'h2'

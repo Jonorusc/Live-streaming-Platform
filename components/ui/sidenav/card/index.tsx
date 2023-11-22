@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import Flex from '@/components/ui/flex'
 import Avatar from '@/components/ui/image'
 import { Title } from '@/components/ui/toast/styles'
+import NoSsr from '@/components/NoSsr'
 
 export type CardProps = {
   title: string
@@ -31,26 +32,28 @@ const Card = ({ title, message, streamer }: CardProps) => {
   }
 
   return (
-    <S.Wrapper onClick={onClickHandler}>
-      <Flex $gapY="1rem" $align="center">
-        <Avatar
-          $size={30}
-          $url={streamer.picture}
-          alt={streamer.name}
-          $rounded
-        />
-        <Flex $justify="space-between" $width="100%">
-          <Flex $direction="column" $align="flex-start">
-            <Title>{title}</Title>
-            <S.Message>{message}</S.Message>
+    <NoSsr>
+      <S.Wrapper onClick={onClickHandler}>
+        <Flex $gapY="1rem" $align="center">
+          <Avatar
+            $size={30}
+            $url={streamer.picture}
+            alt={streamer.name}
+            $rounded
+          />
+          <Flex $justify="space-between" $width="100%">
+            <Flex $direction="column" $align="flex-start">
+              <Title>{title}</Title>
+              <S.Message>{message}</S.Message>
+            </Flex>
+            <S.Counter>
+              <i aria-label="redball"></i>
+              <span>{streamer.viewers}</span>
+            </S.Counter>
           </Flex>
-          <S.Counter>
-            <i aria-label="redball"></i>
-            <span>{streamer.viewers}</span>
-          </S.Counter>
         </Flex>
-      </Flex>
-    </S.Wrapper>
+      </S.Wrapper>
+    </NoSsr>
   )
 }
 

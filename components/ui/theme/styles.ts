@@ -3,22 +3,13 @@ import { motion } from 'framer-motion'
 
 export const Wrapper = styled.div`
   ${({ theme }) => css`
-    position: relative;
-    background: ${theme.palette.background};
-    padding: 1rem;
-    border-radius: 0.5rem;
-    font-weight: ${theme.font.semiBold};
+    padding: 0.5rem;
     user-select: none;
+    color: ${theme.palette.text.base};
     font-size: ${theme.font.size.xsmall};
-    cursor: pointer;
-    width: fit-content;
-    z-index: ${theme.layers.overlay};
-    transition:
-      background,
-      box-shadow 100ms ease-in;
+    border-radius: 0.5rem;
     &:hover {
       background: ${theme.palette.surface};
-      color: ${theme.palette.text.base};
     }
   `};
 `
@@ -42,7 +33,9 @@ export const List = styled(motion.ul).attrs({
     background-color:;
     flex-direction: column;
     gap: 1rem;
-    background: ${theme.palette.surface};
+    background-color: ${theme.name === 'light'
+      ? theme.palette.white
+      : theme.palette.dark};
     transition: background 100ms ease-in;
     list-style: none;
     padding: 1rem;
@@ -67,7 +60,7 @@ export const ListItem = styled.button`
     cursor: pointer;
 
     &:hover {
-      background: ${theme.palette.primary};
+      background: ${theme.palette.surface};
     }
   `};
 `

@@ -24,6 +24,7 @@ import TextField from '@/components/ui/text'
 import { Error } from '@/components/ui/text/styles'
 import Flex from '@/components/ui/flex'
 import { UserReturnProps } from '@/lib/firebase/auth'
+import NoSsr from '@/components/NoSsr'
 
 export type SignInModalProps = {}
 const SignInModal = (props: SignInModalProps) => {
@@ -95,105 +96,111 @@ const SignInModal = (props: SignInModalProps) => {
   }
 
   return (
-    <ModalWrapper>
-      <S.ModalSignIn ref={modalRef}>
-        <Button
-          $position="absolute"
-          $top="1rem"
-          $right="1rem"
-          $hoverColor="surface"
-          onClick={onClose}
-        >
-          <Grid $placeItems="center">
-            <Icon name="x" size={24} />
-          </Grid>
-        </Button>
-        <Flex $direction="column" $width="50rem" $padding="5rem 3rem 2rem 3rem">
-          <Flex $gapY="1.3rem" $align="center" $alingSelf="center">
-            <Twitch />
-            <h4>Log in to Twitch</h4>
-          </Flex>
+    <NoSsr>
+      <ModalWrapper>
+        <S.ModalSignIn ref={modalRef}>
+          <Button
+            $position="absolute"
+            $top="1rem"
+            $right="1rem"
+            $hoverColor="surface"
+            onClick={onClose}
+          >
+            <Grid $placeItems="center">
+              <Icon name="x" size={24} />
+            </Grid>
+          </Button>
           <Flex
             $direction="column"
-            $gapY="1.3rem"
-            $width="100%"
-            $margin="2.5rem 0 0 0"
+            $width="50rem"
+            $padding="5rem 3rem 2rem 3rem"
           >
-            <FormProvider {...methods}>
-              <form onSubmit={methods.handleSubmit(onSubmit)}>
-                <TextField
-                  label="Email"
-                  name="email"
-                  $error={formState.errors?.email?.message || ''}
-                  $success={!getFieldState('email').invalid}
-                  required
-                />
-                <TextField
-                  label="Password"
-                  name="password"
-                  type="password"
-                  $error={formState.errors?.password?.message || ''}
-                  required
-                />
-                <Flex
-                  $align="center"
-                  $direction="column"
-                  $margin="2rem 0 2rem 0"
-                  $gapX="1.3rem"
-                >
-                  <Link href="/user/account-recovery" onClick={onClose}>
-                    Trouble logging in?
-                  </Link>
+            <Flex $gapY="1.3rem" $align="center" $alingSelf="center">
+              <Twitch />
+              <h4>Log in to Twitch</h4>
+            </Flex>
+            <Flex
+              $direction="column"
+              $gapY="1.3rem"
+              $width="100%"
+              $margin="2.5rem 0 0 0"
+            >
+              <FormProvider {...methods}>
+                <form onSubmit={methods.handleSubmit(onSubmit)}>
+                  <TextField
+                    label="Email"
+                    name="email"
+                    $error={formState.errors?.email?.message || ''}
+                    $success={!getFieldState('email').invalid}
+                    required
+                  />
+                  <TextField
+                    label="Password"
+                    name="password"
+                    type="password"
+                    $error={formState.errors?.password?.message || ''}
+                    required
+                  />
+                  <Flex
+                    $align="center"
+                    $direction="column"
+                    $margin="2rem 0 2rem 0"
+                    $gapX="1.3rem"
+                  >
+                    <Link href="/user/account-recovery" onClick={onClose}>
+                      Trouble logging in?
+                    </Link>
 
-                  <Button
-                    type="submit"
-                    $width="100%"
-                    $bgcolor="primary"
-                    $hoverColor="primary"
-                    $color="whiteSmoke"
-                    $fontSize="small"
-                    $fontWeight="semiBold"
-                    disabled={
-                      !methods.formState.isValid ||
-                      methods.formState.isSubmitting ||
-                      server.pending
-                    }
-                  >
-                    {methods.formState.isSubmitting || server.pending ? (
-                      <Flex $align="center" $justify="center" $gapY="0.3rem">
-                        <ReactLoading
-                          type="spin"
-                          color="#B4BDc7"
-                          height={16}
-                          width={16}
-                        />
-                        <span>Logging in...</span>
-                      </Flex>
-                    ) : (
-                      'Log In'
-                    )}
-                  </Button>
-                  <Button
-                    $fontSize="small"
-                    $color="primary"
-                    $width="100%"
-                    $hoverColor="surface"
-                    $fontWeight="semiBold"
-                    onClick={() => {
-                      onClose()
-                      onOpen('signup')
-                    }}
-                  >
-                    Don't have an account? Sign Up here
-                  </Button>
-                </Flex>
-              </form>
-            </FormProvider>
+                    <Button
+                      type="submit"
+                      $width="100%"
+                      $bgcolor="primary"
+                      $hoverColor="primary"
+                      $color="whiteSmoke"
+                      $fontSize="small"
+                      $fontWeight="semiBold"
+                      disabled={
+                        !methods.formState.isValid ||
+                        methods.formState.isSubmitting ||
+                        server.pending
+                      }
+                    >
+                      {methods.formState.isSubmitting || server.pending ? (
+                        <Flex $align="center" $justify="center" $gapY="0.3rem">
+                          <ReactLoading
+                            type="spin"
+                            color="#B4BDc7"
+                            height={16}
+                            width={16}
+                          />
+                          <span>Logging in...</span>
+                        </Flex>
+                      ) : (
+                        'Log In'
+                      )}
+                    </Button>
+                    <Button
+                      $fontSize="small"
+                      $color="primary"
+                      $width="100%"
+                      $hoverColor="surface"
+                      $fontWeight="semiBold"
+                      onClick={() => {
+                        onClose()
+                        onOpen('signup')
+                      }}
+                    >
+                      Don't have an account? Sign Up here
+                    </Button>
+                  </Flex>
+                </form>
+              </FormProvider>
+            </Flex>
+            {authError && <Error>{authError}</Error>}
           </Flex>
-          {authError && <Error>{authError}</Error>}
-        </Flex>
-      </S.ModalSignIn>
-    </ModalWrapper>
+        </S.ModalSignIn>
+      </ModalWrapper>
+    </NoSsr>
   )
 }
 

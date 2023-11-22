@@ -1,8 +1,7 @@
 'use client'
-import React, { useEffect, useState, useMemo } from 'react'
-import { useFormContext } from 'react-hook-form'
+import React, { useState, useMemo } from 'react'
 
-import { COLORS, TEXTFIELD_TYPES } from '@/components/ui/types'
+import { TEXTFIELD_TYPES, COLORS } from '@/components/ui/types'
 import { Responses } from '@/components/ui/logos/svg'
 import passwordStrength from '@/utils/password-strength'
 import Flex from '@/components/ui/flex'
@@ -26,6 +25,8 @@ export type TextFieldProps = {
   $response?: boolean
   $bgColor?: COLORS
   required?: boolean
+  $handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  $debounce?: number
 }
 
 const TextField = React.memo(
@@ -38,23 +39,15 @@ const TextField = React.memo(
     disabled = false,
     placeholder = '',
     $response = false,
+    required = false,
     $bgColor = 'transparent',
-    required = false
+    $handleChange = () => {},
+    $debounce = 600
   }: TextFieldProps) => {
-    // Get the necessary methods from useFormContext
-    const { register, watch, setValue, clearErrors } = useFormContext()
-
-    // Watch the value of the field
-    const value = watch(name)
-
     // State for loading
     const [loading, setLoading] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
-
-    // Update the value of the field
-    useEffect(() => {
-      setValue(name, value)
-    }, [name, value])
+    const [value, setValue] = useState('')
 
     // Determine the response status
     const responseStatus = useMemo(() => {
@@ -103,10 +96,13 @@ const TextField = React.memo(
     return (
       <NoSsr>
         <S.Wrapper $error={!!$error} $bgColor={$bgColor}>
-          <S.Top>
-            <label htmlFor={name}>{label}</label>
-            {responseStatus}
-          </S.Top>
+          {label ||
+            ($response && (
+              <S.Top>
+                {label && <label htmlFor={name}>{label}</label>}
+                {responseStatus}
+              </S.Top>
+            ))}
           <Flex
             $align="center"
             $gapY="0.1rem"
@@ -115,18 +111,19 @@ const TextField = React.memo(
             <input
               type={type === 'password' && showPassword ? 'text' : type}
               id={name}
-              {...register(name)}
               required={required}
               name={name}
               onChange={(e) => {
-                setValue(name, e.target.value)
-                clearErrors(name)
+                $handleChange(e)
+                setValue(e.target.value)
                 if (!loading) {
                   setLoading(true)
                 }
+
                 if (e.target.value.length === 0) {
                   setLoading(false)
                 }
+
                 debouncedSetLoading()
               }}
               disabled={disabled}

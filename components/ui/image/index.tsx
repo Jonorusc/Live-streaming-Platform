@@ -16,7 +16,7 @@ const Avatar = ({
 }: ImageProps) => {
   const styles = $rounded
     ? {
-        clipPath: 'circle(50% at 50% 50%)'
+        borderRadius: '50%'
       }
     : {
         borderRadius: '0.4rem'

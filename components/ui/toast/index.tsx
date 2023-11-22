@@ -12,7 +12,8 @@ import { useRouter } from 'next/navigation'
 import Flex from '@/components/ui/flex'
 import Avatar from '@/components/ui/image'
 import Icon from '@/components/ui/icon'
-import { SVGLogo } from '@/components/ui/logos/svg'
+import { Responses } from '@/components/ui/logos/svg'
+import NoSsr from '@/components/NoSsr'
 
 export type ToastComponentProps = {
   toast: ToastHookProps
@@ -38,16 +39,16 @@ const Toast = ({ toast }: ToastComponentProps) => {
   const iconType = (type: ToastTypes) => {
     switch (type) {
       case 'success': {
-        return <SVGLogo $type="success" $size={30} />
+        return <Responses $type="success" $size={30} />
       }
       case 'error': {
-        return <SVGLogo $type="fail" $size={30} />
+        return <Responses $type="fail" $size={30} />
       }
       case 'warning': {
-        return <SVGLogo $type="warning" $size={30} />
+        return <Responses $type="warning" $size={30} />
       }
       case 'info': {
-        return <SVGLogo $type="info" $size={30} />
+        return <Responses $type="info" $size={30} />
       }
       default:
         return null
@@ -55,7 +56,7 @@ const Toast = ({ toast }: ToastComponentProps) => {
   }
 
   return (
-    <>
+    <NoSsr>
       {toast.type === 'islive' ? (
         <S.WrapperLive
           onMouseEnter={() => pauseToast(toast.id)}
@@ -131,7 +132,7 @@ const Toast = ({ toast }: ToastComponentProps) => {
           </S.Body>
         </S.Wrapper>
       )}
-    </>
+    </NoSsr>
   )
 }
 

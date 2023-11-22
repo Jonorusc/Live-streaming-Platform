@@ -10,10 +10,11 @@ import type {
   PADDING,
   POSITION
 } from '@/components/ui/types'
+import NoSsr from '@/components/NoSsr'
 
 export type ButtonProps = {
   $bgcolor?: COLORS
-  $hoverColor?: COLORS
+  $hoverColor?: COLORS | undefined
   $color?: COLORS
   $border?: boolean
   $borderColor?: COLORS
@@ -34,7 +35,7 @@ export type ButtonProps = {
 const Button = React.memo(
   ({
     $bgcolor = 'transparent',
-    $hoverColor = 'grey',
+    $hoverColor = undefined,
     $color = 'primary',
     $border = false,
     $borderColor = 'transparent',
@@ -55,29 +56,31 @@ const Button = React.memo(
     ...props
   }: ButtonProps) => {
     return (
-      <S.Wrapper
-        $bgcolor={$bgcolor}
-        $hoverColor={$hoverColor}
-        $color={$color}
-        $border={$border}
-        $borderColor={$borderColor}
-        $borderSize={$borderSize}
-        $fontSize={$fontSize}
-        $fontWeight={$fontWeight}
-        type={type}
-        $width={$width}
-        $padding={$padding}
-        $position={$position}
-        $top={$top}
-        $right={$right}
-        $left={$left}
-        $bottom={$bottom}
-        $error={$error}
-        disabled={disabled}
-        {...props}
-      >
-        {children}
-      </S.Wrapper>
+      <NoSsr>
+        <S.Wrapper
+          $bgcolor={$bgcolor}
+          $hoverColor={$hoverColor}
+          $color={$color}
+          $border={$border}
+          $borderColor={$borderColor}
+          $borderSize={$borderSize}
+          $fontSize={$fontSize}
+          $fontWeight={$fontWeight}
+          type={type}
+          $width={$width}
+          $padding={$padding}
+          $position={$position}
+          $top={$top}
+          $right={$right}
+          $left={$left}
+          $bottom={$bottom}
+          $error={$error}
+          disabled={disabled}
+          {...props}
+        >
+          {children}
+        </S.Wrapper>
+      </NoSsr>
     )
   }
 )

@@ -4,29 +4,38 @@ import { AnimatePresence } from 'framer-motion'
 import * as S from './styles'
 
 import { COLORS } from '@/components/ui/types'
+import NoSsr from '@/components/NoSsr'
 
 export type ToolTipProps = {
   $position?: 'top' | 'right' | 'bottom' | 'left'
   $background?: COLORS
   children: React.ReactNode
   $content: React.ReactNode
+  $arrow?: boolean
 }
 
 const ToolTip = ({
   children,
   $background,
   $position,
-  $content
+  $content,
+  $arrow
 }: ToolTipProps) => {
   return (
-    <S.Wrapper>
-      {children}
-      <AnimatePresence>
-        <S.ToolTip $position={$position} $background={$background}>
-          {$content}
-        </S.ToolTip>
-      </AnimatePresence>
-    </S.Wrapper>
+    <NoSsr>
+      <S.Wrapper>
+        {children}
+        <AnimatePresence>
+          <S.ToolTip
+            $position={$position}
+            $background={$background}
+            $arrow={$arrow}
+          >
+            {$content}
+          </S.ToolTip>
+        </AnimatePresence>
+      </S.Wrapper>
+    </NoSsr>
   )
 }
 

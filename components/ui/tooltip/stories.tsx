@@ -20,10 +20,31 @@ const meta: Meta<typeof ToolTip> = {
   parameters: {
     layout: 'centered'
   },
+  tags: ['autodocs'],
   args: {
     children: <Card {...CardProps}></Card>,
     $position: 'top',
-    $content: 'Tooltip content'
+    $content: 'Tooltip content',
+    $arrow: true
+  },
+  argTypes: {
+    $background: {
+      options: [
+        undefined,
+        'surface',
+        'primary',
+        'secondary',
+        'success',
+        'error',
+        'warn',
+        'success',
+        'info',
+        'grey',
+        'accent',
+        'transparent'
+      ],
+      control: { type: 'select' }
+    }
   }
 } satisfies Meta<typeof ToolTip>
 
