@@ -4,6 +4,41 @@ import { cookies } from 'next/headers'
 import { db } from '@/lib/db'
 import { signup, signout } from '@/lib/firebase/auth'
 import { sendemailverification } from '@/lib/firebase/actions'
+import { Profile, User, Channel, Follower, Subscriber } from '@prisma/client'
+
+export type CURRENTUSER = User & {
+  profile: Profile | null
+}
+
+export const getCurrentUser = async (): Promise<CURRENTUSER | null> => {
+  let user = null
+  const token = cookies().get('user_token_id')
+
+  if (!token) {
+    return null
+  }
+
+  const firebase_id = token.value
+
+  try {
+    user = await db.user.findUnique({
+      where: {
+        firebase_id
+      },
+      include: {
+        profile: true
+      }
+    })
+  } catch (error) {
+    console.log(error)
+  }
+
+  if (!user) {
+    return null
+  }
+
+  return user
+}
 
 // I'm using an object here to make it easier to add more props later if needed.
 export const createUser = async ({
@@ -171,7 +206,10 @@ export const verifyUserEmail = async (email: string) => {
   }
 }
 
-export const updateUserEmailStatus = async (firebase_email: string) => {
+export const updateUserEmailStatus = async (
+  firebase_email: string,
+  status = true
+) => {
   if (!firebase_email) {
     return { error: { message: 'Internal Error' } }
   }
@@ -189,7 +227,7 @@ export const updateUserEmailStatus = async (firebase_email: string) => {
         email: firebase_email
       },
       data: {
-        email_verified: true
+        email_verified: status
       }
     })
 
@@ -214,5 +252,132 @@ export const updateUserEmailStatus = async (firebase_email: string) => {
     return user
   } catch (error) {
     return { error: { message: 'Internal Error' } }
+  }
+}
+
+export type RESULT = {
+  username: string
+  profile: {
+    avatar: string
+  } | null
+  channel: {
+    name: string
+    streaming: boolean
+  } | null
+}[]
+
+export const searchQuery = async (query: string): Promise<RESULT | null> => {
+  if (!query) {
+    return null
+  }
+
+  let result = null
+  try {
+    result = await db.user.findMany({
+      where: {
+        username: {
+          contains: query,
+          mode: 'insensitive'
+        }
+      },
+      select: {
+        username: true,
+        profile: {
+          select: {
+            avatar: true
+          }
+        },
+        channel: {
+          select: {
+            name: true,
+            streaming: true
+          }
+        }
+      },
+      take: 8
+    })
+
+    if (result.length === 0) {
+      return null
+    }
+
+    return result
+  } catch {
+    return null
+  }
+}
+
+type UserProps = Omit<User, 'firebase_id' | 'id'> & {
+  profile?: Profile | null
+  channel?: Channel | null
+  follows?: Follower[]
+  subscribers?: Subscriber[]
+}
+
+export const getUser = async (username: string): Promise<UserProps | null> => {
+  if (!username) {
+    return null
+  }
+
+  let user = null
+  try {
+    user = await db.user.findUnique({
+      where: {
+        username
+      },
+      select: {
+        username: true,
+        email: true,
+        last_login: true,
+        profile: true,
+        channel: true,
+        follows: true,
+        subscriptions: true,
+        email_verified: true,
+        deactivated: true,
+        created_at: true,
+        updated_at: true
+      }
+    })
+
+    if (!user) {
+      return null
+    }
+
+    return user
+  } catch {
+    return null
+  }
+}
+
+type UserKeys = keyof UserProps
+
+export const updateUser = async (
+  username: UserKeys,
+  key: string,
+  value: string
+) => {
+  if (!username || !key || !value) {
+    return null
+  }
+
+  let user = null
+  try {
+    user = await db.user.update({
+      where: {
+        username
+      },
+      data: {
+        [key]: value
+      }
+    })
+
+    if (!user) {
+      return null
+    }
+
+    return user
+  } catch {
+    return null
   }
 }
