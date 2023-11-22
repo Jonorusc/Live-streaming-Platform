@@ -1,13 +1,23 @@
-import NoSsr from '@/components/NoSsr'
+// screen
+import Nav from '@/components/screens/nav'
+import { Suspense } from 'react'
+
 export const metadata = {
   title: 'Twitch Clone',
   description: 'A Clone of Twitch made with Next.js and TypeScript'
 }
 
-export default function RootLayout({
+export default function MainLayout({
   children
 }: {
   children: React.ReactNode
 }) {
-  return <NoSsr>{children}</NoSsr>
+  return (
+    <>
+      <Suspense fallback={<div>Loading nav...</div>}>
+        <Nav />
+      </Suspense>
+      <main>{children}</main>
+    </>
+  )
 }

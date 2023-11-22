@@ -15,6 +15,7 @@ import Grid from '@/components/ui/grid'
 export default function AuthPage() {
   const searchParams = useSearchParams()
   const actionCode = searchParams.get('oobCode')
+  const mode = searchParams.get('mode')
   const apiKey = searchParams.get('apiKey')
   const fetched = useRef(false)
   const { addToast } = useToast()
@@ -28,7 +29,6 @@ export default function AuthPage() {
       type: type,
       position: 'top-right',
       data: {
-        title: 'Email verification',
         message: message
       }
     })
@@ -88,7 +88,15 @@ export default function AuthPage() {
     if (fetched.current) return
     fetched.current = true
 
-    verifyEmail()
+    switch (mode) {
+      case 'verifyEmail':
+        verifyEmail()
+        break
+
+      default:
+        notify('error', 'Something went wrong. Please try again later.')
+        redirect('/')
+    }
   }, [fetched])
 
   return (

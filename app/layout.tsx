@@ -22,16 +22,16 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={font.className}>
+      <StyledComponentsRegistry>
         <ThemeProvider theme={theme}>
-          <StyledComponentsRegistry>
+          <body className={font.className}>
             <GlobalStyles />
             <ModalProvider />
             <ToastProvider />
             {children}
-          </StyledComponentsRegistry>
+          </body>
         </ThemeProvider>
-      </body>
+      </StyledComponentsRegistry>
     </html>
   )
 }
