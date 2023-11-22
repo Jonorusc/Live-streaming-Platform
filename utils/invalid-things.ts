@@ -9,3 +9,16 @@ export const tempEmailDomains = [
   'maildrop.cc',
   'mkurg.com'
 ] // add more as needed
+
+export const invalidUsernames = [
+  'user',
+  'channel',
+  'profile',
+  'account',
+  'logout',
+  'login',
+  'register',
+  'settings',
+  'admin',
+  'creater'
+]
