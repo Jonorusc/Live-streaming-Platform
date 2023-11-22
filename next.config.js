@@ -3,11 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   compiler: {
-    // styledComponents: true
-    styledComponents: {
-      ssr: true,
-      displayName: false
-    }
+    styledComponents: true
   },
   transpilePackages: ['lucide-react'],
   images: {
