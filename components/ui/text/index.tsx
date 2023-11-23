@@ -42,7 +42,7 @@ const TextField = React.memo(
     required = false
   }: TextFieldProps) => {
     // Get the necessary methods from useFormContext
-    const { register, watch, setValue, clearErrors } = useFormContext()
+    const { register, watch, setValue, clearErrors, trigger } = useFormContext()
 
     // Watch the value of the field
     const value = watch(name)
@@ -54,6 +54,9 @@ const TextField = React.memo(
     // Update the value of the field
     useEffect(() => {
       setValue(name, value)
+      if (value?.length > 0) {
+        trigger(name)
+      }
     }, [name, value])
 
     // Determine the response status
@@ -120,7 +123,7 @@ const TextField = React.memo(
               name={name}
               onChange={(e) => {
                 setValue(name, e.target.value)
-                clearErrors(name)
+                // clearErrors(name)
                 if (!loading) {
                   setLoading(true)
                 }
