@@ -10,7 +10,7 @@ import { useLocalStorage, useReadLocalStorage } from 'usehooks-ts'
 import { Moon } from 'lucide-react'
 import Toggler from '@/components/ui/toggler'
 import { DefaultTheme } from 'styled-components'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 const ThemeSwitcher = () => {
   const [, setCurrentTheme] = useLocalStorage('theme', defaultTheme)

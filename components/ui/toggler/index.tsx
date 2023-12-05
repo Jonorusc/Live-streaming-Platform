@@ -3,6 +3,7 @@
 import * as S from './styles'
 
 import NoSsr from '@/components/NoSsr'
+import { motion } from 'framer-motion'
 
 import { useState, useRef } from 'react'
 
@@ -25,9 +26,15 @@ const Toggler = ({ id, active, onSwitch }: TogglerProps) => {
           ref.current?.click()
         }}
       >
-        <input
+        <motion.input
           ref={ref}
           type="checkbox"
+          layout
+          transition={{
+            type: 'spring',
+            stiffness: 700,
+            damping: 30
+          }}
           id="id"
           name="id"
           defaultChecked={state}

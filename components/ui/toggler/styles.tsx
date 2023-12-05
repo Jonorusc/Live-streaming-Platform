@@ -6,10 +6,10 @@ export const Wrapper = styled.button<{ $isTrue: boolean }>`
     outline: none;
     border: 0.1rem solid
       ${!$isTrue ? theme.palette.text.base : theme.palette.primary};
-    background-color: ${!$isTrue ? 'transparent' : theme.palette.black};
+    background-color: transparent;
     display: flex;
     align-items: center;
-    /* justify-content: ${!$isTrue ? 'flex-start' : 'flex-end'}; */
+    justify-content: ${!$isTrue ? 'flex-start' : 'flex-end'};
     border-radius: 2.5rem;
     padding: 0 0.1rem;
     cursor: pointer;
@@ -21,27 +21,24 @@ export const Wrapper = styled.button<{ $isTrue: boolean }>`
     &::after {
       content: '';
       position: absolute;
-      display: ${!$isTrue ? 'none' : 'block'};
+      display: 'block';
+      scale: ${!$isTrue ? '0' : '1'};
       left: 0.5rem;
       width: 0.3rem;
       height: 0.8rem;
       border: solid ${theme.palette.primary};
       border-width: 0 0.2rem 0.2rem 0;
       transform: rotate(45deg);
+      transition: scale 0.2s ease-in-out;
     }
 
     input {
       &[type='checkbox'] {
         cursor: pointer;
-        width: 1rem;
-        height: 1rem;
         appearance: none;
         position: relative;
-        transform: translate(${!$isTrue ? '0' : '135%'}, 0);
-        transition: transform 0.1s ease-in-out;
-        transition-delay: 0.2s;
-        width: 1.5rem;
-        height: 1.5rem;
+        width: 1.4rem;
+        height: 1.4rem;
         background-color: ${!$isTrue
           ? theme.palette.text.base
           : theme.palette.primary};

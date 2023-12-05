@@ -1,6 +1,5 @@
 'use client'
 
-import { AnimatePresence } from 'framer-motion'
 import * as S from './styles'
 
 import { COLORS } from '@/components/ui/types'
@@ -25,15 +24,13 @@ const ToolTip = ({
     <NoSsr>
       <S.Wrapper>
         {children}
-        <AnimatePresence>
-          <S.ToolTip
-            $position={$position}
-            $background={$background}
-            $arrow={$arrow}
-          >
-            {$content}
-          </S.ToolTip>
-        </AnimatePresence>
+        <S.ToolTip
+          $position={$position}
+          $background={$background}
+          $arrow={$arrow}
+        >
+          {$content}
+        </S.ToolTip>
       </S.Wrapper>
     </NoSsr>
   )
