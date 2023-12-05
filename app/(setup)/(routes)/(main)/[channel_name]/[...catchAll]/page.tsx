@@ -5,7 +5,6 @@ import { useEffect, useRef } from 'react'
 type Props = {
   params: {
     channel_name: string
-    params: string[]
   }
 }
 

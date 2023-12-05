@@ -15,5 +15,5 @@ export default async function ChannelPage({ params }: Props) {
     notFound()
   }
 
-  return <section>{JSON.stringify(user)}</section>
+  return <section>{JSON.stringify(user.username)}</section>
 }

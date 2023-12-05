@@ -46,7 +46,7 @@ export const defaultTheme: DefaultTheme = {
       small: '1.6rem',
       medium: '2.4rem',
       large: '3.2rem',
-      xlarge: '4rem'
+      xlarge: '3.6rem'
     },
     bold: 700,
     semiBold: 600,

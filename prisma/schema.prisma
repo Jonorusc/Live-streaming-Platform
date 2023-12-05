@@ -30,6 +30,7 @@ model Profile {
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String   @unique @db.ObjectId
   avatar     String
+  color      String?
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }

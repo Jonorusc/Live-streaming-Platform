@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import ChannelSkeleton from './loading'
+import ChannelSkeleton from '@/components/screens/channel/loading'
 
 export type Props = {
   children: React.ReactNode

@@ -307,7 +307,7 @@ export const searchQuery = async (query: string): Promise<RESULT | null> => {
   }
 }
 
-type UserProps = Omit<User, 'firebase_id' | 'id'> & {
+export type UserProps = Omit<User, 'firebase_id' | 'id'> & {
   profile?: Profile | null
   channel?: Channel | null
   follows?: Follower[]

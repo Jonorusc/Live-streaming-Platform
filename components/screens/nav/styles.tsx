@@ -3,7 +3,7 @@
 import styled, { css } from 'styled-components'
 import { Wrapper as TextField } from '@/components/ui/text/styles'
 import { Wrapper as Button } from '@/components/ui/button/styles'
-import Flex from '@/components/ui/flex'
+
 export const Wrapper = styled.nav`
   ${({ theme }) => css`
     position: relative;
@@ -62,12 +62,6 @@ export const Wrapper = styled.nav`
         width: max-content;
         padding: 0.3rem;
         font-size: 1.2rem;
-      }
-    }
-
-    @media (max-width: 414px) {
-      ${Flex} {
-        width: max-content;
       }
     }
   `};
@@ -222,7 +216,7 @@ export const Avatar = styled.div`
 `
 
 export const DropDown = styled.div`
-  ${({ theme }) => css`
+  ${() => css`
     display: grid;
     position: relative;
     place-items: center;

@@ -16,6 +16,11 @@ const GlobalStyles = createGlobalStyle`
       font-size: ${theme.htmlFontSize};
     }
 
+    ul,
+    ol {
+      list-style: none;
+    }
+
     body {
       background-color: ${theme.palette.background};
       transition: all 0.5s ease;

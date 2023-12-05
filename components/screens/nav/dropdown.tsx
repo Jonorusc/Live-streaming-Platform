@@ -15,7 +15,7 @@ import ThemeSwitcher from '@/components/ui/theme'
 
 import { DropdownItem, dropdownItems } from './dropdown-items'
 
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, Dispatch, SetStateAction } from 'react'
 import Link from 'next/link'
 
 const Item = ({
@@ -25,10 +25,15 @@ const Item = ({
   separator,
   click,
   auth,
-  user
-}: DropdownItem & { user: CURRENTUSER | null }) => {
+  user,
+  setShowDp,
+  ...props
+}: DropdownItem & {
+  user: CURRENTUSER | null
+  setShowDp?: Dispatch<SetStateAction<boolean>>
+} & React.HTMLAttributes<HTMLElement>) => {
   const handleItemClick = async () => {
-    // ...
+    setShowDp && setShowDp(false)
   }
 
   const redirect = () => {
@@ -57,7 +62,7 @@ const Item = ({
       {auth && user && (
         <>
           {separator && <Separator />}
-          <S.DropDownItem>
+          <S.DropDownItem onClick={handleItemClick}>
             {!click ? (
               <Link href={$link} prefetch={false}>
                 <Flex
@@ -121,6 +126,7 @@ export const DropDown = ({ user }: { user: CURRENTUSER | null }) => {
         $gapY="1rem"
         $padding="0 0.5rem 0 0"
         $justify="flex-end"
+        $width="max-content!important"
       >
         {!user && (
           <>
@@ -168,7 +174,7 @@ export const DropDown = ({ user }: { user: CURRENTUSER | null }) => {
             </S.Avatar>
           )}
           {showDp && (
-            <S.DropDownBody>
+            <S.DropDownBody onClick={(e) => e.stopPropagation()}>
               {user && user?.profile && (
                 <>
                   <Flex $align="center" $gapY="1rem" $padding="0.5rem">
@@ -210,7 +216,7 @@ export const DropDown = ({ user }: { user: CURRENTUSER | null }) => {
               )}
               {dropdownItems.map((item) => (
                 <React.Fragment key={item.id}>
-                  <Item {...item} user={user} />
+                  <Item {...item} user={user} setShowDp={setShowDp} />
                 </React.Fragment>
               ))}
             </S.DropDownBody>
