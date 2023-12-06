@@ -18,6 +18,7 @@ export type CrooperProps = {
   grid?: boolean
   zoom: number
   setZoom: Dispatch<SetStateAction<number>>
+  rotate: number
 }
 
 const Crooper = ({
@@ -29,7 +30,8 @@ const Crooper = ({
   $height,
   grid = false,
   zoom,
-  setZoom
+  setZoom,
+  rotate
 }: CrooperProps) => {
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 })
 
@@ -54,6 +56,7 @@ const Crooper = ({
             onCropComplete={onCropComplete}
             onZoomChange={setZoom}
             showGrid={grid}
+            rotation={rotate}
           />
         </S.CrooperWrapper>
       </S.Wrapper>
