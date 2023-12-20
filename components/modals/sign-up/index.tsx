@@ -8,6 +8,7 @@ import { z } from 'zod'
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useModal } from '@/hooks/use-modal'
+import useKeyboardEvent from '@/hooks/use-keyboard'
 import passwordStrength from '@/utils/password-strength'
 import { useFormStatus } from 'react-dom'
 import { useSWRConfig } from 'swr'
@@ -37,6 +38,7 @@ const SignUpModal = (props: SignUpModalProps) => {
   const { mutate } = useSWRConfig()
 
   useClickOutside(modalRef, onClose)
+  useKeyboardEvent('Escape', onClose)
 
   const schema = z.object({
     username: z

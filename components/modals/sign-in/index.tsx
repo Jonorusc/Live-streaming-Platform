@@ -8,6 +8,7 @@ import { z } from 'zod'
 import useClickOutside from '@/hooks/use-clickoutside'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useModal } from '@/hooks/use-modal'
+import useKeyboardEvent from '@/hooks/use-keyboard'
 import { useFormStatus } from 'react-dom'
 import { signin } from '@/lib/firebase/auth'
 import { authenticateUser } from '@/actions/user'
@@ -23,7 +24,6 @@ import Grid from '@/components/ui/grid'
 import TextField from '@/components/ui/text'
 import { Error } from '@/components/ui/text/styles'
 import Flex from '@/components/ui/flex'
-import { UserReturnProps } from '@/lib/firebase/auth'
 import NoSsr from '@/components/NoSsr'
 
 export type SignInModalProps = {}
@@ -35,6 +35,8 @@ const SignInModal = (props: SignInModalProps) => {
   const { mutate } = useSWRConfig()
 
   useClickOutside(modalRef, onClose)
+
+  useKeyboardEvent('Escape', onClose)
 
   const schema = z.object({
     email: z.string().email({ message: 'Invalid email address' }),
