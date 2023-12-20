@@ -11,7 +11,8 @@
     "lint": "next lint",
     "format": "prettier --write .",
     "storybook": "storybook dev -s ../public -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
