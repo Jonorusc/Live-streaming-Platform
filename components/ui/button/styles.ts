@@ -105,7 +105,10 @@ export const Wrapper = styled.button<WrapperProps>`
     `};
 
     &:hover {
-      filter: brightness(1.1);
+      background-color: ${$error
+        ? theme.palette.error
+        : lighten(0.1, theme.palette[$bgcolor as COLORS])};
+
       ${$error &&
       css`
         background-color: ${lighten(0.2, theme.palette.error)};
