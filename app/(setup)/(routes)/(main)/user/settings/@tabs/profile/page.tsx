@@ -1,5 +1,8 @@
 import ProfilePage from '@/components/screens/settings/profile'
+import { getCurrentUser, CURRENTUSER } from '@/actions/user'
 
-export default function Page() {
-  return <ProfilePage />
+export default async function Page() {
+  const user = (await getCurrentUser()) as CURRENTUSER
+
+  return <ProfilePage user={user} />
 }

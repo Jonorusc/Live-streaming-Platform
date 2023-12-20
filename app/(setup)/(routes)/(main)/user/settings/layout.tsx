@@ -11,7 +11,7 @@ export const metadata = {
   title: 'Settings - Twitch Clone'
 }
 
-export default function UserSettingsLayout({
+export default async function UserSettingsLayout({
   tabs
 }: {
   tabs: React.ReactNode
@@ -30,7 +30,11 @@ export default function UserSettingsLayout({
           <Link href="profile">profile</Link>
           <Link href="channel">channel</Link>
         </Tabs>
-        <Suspense fallback={<SettingsLoading />}>{tabs}</Suspense>
+        <Suspense fallback={<SettingsLoading />}>
+          <Flex $direction="column" $gapX="1rem" $margin="2rem 0">
+            {tabs}
+          </Flex>
+        </Suspense>
       </Flex>
     </>
   )
