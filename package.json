@@ -30,6 +30,7 @@
     "polished": "^4.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-easy-crop": "^5.0.2",
     "react-hook-form": "^7.47.0",
     "react-loading": "^2.0.3",
     "styled-components": "^6.1.1",

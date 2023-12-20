@@ -27,6 +27,7 @@ declare module 'styled-components' {
       dark: string
       darker: string
       darkGrey: string
+      darkerGrey: string
       grey: string
       lightGrey: string
       darkenBlue: string
@@ -71,6 +72,7 @@ declare module 'styled-components' {
       }
     }
     spacing: {
+      xsmall: string
       small: string
       medium: string
       large: string
