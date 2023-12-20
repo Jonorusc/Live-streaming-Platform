@@ -25,8 +25,9 @@ export const darkTheme: DefaultTheme = {
     dark: '#18181b',
     darker: '#0e0e10',
     darkGrey: '#adadb838',
+    darkerGrey: '#0a0a0b',
     grey: '#adadb8',
-    lightGrey: '#848494',
+    lightGrey: '#d3d3d3',
     darkenBlue: '#194B78',
     whiteSmoke: '#f5f5f5',
     white: '#ffffff',
@@ -69,6 +70,7 @@ export const darkTheme: DefaultTheme = {
     }
   },
   spacing: {
+    xsmall: '0.4rem',
     small: '0.8rem',
     medium: '1.6rem',
     large: '2.4rem',
