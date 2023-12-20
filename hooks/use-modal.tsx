@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-export type ModalType = 'signin' | 'signup'
+export type ModalType = 'signin' | 'signup' | 'profile-image' | 'dialog'
 
 interface ModalStoreProps {
   type: ModalType | null
