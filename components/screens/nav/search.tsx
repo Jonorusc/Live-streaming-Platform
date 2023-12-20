@@ -105,7 +105,7 @@ export const Searcher = () => {
       {active && (
         <S.Results>
           {result.map((user) => (
-            <Link href={user.username} key={user.username}>
+            <Link href={`/${user.username}`} key={user.username}>
               <Flex $align="center" $justify="space-between">
                 <Flex $align="center" $gapY="0.6rem" $padding="0.5rem">
                   {user.channel ? (
