@@ -17,6 +17,7 @@ export const CrooperWrapper = styled.div`
     height: 100%;
     width: 100%;
     bottom: 0.8rem;
+    background-color: rgba(0, 0, 0, 0.5);
     .reactEasyCrop_CropArea {
       color: ${theme.name === 'dark'
         ? 'rgba(24, 24, 27, 0.6)'
