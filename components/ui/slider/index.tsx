@@ -1,7 +1,7 @@
 import * as S from './styles'
 
 import { ZoomIn, ZoomOut } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { COLORS } from '@/components/ui/types'
 import Flex from '@/components/ui/flex'
@@ -31,6 +31,11 @@ const Slider = ({
   $color = 'primary'
 }: SliderProps) => {
   const [value, setValue] = useState($value ? $value : min)
+
+  useEffect(() => {
+    if (!$value) return
+    setValue($value)
+  }, [$value])
 
   function handleZoomClick(type: 'in' | 'out') {
     let newValue = value
