@@ -1,6 +1,7 @@
 'use server'
 
 import { cookies } from 'next/headers'
+import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
 import { signup, signout } from '@/lib/firebase/auth'
 import { sendemailverification } from '@/lib/firebase/actions'
@@ -376,6 +377,42 @@ export const updateUser = async (
       return null
     }
 
+    revalidatePath('/')
+    return user
+  } catch {
+    return null
+  }
+}
+
+export const updateUserProfile = async (
+  username: string,
+  key: string,
+  value: string
+) => {
+  if (!username || !key || !value) {
+    return null
+  }
+
+  let user = null
+  try {
+    user = await db.user.update({
+      where: {
+        username
+      },
+      data: {
+        profile: {
+          update: {
+            [key]: value
+          }
+        }
+      }
+    })
+
+    if (!user) {
+      return null
+    }
+
+    revalidatePath('/')
     return user
   } catch {
     return null
