@@ -96,13 +96,12 @@ const TextField = React.memo(
     return (
       <NoSsr>
         <S.Wrapper $error={!!$error} $bgColor={$bgColor}>
-          {label ||
-            ($response && (
-              <S.Top>
-                {label && <label htmlFor={name}>{label}</label>}
-                {responseStatus}
-              </S.Top>
-            ))}
+          {$response && (
+            <S.Top>
+              {label && <label htmlFor={name}>{label}</label>}
+              {responseStatus}
+            </S.Top>
+          )}
           <Flex
             $align="center"
             $gapY="0.1rem"

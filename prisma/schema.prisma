@@ -9,20 +9,36 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum GAMES_CATEGORIES {
+  ACTION
+  ADVENTURE
+  CASUAL
+  INDIE
+  MULTIPLAYER
+  RACING
+  RPG
+  SIMULATION
+  SPORTS
+  STRATEGY
+}
+
 model User {
-  id             String       @id @default(auto()) @map("_id") @db.ObjectId
-  firebase_id    String       @unique
-  email          String       @unique
-  username       String       @unique
-  profile        Profile?
-  channel        Channel?
-  follows        Follower[]
-  subscriptions  Subscriber[]
-  email_verified Boolean      @default(false)
-  deactivated    Boolean      @default(false)
-  last_login     DateTime     @default(now())
-  created_at     DateTime     @default(now())
-  updated_at     DateTime     @updatedAt
+  id                      String             @id @default(auto()) @map("_id") @db.ObjectId
+  firebase_id             String             @unique
+  email                   String             @unique
+  username                String             @unique
+  username_updated_at     DateTime?
+  profile                 Profile?
+  channel                 Channel?
+  follows                 Follower[]
+  subscriptions           Subscriber[]
+  interested_categories   GAMES_CATEGORIES[]
+  uninterested_categories GAMES_CATEGORIES[]
+  email_verified          Boolean            @default(false)
+  deactivated             Boolean            @default(false)
+  last_login              DateTime           @default(now())
+  created_at              DateTime           @default(now())
+  updated_at              DateTime           @updatedAt
 }
 
 model Profile {
@@ -36,27 +52,36 @@ model Profile {
 }
 
 model Channel {
-  id              String       @id @default(auto()) @map("_id") @db.ObjectId
-  name            String       @unique
-  owner           User         @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  ownerId         String       @unique @db.ObjectId
-  followers       Follower[]
-  subscribers     Subscriber[]
-  description     String?
-  streaming_title String?
-  streaming_game  String?
-  streaming       Boolean      @default(false)
-  created_at      DateTime     @default(now())
-  updated_at      DateTime     @updatedAt
+  id                   String             @id @default(auto()) @map("_id") @db.ObjectId
+  name                 String             @unique
+  owner                User               @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId              String             @unique @db.ObjectId
+  followers            Follower[]
+  subscribers          Subscriber[]
+  description          String?
+  categories           GAMES_CATEGORIES[]
+  stream_key           String?
+  stream_server_url    String?
+  stream_ingress_id    String?
+  streaming_title      String?
+  streaming_thumbnail  String?
+  streaming_game       String?
+  streaming_viewers    Int?
+  streaming_started_at DateTime?
+  streaming_ended_at   DateTime?
+  streaming_category   GAMES_CATEGORIES?
+  live                 Boolean            @default(false)
+  created_at           DateTime           @default(now())
+  updated_at           DateTime           @updatedAt
 }
 
-enum FollowerRole {
+enum FOLLOWER_ROLE {
   VIEWER
   STREAMER
   MODERATOR
 }
 
-enum FollowerRank {
+enum FOLLOWER_RANK {
   NEW
   REGULAR
   ENTHUSIAST
@@ -65,15 +90,15 @@ enum FollowerRank {
 }
 
 model Follower {
-  id         String       @id @default(auto()) @map("_id") @db.ObjectId
-  role       FollowerRole @default(VIEWER)
-  rank       FollowerRank @default(NEW)
-  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String       @db.ObjectId
-  channel    Channel      @relation(fields: [channelId], references: [id], onDelete: Cascade)
-  channelId  String       @db.ObjectId
-  created_at DateTime     @default(now())
-  updated_at DateTime     @updatedAt
+  id         String        @id @default(auto()) @map("_id") @db.ObjectId
+  role       FOLLOWER_ROLE @default(VIEWER)
+  rank       FOLLOWER_RANK @default(NEW)
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String        @db.ObjectId
+  channel    Channel       @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  channelId  String        @db.ObjectId
+  created_at DateTime      @default(now())
+  updated_at DateTime      @updatedAt
 }
 
 // enum SubscriberTier {

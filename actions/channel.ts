@@ -2,19 +2,32 @@
 
 import { db } from '@/lib/db'
 import { Channel } from '@prisma/client'
+import { getCurrentUser } from './user'
 
 export const fetchChannel = async (
   channel_name: string
 ): Promise<Channel | null> => {
   if (!channel_name) {
-    return null
+    throw new Error('Channel name is required')
+  }
+
+  const curentUser = await getCurrentUser()
+
+  if (!curentUser) {
+    throw new Error('Internal Error')
   }
 
   let channel = null
   try {
     channel = await db.channel.findUnique({
       where: {
-        name: channel_name
+        name: channel_name,
+        NOT: {
+          ownerId: curentUser.id,
+          owner: {
+            deactivated: true
+          }
+        }
       }
     })
 
@@ -23,7 +36,7 @@ export const fetchChannel = async (
     }
 
     return channel
-  } catch {
-    return null
+  } catch (error) {
+    throw new Error(String(error))
   }
 }

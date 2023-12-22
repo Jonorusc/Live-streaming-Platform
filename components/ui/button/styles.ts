@@ -105,20 +105,13 @@ export const Wrapper = styled.button<WrapperProps>`
     `};
 
     &:hover {
-      background-color: ${$error
-        ? theme.palette.error
-        : lighten(0.1, theme.palette[$bgcolor as COLORS])};
-
-      ${$error &&
-      css`
-        background-color: ${lighten(0.2, theme.palette.error)};
-      `}
-
       ${!disabled &&
-      !$error &&
-      $hoverColor !== undefined &&
       css`
-        background-color: ${darken(0.1, theme.palette[$hoverColor as COLORS])};
+        background-color: ${$error
+          ? lighten(0.2, theme.palette.error)
+          : $hoverColor !== undefined
+          ? darken(0.1, theme.palette[$hoverColor as COLORS])
+          : lighten(0.1, theme.palette[$bgcolor as COLORS])};
       `}
     }
 

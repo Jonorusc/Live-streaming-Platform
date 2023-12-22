@@ -15,11 +15,14 @@ export async function GET(req: Request) {
     const user = await db.user.findUnique({
       select: {
         username: true,
+        username_updated_at: true,
         email: true,
         last_login: true,
         profile: true,
         channel: true,
         follows: true,
+        interested_categories: true,
+        uninterested_categories: true,
         subscriptions: true,
         email_verified: true,
         deactivated: true,

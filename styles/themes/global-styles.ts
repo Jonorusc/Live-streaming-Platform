@@ -25,6 +25,7 @@ const GlobalStyles = createGlobalStyle`
       background-color: ${theme.palette.background};
       transition: all 0.5s ease;
       width: 100%;
+      height: 100%;
       overflow: hidden;
       color: ${theme.palette.text.base};
       font-size: ${theme.font.size.small};

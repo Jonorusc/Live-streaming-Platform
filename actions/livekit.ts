@@ -1,5 +1,6 @@
 'use server'
 
+import { db } from '@/lib/db'
 import {
   AccessToken,
   IngressAudioEncodingPreset,
@@ -78,6 +79,22 @@ export const createIngress = async (
   }
 
   const ingress = await ingressClient.createIngress(ingressType, options)
+
+  try {
+    await db.channel.update({
+      where: { name: channelName },
+      data: {
+        stream_ingress_id: ingress.ingressId,
+        stream_key: ingress.streamKey,
+        stream_server_url: ingress.url
+      }
+    })
+  } catch {
+    if (ingress.ingressId) {
+      await ingressClient.deleteIngress(ingress.ingressId)
+    }
+    throw new Error('Failed to save ingress')
+  }
 
   return ingress
 }

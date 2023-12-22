@@ -13,7 +13,7 @@ import { useModal } from '@/hooks/use-modal'
 import ReactLoading from 'react-loading'
 import useKeyboardEvent from '@/hooks/use-keyboard'
 import { useToast } from '@/hooks/use-toast'
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { mutate } from 'swr'
 
 import DefaultView from './default'
@@ -28,8 +28,8 @@ const ProfileImageModal = () => {
   const [view, setView] = useState<Views>('default')
   const [file, setFile] = useState<File | null>(null)
   const [fileList, setFileList] = useState<FileList | null>(null)
-  const [loading, setLoading] = useState<boolean>(false)
   const { addToast } = useToast()
+  const [isPending, startTransition] = useTransition()
 
   const views = {
     edit: <EditProfilePicture setFileList={setFileList} file={file} />,
@@ -40,49 +40,46 @@ const ProfileImageModal = () => {
 
   useKeyboardEvent('Escape', onClose)
 
-  const handleSaveProfilePicture = async () => {
-    setLoading(true)
-    const path = await uploadFilesToStorage({
-      fileList: fileList as FileList,
-      collectionName: 'avatars',
-      document: data.username
-    })
+  const handleSaveProfilePicture = () => {
+    startTransition(async () => {
+      try {
+        const path = await uploadFilesToStorage({
+          fileList: fileList as FileList,
+          collectionName: 'avatars',
+          document: data.username
+        })
+        // update user data
+        await updateUserProfile({
+          username: data!.username,
+          key: 'avatar',
+          value: path[0]
+        })
+        addToast({
+          id: Date.now(),
+          timeout: 5000,
+          type: 'success',
+          position: 'top-right',
+          data: {
+            message: 'Profile picture updated successfully.'
+          }
+        })
 
-    // update user data
-    const updatedProfile = await updateUserProfile(
-      data!.username,
-      'avatar',
-      path[0]
-    )
-
-    setLoading(false)
-
-    if (!updatedProfile) {
-      addToast({
-        id: Date.now(),
-        timeout: 5000,
-        type: 'error',
-        position: 'top-right',
-        data: {
-          message:
-            'Something went wrong while updating your profile picture. Please try again later.'
-        }
-      })
-      return
-    }
-
-    addToast({
-      id: Date.now(),
-      timeout: 5000,
-      type: 'success',
-      position: 'top-right',
-      data: {
-        message: 'Profile picture updated successfully.'
+        mutate('/api/user')
+      } catch {
+        addToast({
+          id: Date.now(),
+          timeout: 5000,
+          type: 'error',
+          position: 'top-right',
+          data: {
+            message:
+              'Something went wrong while updating your profile picture. Please try again later.'
+          }
+        })
+      } finally {
+        onClose()
       }
     })
-
-    onClose()
-    mutate('/api/user')
   }
 
   return (
@@ -128,10 +125,10 @@ const ProfileImageModal = () => {
                     $fontSize="small"
                     $width="max-content"
                     $fontWeight="bold"
-                    disabled={loading}
+                    disabled={isPending}
                     onClick={handleSaveProfilePicture}
                   >
-                    {loading ? (
+                    {isPending ? (
                       <Flex $align="center" $justify="center" $gapY="0.3rem">
                         <ReactLoading
                           type="spin"

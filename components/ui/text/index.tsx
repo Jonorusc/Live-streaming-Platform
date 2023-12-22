@@ -19,6 +19,7 @@ export type TextFieldProps = {
   label?: string
   name: string
   type?: TEXTFIELD_TYPES
+  $value?: string
   $error?: string
   $success?: boolean
   disabled?: boolean
@@ -32,6 +33,7 @@ const TextField = React.memo(
   ({
     label,
     name,
+    $value,
     type = 'text',
     $error = '',
     $success = false,
@@ -42,7 +44,7 @@ const TextField = React.memo(
     required = false
   }: TextFieldProps) => {
     // Get the necessary methods from useFormContext
-    const { register, watch, setValue, clearErrors, trigger } = useFormContext()
+    const { register, watch, setValue, trigger } = useFormContext()
 
     // Watch the value of the field
     const value = watch(name)
@@ -50,6 +52,7 @@ const TextField = React.memo(
     // State for loading
     const [loading, setLoading] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
+    const [inputValue, setInputValue] = useState($value || '')
 
     // Update the value of the field
     useEffect(() => {
@@ -121,7 +124,9 @@ const TextField = React.memo(
               {...register(name)}
               required={required}
               name={name}
+              value={inputValue}
               onChange={(e) => {
+                setInputValue(e.target.value)
                 setValue(name, e.target.value)
                 // clearErrors(name)
                 if (!loading) {

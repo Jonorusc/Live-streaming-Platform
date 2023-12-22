@@ -17,8 +17,16 @@ import { CURRENTUSER, updateUserProfile } from '@/actions/user'
 const ProfilePicturePage = ({ user }: { user: CURRENTUSER }) => {
   const { onOpen } = useModal()
   const { addToast } = useToast()
+
   return (
     <NoSsr>
+      <Typrography
+        $color="triadic2"
+        $text="Profile Picture"
+        $type="h5"
+        $fontSize="small"
+        $fontWeight="semiBold"
+      />
       <S.Section>
         <Flex $align="center" $gapY="2rem">
           <Avatar
@@ -67,15 +75,25 @@ const ProfilePicturePage = ({ user }: { user: CURRENTUSER }) => {
                         title: 'Remove Profile Picture',
                         message:
                           'Are you sure you want to remove your profile picture?',
-                        onAccept: () => {
-                          // this is a server side call (server action)
-                          const updatedProfile = updateUserProfile(
-                            user.username,
-                            'avatar',
-                            `https://api.dicebear.com/7.x/initials/png?seed=${user.username}`
-                          )
+                        onAccept: async () => {
+                          try {
+                            // this is a server side call (server action)
+                            await updateUserProfile({
+                              username: user.username,
+                              key: 'avatar',
+                              value: `https://api.dicebear.com/7.x/initials/png?seed=${user.username}`
+                            })
 
-                          if (!updatedProfile) {
+                            addToast({
+                              id: Date.now(),
+                              timeout: 5000,
+                              type: 'success',
+                              position: 'top-right',
+                              data: {
+                                message: 'Profile picture removed successfully.'
+                              }
+                            })
+                          } catch {
                             addToast({
                               id: Date.now(),
                               timeout: 5000,
@@ -86,18 +104,7 @@ const ProfilePicturePage = ({ user }: { user: CURRENTUSER }) => {
                                   'Something went wrong. Please try again later.'
                               }
                             })
-                            return
                           }
-
-                          addToast({
-                            id: Date.now(),
-                            timeout: 5000,
-                            type: 'success',
-                            position: 'top-right',
-                            data: {
-                              message: 'Profile picture removed successfully.'
-                            }
-                          })
                         }
                       })
                     }}

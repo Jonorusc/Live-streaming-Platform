@@ -69,17 +69,17 @@ export default function AuthPage() {
 
         if (success) {
           // I'm using two methods to update the user's email status because at some point if I decide to switch to another authentication platform I can easily change the code
-          const handler: any = await updateUserEmailStatus(firebaseUser.email)
-          if (handler.error) {
-            notify('error', 'Something went wrong. Please try again later.')
-            return
-          }
+          await updateUserEmailStatus(firebaseUser.email)
         }
 
         notify('success', 'Your email has been verified successfully.')
         userMutate()
       } catch (resp: any) {
-        notify('error', resp.error?.message)
+        notify(
+          'error',
+          resp?.error?.message ||
+            'Something went wrong. Please try again later.'
+        )
       } finally {
         router.push('/')
       }

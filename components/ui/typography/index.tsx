@@ -49,7 +49,7 @@ const Typrography = ({
   $borderSize = undefined,
   $fontSize = 'medium',
   $fontWeight = 'normal',
-  $type = 'span',
+  $type,
   $width = 'auto',
   $margin = undefined,
   $position = 'unset',
@@ -65,7 +65,7 @@ const Typrography = ({
   return (
     <NoSsr>
       <S.Wrapper
-        as={$type}
+        {...($type && !children ? { as: $type } : {})}
         $bgcolor={$bgcolor}
         $hoverColor={$hoverColor}
         $color={$color}

@@ -18,7 +18,7 @@ import { useRef } from 'react'
 const DialogModal = () => {
   const { onClose, data } = useModal()
   const modalRef = useRef<HTMLDivElement>(null)
-  const { title, message, onAccept, onDeny } = data
+  const { title, message, onAccept, onDeny, acceptText, denyText } = data
 
   useKeyboardEvent('Escape', onClose)
   useClickOutside(modalRef, onClose)
@@ -64,7 +64,7 @@ const DialogModal = () => {
                       onClose()
                     }}
                   >
-                    Cancel
+                    {denyText ? denyText : 'Cancel'}
                   </Button>
                 )}
                 {onAccept && (
@@ -77,7 +77,7 @@ const DialogModal = () => {
                       onAccept()
                     }}
                   >
-                    Ok
+                    {acceptText ? acceptText : 'Ok'}
                   </Button>
                 )}
               </Flex>

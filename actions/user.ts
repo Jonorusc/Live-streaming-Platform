@@ -30,8 +30,8 @@ export const getCurrentUser = async (): Promise<CURRENTUSER | null> => {
         profile: true
       }
     })
-  } catch (error) {
-    console.log(error)
+  } catch {
+    null
   }
 
   if (!user) {
@@ -52,7 +52,7 @@ export const createUser = async ({
   password: string
 }) => {
   if (!username || !email || !password) {
-    return { error: { message: 'Complete all required fields' } }
+    throw new Error('Complete all fields')
   }
 
   try {
@@ -60,7 +60,7 @@ export const createUser = async ({
     const { data: firebaseUser } = await signup(email, password)
 
     if (!firebaseUser) {
-      return { error: { message: 'Internal Error' } }
+      throw new Error('Internal Error')
     }
 
     let user = null
@@ -80,21 +80,21 @@ export const createUser = async ({
     })
 
     if (!user) {
-      return { error: { message: 'Internal Error' } }
+      throw new Error('Internal Error')
     }
 
     await sendemailverification()
 
     return user
   } catch {
-    return { error: { message: 'Internal Error' } }
+    throw new Error('Internal Error')
   }
 }
 
 // authenticate the user
 export const authenticateUser = async (firebase_id: string) => {
   if (!firebase_id) {
-    return { error: { message: 'Internal Error' } }
+    throw new Error('Internal Error')
   }
 
   let user = null
@@ -106,7 +106,7 @@ export const authenticateUser = async (firebase_id: string) => {
     })
 
     if (!user) {
-      return { error: { message: 'Internal Error' } }
+      throw new Error('User not found')
     }
 
     user = await db.user.update({
@@ -114,12 +114,13 @@ export const authenticateUser = async (firebase_id: string) => {
         firebase_id
       },
       data: {
+        deactivated: false,
         last_login: new Date()
       }
     })
 
     if (!user) {
-      return { error: { message: 'Internal Error' } }
+      throw new Error('Internal Error')
     }
 
     // create the token and set it as a cookie
@@ -137,7 +138,7 @@ export const authenticateUser = async (firebase_id: string) => {
 
     return user
   } catch (error) {
-    return { error: { message: error } }
+    throw new Error('Internal Error')
   }
 }
 
@@ -145,19 +146,19 @@ export const signOutUser = async () => {
   try {
     const success = await signout()
     if (!success) {
-      return { error: { message: 'Internal Error' } }
+      throw new Error('Internal Error')
     }
     cookies().delete('user_token_id')
 
     return success
   } catch {
-    return { error: { message: 'Internal Error' } }
+    throw new Error('Internal Error')
   }
 }
 
 export const verifyUserName = async (username: string) => {
   if (!username) {
-    return { error: { message: 'Internal Error' } }
+    throw new Error('Username is required')
   }
 
   let user = null
@@ -178,13 +179,13 @@ export const verifyUserName = async (username: string) => {
 
     return user
   } catch {
-    return { error: { message: 'Internal Error' } }
+    throw new Error('Internal Error')
   }
 }
 
 export const verifyUserEmail = async (email: string) => {
   if (!email) {
-    return { error: { message: 'Internal Error' } }
+    throw new Error('Email is required')
   }
   let user = null
   try {
@@ -203,7 +204,7 @@ export const verifyUserEmail = async (email: string) => {
 
     return user
   } catch {
-    return { error: { message: 'Internal Error' } }
+    throw new Error('Internal Error')
   }
 }
 
@@ -212,7 +213,7 @@ export const updateUserEmailStatus = async (
   status = true
 ) => {
   if (!firebase_email) {
-    return { error: { message: 'Internal Error' } }
+    throw new Error('Internal Error')
   }
   let user = null
   try {
@@ -233,7 +234,7 @@ export const updateUserEmailStatus = async (
     })
 
     if (!user) {
-      return { error: { message: 'Internal Error' } }
+      throw new Error('Internal Error')
     }
 
     // lets create the user channel as well
@@ -247,12 +248,12 @@ export const updateUserEmailStatus = async (
     })
 
     if (!channel) {
-      return { error: { message: 'Internal Error' } }
+      throw new Error('Internal Error')
     }
 
     return user
   } catch (error) {
-    return { error: { message: 'Internal Error' } }
+    throw new Error('Internal Error')
   }
 }
 
@@ -263,23 +264,32 @@ export type RESULT = {
   } | null
   channel: {
     name: string
-    streaming: boolean
+    live: boolean
   } | null
 }[]
 
 export const searchQuery = async (query: string): Promise<RESULT | null> => {
   if (!query) {
-    return null
+    throw new Error('Query is required')
+  }
+
+  const currentUser = await getCurrentUser()
+
+  const username: { [key: string]: string } = {
+    contains: query,
+    mode: 'insensitive'
+  }
+  if (currentUser) {
+    username.not = currentUser.username
   }
 
   let result = null
+
   try {
     result = await db.user.findMany({
       where: {
-        username: {
-          contains: query,
-          mode: 'insensitive'
-        }
+        username: username,
+        deactivated: false
       },
       select: {
         username: true,
@@ -291,7 +301,7 @@ export const searchQuery = async (query: string): Promise<RESULT | null> => {
         channel: {
           select: {
             name: true,
-            streaming: true
+            live: true
           }
         }
       },
@@ -303,8 +313,8 @@ export const searchQuery = async (query: string): Promise<RESULT | null> => {
     }
 
     return result
-  } catch {
-    return null
+  } catch (error) {
+    throw new Error(String(error))
   }
 }
 
@@ -317,7 +327,7 @@ export type UserProps = Omit<User, 'firebase_id' | 'id'> & {
 
 export const getUser = async (username: string): Promise<UserProps | null> => {
   if (!username) {
-    return null
+    throw new Error('Username is required')
   }
 
   let user = null
@@ -328,11 +338,14 @@ export const getUser = async (username: string): Promise<UserProps | null> => {
       },
       select: {
         username: true,
+        username_updated_at: true,
         email: true,
         last_login: true,
         profile: true,
         channel: true,
         follows: true,
+        interested_categories: true,
+        uninterested_categories: true,
         subscriptions: true,
         email_verified: true,
         deactivated: true,
@@ -351,70 +364,84 @@ export const getUser = async (username: string): Promise<UserProps | null> => {
   }
 }
 
-type UserKeys = keyof UserProps
-
-export const updateUser = async (
-  username: UserKeys,
-  key: string,
-  value: string
-) => {
-  if (!username || !key || !value) {
-    return null
+export const updateUser = async ({
+  username,
+  key,
+  value
+}: {
+  username: string
+  key?: keyof UserProps
+  value: string | Partial<Record<keyof UserProps, any>>
+}) => {
+  if (!username || !value) {
+    throw new Error('Complete all fields')
   }
 
-  let user = null
   try {
-    user = await db.user.update({
+    const user = await db.user.update({
       where: {
         username
       },
       data: {
-        [key]: value
+        ...(typeof value === 'object'
+          ? value
+          : { [key as string]: value as string })
       }
     })
 
     if (!user) {
-      return null
+      throw new Error('User not found')
     }
 
     revalidatePath('/')
+    revalidatePath(`/${username}`)
+    revalidatePath(`/user/settings/`)
     return user
-  } catch {
-    return null
+  } catch (error) {
+    throw new Error(String(error))
   }
 }
 
-export const updateUserProfile = async (
-  username: string,
-  key: string,
-  value: string
-) => {
-  if (!username || !key || !value) {
-    return null
+export const updateUserProfile = async ({
+  username,
+  key,
+  value
+}: {
+  username: string
+  key: keyof Profile
+  value: string | Partial<Record<keyof Profile, any>>
+}) => {
+  if (!username || !value) {
+    throw new Error('Complete all fields')
   }
 
-  let user = null
   try {
-    user = await db.user.update({
+    const user = await db.user.update({
       where: {
         username
       },
       data: {
         profile: {
           update: {
-            [key]: value
+            data: {
+              ...(typeof value === 'object'
+                ? value
+                : { [key]: value as string })
+            }
           }
         }
       }
     })
 
     if (!user) {
-      return null
+      throw new Error('User not found')
     }
 
     revalidatePath('/')
+    revalidatePath(`/${username}`)
+    revalidatePath(`/user/settings/`)
     return user
-  } catch {
-    return null
+  } catch (error) {
+    throw new Error(String(error))
   }
 }

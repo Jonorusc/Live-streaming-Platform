@@ -124,7 +124,7 @@ export const Searcher = () => {
                     </span>
                   </Typrography>
                 </Flex>
-                {user.channel?.streaming && (
+                {user.channel?.live && (
                   <Flex $align="center">
                     <S.Streaming>Live</S.Streaming>
                   </Flex>
@@ -133,7 +133,7 @@ export const Searcher = () => {
             </Link>
           ))}
           {search.length >= 5 && (
-            <Link href={search}>
+            <Link href={`/${search}`}>
               <Flex $align="center" $gapY="0.5rem" $margin="0.5rem 0 0 0">
                 {/* I'm using 5 because it's the minimum to create a username, so if the user searches for a string with length less than 6 he will receive the 404 page */}
                 <Typrography
