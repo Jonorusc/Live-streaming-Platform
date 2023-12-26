@@ -7,9 +7,14 @@ import { signup, signout } from '@/lib/firebase/auth'
 import { sendemailverification } from '@/lib/firebase/actions'
 import { Profile, User, Channel, Follower, Subscriber } from '@prisma/client'
 
-export type CURRENTUSER = User & {
-  profile: Profile | null
+export type UserProps = Omit<User, 'firebase_id' | 'id'> & {
+  profile?: Profile | null
+  channel?: Channel | null
+  follows?: Follower[]
+  subscribers?: Subscriber[]
 }
+
+export type CURRENTUSER = UserProps & { id: string }
 
 export const getCurrentUser = async (): Promise<CURRENTUSER | null> => {
   let user = null
@@ -23,11 +28,25 @@ export const getCurrentUser = async (): Promise<CURRENTUSER | null> => {
 
   try {
     user = await db.user.findUnique({
+      select: {
+        id: true,
+        username: true,
+        username_updated_at: true,
+        email: true,
+        last_login: true,
+        profile: true,
+        channel: true,
+        follows: true,
+        interested_categories: true,
+        uninterested_categories: true,
+        subscriptions: true,
+        email_verified: true,
+        deactivated: true,
+        created_at: true,
+        updated_at: true
+      },
       where: {
         firebase_id
-      },
-      include: {
-        profile: true
       }
     })
   } catch {
@@ -316,13 +335,6 @@ export const searchQuery = async (query: string): Promise<RESULT | null> => {
   } catch (error) {
     throw new Error(String(error))
   }
-}
-
-export type UserProps = Omit<User, 'firebase_id' | 'id'> & {
-  profile?: Profile | null
-  channel?: Channel | null
-  follows?: Follower[]
-  subscribers?: Subscriber[]
 }
 
 export const getUser = async (username: string): Promise<UserProps | null> => {

@@ -113,35 +113,63 @@ const TextField = React.memo(
             <label htmlFor={name}>{label}</label>
             {responseStatus}
           </S.Top>
-          <Flex
-            $align="center"
-            $gapY="0.1rem"
-            {...(type === 'password' ? { 'aria-label': 'action-button' } : {})}
-          >
-            <input
-              type={type === 'password' && showPassword ? 'text' : type}
-              id={name}
-              {...register(name)}
-              required={required}
-              name={name}
-              value={inputValue}
-              onChange={(e) => {
-                setInputValue(e.target.value)
-                setValue(name, e.target.value)
-                // clearErrors(name)
-                if (!loading) {
-                  setLoading(true)
-                }
-                if (e.target.value.length === 0) {
-                  setLoading(false)
-                }
-                debouncedSetLoading()
-              }}
-              disabled={disabled}
-              placeholder={placeholder}
-            />
-            {eyes}
-          </Flex>
+          {type !== 'textarea' ? (
+            <Flex
+              $align="center"
+              $gapY="0.1rem"
+              {...(type === 'password'
+                ? { 'aria-label': 'action-button' }
+                : {})}
+            >
+              <input
+                type={type === 'password' && showPassword ? 'text' : type}
+                id={name}
+                {...register(name)}
+                required={required}
+                name={name}
+                value={inputValue}
+                onChange={(e) => {
+                  setInputValue(e.target.value)
+                  setValue(name, e.target.value)
+                  // clearErrors(name)
+                  if (!loading) {
+                    setLoading(true)
+                  }
+                  if (e.target.value.length === 0) {
+                    setLoading(false)
+                  }
+                  debouncedSetLoading()
+                }}
+                disabled={disabled}
+                placeholder={placeholder}
+              />
+              {eyes}
+            </Flex>
+          ) : (
+            <div>
+              <textarea
+                id={name}
+                {...register(name)}
+                required={required}
+                name={name}
+                value={inputValue}
+                onChange={(e) => {
+                  setInputValue(e.target.value)
+                  setValue(name, e.target.value)
+                  // clearErrors(name)
+                  if (!loading) {
+                    setLoading(true)
+                  }
+                  if (e.target.value.length === 0) {
+                    setLoading(false)
+                  }
+                  debouncedSetLoading()
+                }}
+                disabled={disabled}
+                placeholder={placeholder}
+              />
+            </div>
+          )}
           {$error?.length > 1 && <S.Error>{$error}</S.Error>}
         </S.Wrapper>
       </NoSsr>

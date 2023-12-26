@@ -54,9 +54,10 @@ export const Wrapper = styled.div<{ $error?: boolean; $bgColor?: COLORS }>`
       ${backgroundModifier(theme)}
     }
 
+
     & > div {
       width: 100%;
-      > input {
+      & > input, textarea {
       transform: translateZ(0);
       background-color: transparent;
       color: ${theme.palette.text.base};
@@ -67,6 +68,7 @@ export const Wrapper = styled.div<{ $error?: boolean; $bgColor?: COLORS }>`
       font-weight: 400;
       height: 3rem;
       outline: none;
+      resize: none;
       margin: 0;
       width: inherit;
       padding: 0.5rem 1rem;
@@ -107,6 +109,11 @@ export const Wrapper = styled.div<{ $error?: boolean; $bgColor?: COLORS }>`
           $error ? theme.palette.error : theme.palette.grey
         )};
       }
+    }
+
+    textarea {
+      height: 6rem;
+
     }
   }`}
 `

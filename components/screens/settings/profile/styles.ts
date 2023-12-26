@@ -19,9 +19,16 @@ export const Section = styled.div`
     form {
       width: 100%;
       margin-bottom: 8rem;
+      display: flex;
+      flex-direction: column;
+      row-gap: 2rem;
       ${TextField} {
         width: 60%;
         margin-bottom: 0.5rem;
+
+        @media screen and (max-width: 425px) {
+          width: 100%;
+        }
       }
     }
 

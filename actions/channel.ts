@@ -11,9 +11,9 @@ export const fetchChannel = async (
     throw new Error('Channel name is required')
   }
 
-  const curentUser = await getCurrentUser()
+  const currentUser = await getCurrentUser()
 
-  if (!curentUser) {
+  if (!currentUser) {
     throw new Error('Internal Error')
   }
 
@@ -23,7 +23,7 @@ export const fetchChannel = async (
       where: {
         name: channel_name,
         NOT: {
-          ownerId: curentUser.id,
+          ownerId: currentUser.id,
           owner: {
             deactivated: true
           }
@@ -34,6 +34,37 @@ export const fetchChannel = async (
     if (!channel) {
       return channel
     }
+
+    return channel
+  } catch (error) {
+    throw new Error(String(error))
+  }
+}
+
+export const updateChannel = async ({
+  channel_name,
+  key,
+  value
+}: {
+  channel_name: string
+  key?: keyof Channel
+  value: string | Partial<Record<keyof Channel, any>>
+}) => {
+  if (!channel_name || !value) {
+    throw new Error('Channel name and value are required')
+  }
+
+  try {
+    const channel = await db.channel.update({
+      where: {
+        name: channel_name
+      },
+      data: {
+        ...(typeof value === 'object'
+          ? value
+          : { [key as string]: value as string })
+      }
+    })
 
     return channel
   } catch (error) {

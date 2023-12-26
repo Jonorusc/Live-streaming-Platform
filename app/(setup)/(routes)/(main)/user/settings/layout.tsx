@@ -7,6 +7,8 @@ import SettingsLoading from '@/components/screens/settings/loading'
 
 import Link from 'next/link'
 import { Suspense } from 'react'
+import { redirect } from 'next/navigation'
+import { getCurrentUser } from '@/actions/user'
 
 export const metadata = {
   title: 'Settings - Twitch Clone'
@@ -17,6 +19,9 @@ export default async function UserSettingsLayout({
 }: {
   tabs: React.ReactNode
 }) {
+  const user = await getCurrentUser()
+  if (!user) return redirect('/')
+
   return (
     <>
       <CustomScrollBar height="100vh">
@@ -31,6 +36,7 @@ export default async function UserSettingsLayout({
           <Tabs>
             <Link href="profile">profile</Link>
             <Link href="channel">channel</Link>
+            <Link href="security">security</Link>
           </Tabs>
           <Suspense fallback={<SettingsLoading />}>
             <Flex $direction="column" $gapX="1rem" $margin="2rem 0">

@@ -71,42 +71,26 @@ export const sendemailverification = (): Promise<String | null> => {
 }
 
 // handle email verification
-export const handleverifyemail = (
-  actionCode: string
-): Promise<{ success: true; error?: { message: string } }> => {
+export const handleverifyemail = (actionCode: string): Promise<string> => {
   return new Promise((resolve, reject) => {
     applyActionCode(auth, actionCode)
       .then(async () => {
-        resolve({ success: true })
+        resolve('Email verified successfully.')
       })
       .catch(async (error) => {
         switch (error.code) {
           case AuthErrorCodes.EXPIRED_OOB_CODE: {
-            reject({
-              success: false,
-              error: {
-                message: 'Code is expired. Please resend verification email.'
-              }
-            })
+            reject('Code is expired. Please resend verification email.')
             break
           }
           case AuthErrorCodes.INVALID_OOB_CODE: {
-            reject({
-              success: false,
-              error: {
-                message:
-                  'This code has already been used. Please resend verification email.'
-              }
-            })
+            reject(
+              'This code has already been used. Please resend verification email.'
+            )
             break
           }
           default:
-            reject({
-              success: false,
-              error: {
-                message: error.message
-              }
-            })
+            reject('Something went wrong. Please try again later.')
             break
         }
       })
@@ -132,52 +116,30 @@ export const sendpasswordresetemail = (
 export const handlepasswordreset = (
   actionCode: string,
   newPassword: string
-): Promise<{ success: true; error?: { message: string } }> => {
+): Promise<string> => {
   return new Promise((resolve, reject) => {
     verifyPasswordResetCode(auth, actionCode)
       .then((email) => {
         // you can use email to send a notification to user that their password has been reset
         confirmPasswordReset(auth, actionCode, newPassword)
           .then(() => {
-            resolve({
-              success: true
-            })
+            resolve('Password reset successfully. Please login.')
           })
           .catch(() => {
-            reject({
-              success: false,
-              error: {
-                message: 'Something went wrong. Please try again later.'
-              }
-            })
+            reject('Something went wrong. Please try again later.')
           })
       })
       .catch((error) => {
         switch (error.code) {
           case AuthErrorCodes.EXPIRED_OOB_CODE:
-            reject({
-              success: false,
-              error: {
-                message: 'Code is expired. Please reset your password again.'
-              }
-            })
+            reject('Code is expired. Please reset your password again.')
             break
           case AuthErrorCodes.INVALID_OOB_CODE:
-            reject({
-              success: false,
-              error: {
-                message: 'Code is invalid. Please reset your password again.'
-              }
-            })
+            reject('Code is invalid. Please reset your password again.')
             break
 
           default:
-            reject({
-              success: false,
-              error: {
-                message: 'Something went wrong. Please try again later.'
-              }
-            })
+            reject('Something went wrong. Please try again later.')
             break
         }
       })

@@ -7,6 +7,7 @@ import SignUpModal from '@/components/modals/sign-up'
 import SignInModal from '@/components/modals/sign-in'
 import ProfileImageModal from '@/components/modals/profile-image'
 import DialogModal from '@/components/modals/dialog'
+import ForgotPasswordModal from '@/components/modals/forgot-password'
 
 import { useModal } from '@/hooks/use-modal'
 
@@ -24,7 +25,8 @@ export const ModalProvider = () => {
     signup: <SignUpModal />,
     signin: <SignInModal />,
     'profile-image': <ProfileImageModal />,
-    dialog: <DialogModal />
+    dialog: <DialogModal />,
+    'forgot-password': <ForgotPasswordModal />
   }
 
   const ModalComponent: JSX.Element = modals[type!]

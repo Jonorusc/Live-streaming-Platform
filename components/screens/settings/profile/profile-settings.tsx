@@ -20,11 +20,13 @@ import { CURRENTUSER, updateUser, verifyUserName } from '@/actions/user'
 import { useEffect, useState } from 'react'
 import { useFormStatus } from 'react-dom'
 import { Check } from 'lucide-react'
+import { updateChannel } from '@/actions/channel'
 
 const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
   const server = useFormStatus()
   const usernameUpdatedAt = user.username_updated_at
   const [canUpdateUsername, setCanUpdateUsername] = useState(false)
+  const [areFieldsAble, setAreFieldsAble] = useState(false)
   const [daysLeft, setDaysLeft] = useState(0)
 
   useEffect(() => {
@@ -63,12 +65,6 @@ const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
         },
         { message: "This username isn't allowed" }
       )
-      // .refine(
-      //   (username) => {
-      //     return username !== user.username
-      //   },
-      //   { message: 'This is your current username' }
-      // )
       .refine(
         async (username) => {
           if (username.length < 5) return false
@@ -85,6 +81,12 @@ const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
           message: 'This username is already taken'
         }
       )
+      .optional(),
+    bio: z
+      .string()
+      .min(5, { message: 'Bio must be at least 5 characters' })
+      .max(300, { message: 'Bio must be at most 300 characters' })
+      .optional()
   })
 
   const methods = useForm<z.infer<typeof schema>>({
@@ -95,29 +97,48 @@ const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
   const { getFieldState, formState } = methods
 
   const onSubmit = async (data: z.infer<typeof schema>) => {
-    if (data.username === user.username) return
     try {
-      const value = {
-        username: user.username,
-        value: {
-          username: data.username,
-          username_updated_at: new Date().toISOString()
-        }
+      if (
+        !getFieldState('username').invalid &&
+        data.username !== user.username
+      ) {
+        await updateUser({
+          username: user.username,
+          value: {
+            username: data.username,
+            username_updated_at: new Date().toISOString(),
+            channel: {
+              update: {
+                name: data.username
+              }
+            }
+          }
+        })
+        setCanUpdateUsername(false)
       }
 
-      await updateUser(value)
+      if (
+        !getFieldState('bio').invalid &&
+        data.bio !== user.channel?.description
+      ) {
+        await updateChannel({
+          channel_name: user.username,
+          value: {
+            description: data.bio
+          }
+        })
+      }
 
-      setUpdated(true)
       addToast({
         id: Date.now(),
         timeout: 4000,
         type: 'success',
         position: 'top-right',
         data: {
-          message: 'Your username has been updated successfully.'
+          message: 'Changes saved successfully'
         }
       })
-      setCanUpdateUsername(false)
+      setUpdated(true)
     } catch (error) {
       addToast({
         id: Date.now(),
@@ -130,6 +151,11 @@ const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
       })
     }
   }
+
+  useEffect(() => {
+    const { username, bio } = methods.getValues()
+    setAreFieldsAble(!!(bio || username))
+  }, [formState])
 
   return (
     <NoSsr>
@@ -152,26 +178,45 @@ const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
         <Flex $align="flex-start" $direction="column">
           <FormProvider {...methods}>
             <form onSubmit={methods.handleSubmit(onSubmit)}>
-              <TextField
-                label="Username"
-                name="username"
-                $value={user.username}
-                $error={formState.errors?.username?.message || ''}
-                $success={!getFieldState('username').invalid}
-                disabled={!canUpdateUsername}
-                placeholder={user.username}
-                $response={user.username !== methods.getValues('username')}
-                required
-              />
-              {!canUpdateUsername && (
+              <div>
+                <TextField
+                  label="Username"
+                  name="username"
+                  // $value={user.username}
+                  $error={formState.errors?.username?.message || ''}
+                  $success={!getFieldState('username').invalid}
+                  disabled={!canUpdateUsername}
+                  placeholder={user.username}
+                  $response={user.username !== methods.getValues('username')}
+                  required
+                />
+                {!canUpdateUsername && (
+                  <Typrography
+                    $color="triadic2"
+                    $text={`You may update your username again in ${daysLeft} day(s)`}
+                    $type="span"
+                    $fontSize="xsmall"
+                    $fontWeight="light"
+                  />
+                )}
+              </div>
+              <div>
+                <TextField
+                  type="textarea"
+                  label="Bio"
+                  name="bio"
+                  placeholder={user.channel?.description || ''}
+                  $error={formState.errors?.bio?.message || ''}
+                  $success={!getFieldState('bio').invalid}
+                />
                 <Typrography
                   $color="triadic2"
-                  $text={`You may update your username again in ${daysLeft} day(s)`}
+                  $text="Description for the About panel on your channel page in under 300 characters"
                   $type="span"
                   $fontSize="xsmall"
                   $fontWeight="light"
                 />
-              )}
+              </div>
               <Flex
                 $justify="flex-end"
                 $background="surface"
@@ -186,10 +231,7 @@ const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
                   $fontSize="small"
                   $fontWeight="semiBold"
                   disabled={
-                    !methods.formState.isValid ||
-                    methods.formState.isSubmitting ||
-                    !canUpdateUsername ||
-                    user.username === methods.getValues('username')
+                    methods.formState.isSubmitting || !areFieldsAble || updated
                   }
                 >
                   {methods.formState.isSubmitting || server.pending ? (

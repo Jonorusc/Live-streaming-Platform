@@ -1,16 +1,16 @@
 'use client'
 
-import { useRouter, redirect } from 'next/navigation'
+import { redirect } from 'next/navigation'
 import { app_config } from '@/utils/firebase'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 import { useToast } from '@/hooks/use-toast'
 import { useUser } from '@/hooks/use-user'
-import { getCurrentUser } from '@/lib/firebase/auth'
-import { handleverifyemail } from '@/lib/firebase/actions'
-import { updateUserEmailStatus } from '@/actions/user'
 import ReactLoading from 'react-loading'
 import Grid from '@/components/ui/grid'
+import { useModal } from '@/hooks/use-modal'
+
+import { verifyEmail } from './verify-email'
 
 export default function AuthPage() {
   const searchParams = useSearchParams()
@@ -19,8 +19,8 @@ export default function AuthPage() {
   const apiKey = searchParams.get('apiKey')
   const fetched = useRef(false)
   const { addToast } = useToast()
-  const router = useRouter()
   const { userMutate } = useUser()
+  const { onOpen } = useModal()
 
   const notify = (type: 'error' | 'success', message: string) => {
     addToast({
@@ -54,45 +54,28 @@ export default function AuthPage() {
       redirect('/')
     }
 
-    const verifyEmail = async () => {
-      // try to verify email
-      const firebaseUser = await getCurrentUser()
-      if (!firebaseUser || !firebaseUser.email) {
-        notify('error', 'You need to be logged in to verify your email.')
-        router.push('/')
-        return
-      }
-
-      try {
-        // inside of handleverifyemail (firebase), we will check if the user is already logged in or not and check the action code as well
-        const { success } = await handleverifyemail(actionCode)
-
-        if (success) {
-          // I'm using two methods to update the user's email status because at some point if I decide to switch to another authentication platform I can easily change the code
-          await updateUserEmailStatus(firebaseUser.email)
-        }
-
-        notify('success', 'Your email has been verified successfully.')
-        userMutate()
-      } catch (resp: any) {
-        notify(
-          'error',
-          resp?.error?.message ||
-            'Something went wrong. Please try again later.'
-        )
-      } finally {
-        router.push('/')
-      }
-    }
-
     if (fetched.current) return
     fetched.current = true
 
     switch (mode) {
       case 'verifyEmail':
-        verifyEmail()
+        {
+          verifyEmail(actionCode)
+            .then(() => {
+              notify('success', 'Your email has been verified.')
+              userMutate()
+            })
+            .catch((error) => {
+              notify('error', error)
+            })
+            .finally(() => {
+              redirect('/')
+            })
+        }
         break
-
+      case 'resetPassword':
+        onOpen('forgot-password', { actionCode })
+        break
       default:
         notify('error', 'Something went wrong. Please try again later.')
         redirect('/')
@@ -101,7 +84,7 @@ export default function AuthPage() {
 
   return (
     <Grid $height="100vh" $width="100vw" $placeItems="center">
-      <ReactLoading type="spin" color="#B4BDc7" height={150} width={150} />
+      <ReactLoading type="spin" color="#B4BDc7" height={100} width={100} />
     </Grid>
   )
 }

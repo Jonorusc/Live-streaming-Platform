@@ -42,7 +42,7 @@ const TextField = React.memo(
     required = false,
     $bgColor = 'transparent',
     $handleChange = () => {},
-    $debounce = 600
+    $debounce = 1000
   }: TextFieldProps) => {
     // State for loading
     const [loading, setLoading] = useState(false)
@@ -90,7 +90,7 @@ const TextField = React.memo(
     }, [showPassword, type])
 
     // Debounce the setLoading function
-    const debouncedSetLoading = debounce(() => setLoading(false), 1000)
+    const debouncedSetLoading = debounce(() => setLoading(false), $debounce)
 
     // Render the TextField component
     return (
