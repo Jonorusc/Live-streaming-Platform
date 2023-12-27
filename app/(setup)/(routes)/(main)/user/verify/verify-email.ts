@@ -19,6 +19,7 @@ export const verifyEmail = async (actionCode: string) => {
 
       resolve('Your email has been verified.')
     } catch (error) {
+      console.log(error)
       reject(error || 'Something went wrong. Please try again later.')
     }
   })

@@ -38,5 +38,16 @@ export const Section = styled.div`
       left: 0;
       width: 100%;
     }
+
+    [aria-label='btn-actions'] {
+      padding: 0.5rem;
+      border-radius: 0.4rem;
+      cursor: pointer;
+      transition: 150ms background-color ease-in;
+
+      &:hover {
+        background-color: ${theme.palette.darkGrey};
+      }
+    }
   `}
 `

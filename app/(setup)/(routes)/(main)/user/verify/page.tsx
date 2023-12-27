@@ -36,49 +36,59 @@ export default function AuthPage() {
 
   useEffect(() => {
     // checking if api key is valid (prevent spamming)
-    if (apiKey !== app_config.apiKey) {
+    try {
+      if (apiKey !== app_config.apiKey) {
+        if (fetched.current) return
+        fetched.current = true
+        notify('error', 'Something went wrong. Please try again later.')
+        redirect('/')
+      }
+
+      // checking if there is an action code
+      if (!actionCode) {
+        if (fetched.current) return
+        fetched.current = true
+        notify(
+          'error',
+          'It looks like your email verification link is invalid or expired. Please try requesting a new one.'
+        )
+        redirect('/')
+      }
+
       if (fetched.current) return
       fetched.current = true
-      notify('error', 'Something went wrong. Please try again later.')
-      redirect('/')
-    }
 
-    // checking if there is an action code
-    if (!actionCode) {
+      switch (mode) {
+        case 'verifyEmail':
+          {
+            verifyEmail(actionCode)
+              .then(() => {
+                notify('success', 'Your email has been verified.')
+                userMutate()
+              })
+              .catch((error) => {
+                notify('error', error)
+              })
+              .finally(() => {
+                redirect('/')
+              })
+          }
+          break
+        case 'resetPassword':
+          onOpen('forgot-password', { actionCode })
+          break
+        default:
+          notify('error', 'Something went wrong. Please try again later.')
+          redirect('/')
+      }
+    } catch {
       if (fetched.current) return
       fetched.current = true
       notify(
         'error',
-        'It looks like your email verification link is invalid or expired. Please try requesting a new one.'
+        'Something went wrong with your verification link. Please try again later.'
       )
       redirect('/')
-    }
-
-    if (fetched.current) return
-    fetched.current = true
-
-    switch (mode) {
-      case 'verifyEmail':
-        {
-          verifyEmail(actionCode)
-            .then(() => {
-              notify('success', 'Your email has been verified.')
-              userMutate()
-            })
-            .catch((error) => {
-              notify('error', error)
-            })
-            .finally(() => {
-              redirect('/')
-            })
-        }
-        break
-      case 'resetPassword':
-        onOpen('forgot-password', { actionCode })
-        break
-      default:
-        notify('error', 'Something went wrong. Please try again later.')
-        redirect('/')
     }
   }, [fetched])
 

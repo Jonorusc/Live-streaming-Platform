@@ -1,5 +1,5 @@
 'use client'
-import * as S from './styles'
+import * as S from '../styles'
 
 import NoSsr from '@/components/NoSsr'
 import Flex from '@/components/ui/flex'

@@ -8,7 +8,7 @@ export type CustomScrollBarProps = {
 }
 
 const CustomScrollBar = ({
-  height = '100dvh',
+  height = '100%',
   children
 }: CustomScrollBarProps) => {
   return (
@@ -20,8 +20,18 @@ const CustomScrollBar = ({
         thumbMinSize={30}
         universal
         autoHeight
-        autoHeightMin={'100dvh'}
-        autoHeightMax={'100vh'}
+        height={height}
+        autoHeightMax="100vh"
+        renderView={({ style, ...props }) => {
+          return (
+            <div
+              style={{
+                ...style
+              }}
+              {...props}
+            />
+          )
+        }}
       >
         {children}
       </Scrollbars>

@@ -376,6 +376,35 @@ export const getUser = async (username: string): Promise<UserProps | null> => {
   }
 }
 
+/**
+ * Update users from their username.
+ *
+ *
+ * @example
+ * ```javascript
+ * const data = {
+ *   username: 'currentUsername',
+ *   value: {
+ *     username: 'newUsername',
+ *   }
+ * }
+ * ```
+ * Update only one prop
+ *
+ * ```javascript
+ * const data = {
+ *  username: 'currentUsername',
+ *  key: 'username',
+ *  value: 'newUsername'
+ * }
+ *
+ * user = await updateUser(data)
+ * console.log(user) // { username: 'newUsername', ... }
+ * ```
+ *
+ *
+ */
+
 export const updateUser = async ({
   username,
   key,

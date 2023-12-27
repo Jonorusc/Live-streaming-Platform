@@ -8,12 +8,14 @@ import type {
   ALIGNCONTENT,
   ALINGSELF,
   DIRECTION,
+  DIRECTION_FLOW,
   JUSTIFY,
   COLORS
 } from '@/components/ui/types'
 
 const Flex = styled.div<{
   $direction?: DIRECTION
+  $flow?: DIRECTION_FLOW
   $align?: ALIGN
   $alingSelf?: ALINGSELF
   $alingContent?: ALIGNCONTENT
@@ -30,6 +32,7 @@ const Flex = styled.div<{
   ${({
     theme,
     $direction,
+    $flow,
     $align,
     $alingSelf,
     $gap,
@@ -51,6 +54,7 @@ const Flex = styled.div<{
     margin: ${$margin || '0'};
     width: ${$width || 'auto'};
     height: ${$height || 'auto'};
+    ${!!$flow && `flex-flow: ${$flow};`}
     ${!!$align && `align-items: ${$align};`}
     ${!!$alingSelf && `align-self: ${$alingSelf};`}
     justify-content: ${$justify || 'unset'};

@@ -6,11 +6,11 @@ import DeactivateAccountPage from './deactivate-account'
 
 const ProfilePage = async ({ user }: { user: CURRENTUSER }) => {
   return (
-    <>
+    <section>
       <ProfilePicturePage user={user} />
       <ProfileSettingsPage user={user} />
       <DeactivateAccountPage user={user} />
-    </>
+    </section>
   )
 }
 

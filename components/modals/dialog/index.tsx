@@ -70,7 +70,8 @@ const DialogModal = () => {
                 {onAccept && (
                   <Button
                     $bgcolor="primary"
-                    $color="triadic2"
+                    $hoverColor="primary"
+                    $color="background"
                     $fontSize="small"
                     onClick={() => {
                       onClose()

@@ -3,7 +3,9 @@ import Nav from '@/components/screens/nav'
 import { Suspense } from 'react'
 
 export const metadata = {
-  // metadataBase: new URL(String(process.env.NEXT_PUBLIC_URL)),
+  metadataBase: new URL(
+    String(process.env.VERCEL_URL || process.env.NEXT_PUBLIC_URL)
+  ),
   title: 'Twitch Clone',
   description: 'A Clone of Twitch made with Next.js and TypeScript',
   openGraph: {

@@ -24,22 +24,28 @@ export default async function UserSettingsLayout({
 
   return (
     <>
-      <CustomScrollBar height="100vh">
-        <Flex $direction="column" $gapX="1rem" $padding="3rem">
-          <Typrography
-            $color="triadic2"
-            $text="Settings"
-            $type="h1"
-            $fontSize="xlarge"
-            $fontWeight="bold"
-          />
-          <Tabs>
-            <Link href="profile">profile</Link>
-            <Link href="channel">channel</Link>
-            <Link href="security">security</Link>
-          </Tabs>
+      <Flex $direction="column" $gapX="1rem" $padding="3rem 3rem 0 3rem">
+        <Typrography
+          $color="triadic2"
+          $text="Settings"
+          $type="h1"
+          $fontSize="xlarge"
+          $fontWeight="bold"
+        />
+        <Tabs>
+          <Link href="profile">profile</Link>
+          <Link href="channel">channel</Link>
+          <Link href="security">security and Contact</Link>
+        </Tabs>
+      </Flex>
+      <CustomScrollBar>
+        <Flex $direction="column" $gapX="1rem" $padding="2rem 3rem 3rem 3rem">
           <Suspense fallback={<SettingsLoading />}>
-            <Flex $direction="column" $gapX="1rem" $margin="2rem 0">
+            <Flex
+              $direction="column"
+              $gapX="1rem"
+              $height="calc(100vh - 20rem)"
+            >
               {tabs}
             </Flex>
           </Suspense>

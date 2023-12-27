@@ -11,6 +11,7 @@ export type ToolTipProps = {
   children: React.ReactNode
   $content: React.ReactNode
   $arrow?: boolean
+  $show?: boolean
 }
 
 const ToolTip = ({
@@ -18,19 +19,22 @@ const ToolTip = ({
   $background,
   $position,
   $content,
-  $arrow
+  $arrow,
+  $show = true
 }: ToolTipProps) => {
   return (
     <NoSsr>
       <S.Wrapper>
         {children}
-        <S.ToolTip
-          $position={$position}
-          $background={$background}
-          $arrow={$arrow}
-        >
-          {$content}
-        </S.ToolTip>
+        {$show && (
+          <S.ToolTip
+            $position={$position}
+            $background={$background}
+            $arrow={$arrow}
+          >
+            {$content}
+          </S.ToolTip>
+        )}
       </S.Wrapper>
     </NoSsr>
   )

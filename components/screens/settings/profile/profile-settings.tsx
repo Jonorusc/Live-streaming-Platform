@@ -1,11 +1,9 @@
 'use client'
-import * as S from './styles'
+import * as S from '../styles'
 
 import NoSsr from '@/components/NoSsr'
-import Avatar from '@/components/ui/image'
 import Flex from '@/components/ui/flex'
 import Button from '@/components/ui/button'
-import ToolTip from '@/components/ui/tooltip'
 import Typrography from '@/components/ui/typography'
 import TextField from '@/components/ui/text'
 import ReactLoading from 'react-loading'
@@ -19,7 +17,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { CURRENTUSER, updateUser, verifyUserName } from '@/actions/user'
 import { useEffect, useState } from 'react'
 import { useFormStatus } from 'react-dom'
-import { Check } from 'lucide-react'
 import { updateChannel } from '@/actions/channel'
 
 const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
@@ -48,7 +45,6 @@ const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
     setCanUpdateUsername(true)
   }, [usernameUpdatedAt])
 
-  const [updated, setUpdated] = useState(false)
   const { addToast } = useToast()
 
   const schema = z.object({
@@ -81,27 +77,38 @@ const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
           message: 'This username is already taken'
         }
       )
+      .refine((username) => {
+        return (
+          username !== user.username,
+          'Username must be different from the current one'
+        )
+      })
       .optional(),
     bio: z
       .string()
       .min(5, { message: 'Bio must be at least 5 characters' })
       .max(300, { message: 'Bio must be at most 300 characters' })
+      .refine((bio) => {
+        return (
+          bio !== user.channel?.description,
+          'Bio must be different from the current one'
+        )
+      })
       .optional()
   })
 
   const methods = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-    mode: 'all'
+    mode: 'onSubmit'
   })
 
-  const { getFieldState, formState } = methods
+  const { getFieldState, formState, watch } = methods
+  const fields = watch()
 
   const onSubmit = async (data: z.infer<typeof schema>) => {
     try {
-      if (
-        !getFieldState('username').invalid &&
-        data.username !== user.username
-      ) {
+      const validUsername = data.username && data.username !== user.username
+      if (validUsername && !getFieldState('username').invalid) {
         await updateUser({
           username: user.username,
           value: {
@@ -117,17 +124,21 @@ const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
         setCanUpdateUsername(false)
       }
 
-      if (
+      const validBio =
         !getFieldState('bio').invalid &&
-        data.bio !== user.channel?.description
-      ) {
+        data.bio !== user.channel?.description &&
+        data.bio
+      const channel_name = validUsername ? data.username! : user.username
+      if (validBio) {
         await updateChannel({
-          channel_name: user.username,
+          channel_name,
           value: {
             description: data.bio
           }
         })
       }
+
+      if (!validBio && !validUsername) return
 
       addToast({
         id: Date.now(),
@@ -138,7 +149,7 @@ const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
           message: 'Changes saved successfully'
         }
       })
-      setUpdated(true)
+      methods.reset()
     } catch (error) {
       addToast({
         id: Date.now(),
@@ -153,9 +164,9 @@ const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
   }
 
   useEffect(() => {
-    const { username, bio } = methods.getValues()
+    const { username, bio } = fields
     setAreFieldsAble(!!(bio || username))
-  }, [formState])
+  }, [fields])
 
   return (
     <NoSsr>
@@ -188,7 +199,6 @@ const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
                   disabled={!canUpdateUsername}
                   placeholder={user.username}
                   $response={user.username !== methods.getValues('username')}
-                  required
                 />
                 {!canUpdateUsername && (
                   <Typrography
@@ -226,12 +236,15 @@ const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
               >
                 <Button
                   type="submit"
-                  $bgcolor={updated ? 'success' : 'primary'}
+                  $bgcolor="primary"
+                  $hoverColor="primary"
                   $color="whiteSmoke"
                   $fontSize="small"
                   $fontWeight="semiBold"
                   disabled={
-                    methods.formState.isSubmitting || !areFieldsAble || updated
+                    !methods.formState.isValid ||
+                    methods.formState.isSubmitting ||
+                    !areFieldsAble
                   }
                 >
                   {methods.formState.isSubmitting || server.pending ? (
@@ -244,16 +257,7 @@ const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
                       />
                     </Flex>
                   ) : (
-                    <>
-                      {updated ? (
-                        <Flex $align="center" $gapY="1rem">
-                          <Check size={16} />
-                          <span>Updated</span>
-                        </Flex>
-                      ) : (
-                        'Save Changes'
-                      )}
-                    </>
+                    <>Save Changes</>
                   )}
                 </Button>
               </Flex>

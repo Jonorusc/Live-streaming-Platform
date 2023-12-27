@@ -10,7 +10,7 @@ export const ToolTip = styled.div<
     max-height: 10.2rem;
     min-height: fit-content;
     min-width: fit-content;
-    max-width: 24.2rem;
+    max-width: max-content;
     text-align: start;
     word-wrap: break-word;
     padding: ${theme.spacing.small};

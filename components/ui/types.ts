@@ -44,6 +44,16 @@ export type PLACEITEMS =
   | 'inherit'
 
 export type DIRECTION = 'row' | 'column' | 'row-reverse' | 'column-reverse'
+export type DIRECTION_FLOW =
+  | 'row'
+  | 'column'
+  | 'row-reverse'
+  | 'column-reverse'
+  | 'nowrap'
+  | 'row wrap'
+  | 'row-reverse nowrap'
+  | 'column wrap'
+  | 'column wrap-reverse'
 export type ALINGSELF = 'center' | 'start' | 'end' | 'stretch' | 'inherit'
 export type ALIGNCONTENT =
   | 'center'

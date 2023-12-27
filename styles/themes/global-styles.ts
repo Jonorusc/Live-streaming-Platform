@@ -14,6 +14,7 @@ const GlobalStyles = createGlobalStyle`
 
     html {
       font-size: ${theme.htmlFontSize};
+      text-rendering: optimizeLegibility;
     }
 
     ul,

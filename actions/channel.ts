@@ -3,6 +3,7 @@
 import { db } from '@/lib/db'
 import { Channel } from '@prisma/client'
 import { getCurrentUser } from './user'
+import { revalidatePath } from 'next/cache'
 
 export const fetchChannel = async (
   channel_name: string
@@ -65,7 +66,9 @@ export const updateChannel = async ({
           : { [key as string]: value as string })
       }
     })
-
+    revalidatePath('/')
+    revalidatePath(`/${channel_name}`)
+    revalidatePath(`/user/settings/`)
     return channel
   } catch (error) {
     throw new Error(String(error))
