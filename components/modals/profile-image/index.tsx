@@ -45,9 +45,10 @@ const ProfileImageModal = () => {
       try {
         const path = await uploadFilesToStorage({
           fileList: fileList as FileList,
-          collectionName: 'avatars',
-          document: data.username
+          collectionName: data.username,
+          document: 'avatar'
         })
+
         // update user data
         await updateUserProfile({
           username: data!.username,

@@ -18,6 +18,7 @@ import { CURRENTUSER, updateUser, verifyUserName } from '@/actions/user'
 import { useEffect, useState } from 'react'
 import { useFormStatus } from 'react-dom'
 import { updateChannel } from '@/actions/channel'
+import { updatePathInStorage } from '@/lib/firebase/storage'
 
 const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
   const server = useFormStatus()
@@ -109,18 +110,29 @@ const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
     try {
       const validUsername = data.username && data.username !== user.username
       if (validUsername && !getFieldState('username').invalid) {
+        const paths = await updatePathInStorage({
+          collection: user.username,
+          newCollection: data.username as string,
+          document: 'avatar',
+          newFileName: `${data.username}-avatar`
+        })
+
+        if (paths.length < 0) {
+          throw new Error('Something went wrong. Please try again later.')
+        }
+
         await updateUser({
           username: user.username,
           value: {
             username: data.username,
-            username_updated_at: new Date().toISOString(),
-            channel: {
+            profile: {
               update: {
-                name: data.username
+                avatar: paths[0]
               }
             }
           }
         })
+
         setCanUpdateUsername(false)
       }
 

@@ -44,7 +44,7 @@ export default async function UserSettingsLayout({
             <Flex
               $direction="column"
               $gapX="1rem"
-              $height="calc(100vh - 20rem)"
+              $height="calc(100dvh - 20rem)"
             >
               {tabs}
             </Flex>

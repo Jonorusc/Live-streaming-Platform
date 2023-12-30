@@ -13,6 +13,8 @@ import { Trash2 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 
 import { CURRENTUSER, updateUserProfile } from '@/actions/user'
+import { deleteFromStorage } from '@/lib/firebase/storage'
+import { separateByUppercase } from '@/utils/text'
 
 const ProfilePicturePage = ({ user }: { user: CURRENTUSER }) => {
   const { onOpen } = useModal()
@@ -76,12 +78,15 @@ const ProfilePicturePage = ({ user }: { user: CURRENTUSER }) => {
                         message:
                           'Are you sure you want to remove your profile picture?',
                         onAccept: async () => {
+                          if (!user.profile) return
                           try {
+                            await deleteFromStorage([user.profile.avatar])
                             // this is a server side call (server action)
+                            const initals = separateByUppercase(user.username)
                             await updateUserProfile({
                               username: user.username,
                               key: 'avatar',
-                              value: `https://api.dicebear.com/7.x/initials/png?seed=${user.username}`
+                              value: `https://api.dicebear.com/7.x/initials/png?seed=${initals}`
                             })
 
                             addToast({

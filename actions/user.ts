@@ -6,6 +6,7 @@ import { db } from '@/lib/db'
 import { signup, signout } from '@/lib/firebase/auth'
 import { sendemailverification } from '@/lib/firebase/actions'
 import { Profile, User, Channel, Follower, Subscriber } from '@prisma/client'
+import { separateByUppercase } from '@/utils/text'
 
 export type UserProps = Omit<User, 'firebase_id' | 'id'> & {
   profile?: Profile | null
@@ -84,6 +85,8 @@ export const createUser = async ({
 
     let user = null
     // then create an account with prisma
+    const initals = separateByUppercase(username)
+
     user = await db.user.create({
       data: {
         username,
@@ -92,7 +95,7 @@ export const createUser = async ({
         profile: {
           create: {
             // avatar generation api
-            avatar: `https://api.dicebear.com/7.x/initials/png?seed=${username}`
+            avatar: `https://api.dicebear.com/7.x/initials/png?seed=${initals}`
           }
         }
       }
@@ -232,7 +235,7 @@ export const updateUserEmailStatus = async (
   status = true
 ) => {
   if (!firebase_email) {
-    throw new Error('Internal Error')
+    throw new Error('An unexpected error occurred. Please try again later.')
   }
   let user = null
   try {
@@ -253,7 +256,7 @@ export const updateUserEmailStatus = async (
     })
 
     if (!user) {
-      throw new Error('Internal Error')
+      throw new Error('An unexpected error occurred. Please try again later.')
     }
 
     // lets create the user channel as well
@@ -267,12 +270,12 @@ export const updateUserEmailStatus = async (
     })
 
     if (!channel) {
-      throw new Error('Internal Error')
+      throw new Error('An unexpected error occurred. Please try again later.')
     }
 
     return user
   } catch (error) {
-    throw new Error('Internal Error')
+    throw new Error(String(error))
   }
 }
 
@@ -379,7 +382,6 @@ export const getUser = async (username: string): Promise<UserProps | null> => {
 /**
  * Update users from their username.
  *
- *
  * @example
  * ```javascript
  * const data = {
@@ -401,8 +403,6 @@ export const getUser = async (username: string): Promise<UserProps | null> => {
  * user = await updateUser(data)
  * console.log(user) // { username: 'newUsername', ... }
  * ```
- *
- *
  */
 
 export const updateUser = async ({
@@ -419,15 +419,56 @@ export const updateUser = async ({
   }
 
   try {
+    let data = {
+      ...(typeof value === 'object'
+        ? value
+        : { [key as string]: value as string })
+    }
+    // verify is the user username was updated if so we need to update the user channel name as well
+    // checks if within the value object there is a username prop
+    if (
+      (typeof value === 'object' && value.hasOwnProperty('username')) ||
+      key === 'username'
+    ) {
+      // here we're verifying if the username is different from the current username
+      if (
+        (typeof value === 'object' && username !== value.username) ||
+        (key === 'username' && username !== value)
+      ) {
+        // updates the channel name and the username_updated_at
+        // search for the user channel
+        const channel = await db.channel.findUnique({
+          where: {
+            name: username
+          }
+        })
+        const name = (
+          typeof value === 'object' ? value.username : value
+        ) as string
+        // mutate the data object to set the changes
+        data = {
+          ...data,
+          username_updated_at: new Date().toISOString()
+        }
+
+        if (channel) {
+          data = {
+            ...data,
+            channel: {
+              update: {
+                name
+              }
+            }
+          }
+        }
+      }
+    }
+
     const user = await db.user.update({
       where: {
         username
       },
-      data: {
-        ...(typeof value === 'object'
-          ? value
-          : { [key as string]: value as string })
-      }
+      data
     })
 
     if (!user) {
