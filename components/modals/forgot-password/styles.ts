@@ -19,10 +19,6 @@ export const ModalForgotPassword = styled(motion.div).attrs({
     position: relative;
     box-sizing: border-box;
 
-    @media screen and (max-width: 414px) {
-      width: 100%;
-    }
-
     form {
       margin-top: ${theme.spacing.large};
     }

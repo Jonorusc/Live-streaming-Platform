@@ -37,10 +37,11 @@ const UserContactPage = ({
     }
   }, [error])
 
-  const setMask = (state: boolean) => {
-    if (user.email_verified) setShowMask(state)
-  }
+  if (!user?.email) return null
 
+  const setMask = (state: boolean) => {
+    if (user?.email_verified) setShowMask(state)
+  }
   return (
     <>
       <Typrography
@@ -90,6 +91,7 @@ const UserContactPage = ({
                     $fontSize="medium"
                     $fontWeight="semiBold"
                     $margin="0.4rem 0"
+                    $breakWord="break-all"
                   />
                   <Flex $gapY="1rem">
                     {!showMask && user.email_verified && (

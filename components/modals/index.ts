@@ -19,8 +19,9 @@ export const ModalWrapper = styled.div`
       background-color: ${theme.palette.background};
       position: relative;
       border-radius: 0.4rem;
-      @media (max-width: 414px) {
+      @media (max-width: 425px) {
         translate: 0 -1.2rem;
+        width: 95vw;
       }
     }
   `}

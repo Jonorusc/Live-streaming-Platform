@@ -15,8 +15,10 @@ export const Wrapper = styled.span<WrapperProps>`
     $color,
     $fontSize,
     $fontWeight,
+    $align,
     $width,
     $margin,
+    $padding,
     $position,
     $top,
     $left,
@@ -25,7 +27,9 @@ export const Wrapper = styled.span<WrapperProps>`
     $right,
     $border,
     $borderColor,
-    $borderSize
+    $borderSize,
+    $breakWord,
+    $radius
   }) => css`
     border: none;
     display: block;
@@ -47,6 +51,10 @@ export const Wrapper = styled.span<WrapperProps>`
     css`
       background-color: ${lighten(0.1, theme.palette[$bgcolor as COLORS])};
     `};
+    ${$radius &&
+    css`
+      border-radius: ${$radius};
+    `};
     ${$color &&
     css`
       color: ${theme.palette[$color]};
@@ -63,12 +71,21 @@ export const Wrapper = styled.span<WrapperProps>`
     css`
       font-weight: ${theme.font[$fontWeight]};
     `};
+    ${!!$align &&
+    css`
+      text-align: ${$align};
+    `};
     ${$margin &&
     css`
       margin: ${$margin};
     `};
+    ${$padding &&
+    css`
+      padding: ${$padding};
+    `};
 
     width: ${$width || 'auto'};
+    word-break: ${$breakWord || 'normal'};
 
     ${!!$position &&
     css`

@@ -15,12 +15,8 @@ export const ModalDialog = styled(motion.div).attrs({
   },
   exit: { opacity: 0, scale: 0.5 }
 })`
-  ${({ theme }) => css`
+  ${({}) => css`
     position: relative;
     box-sizing: border-box;
-
-    @media screen and (max-width: 414px) {
-      width: 100%;
-    }
   `}
 `

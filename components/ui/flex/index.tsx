@@ -60,7 +60,7 @@ const Flex = styled.div<{
     justify-content: ${$justify || 'unset'};
     background-color: ${theme.palette[$background!] || 'transparent'};
 
-    @media (max-width: 414px) {
+    @media (max-width: 425px) {
       width: 100%;
     }
   `}

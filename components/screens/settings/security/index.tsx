@@ -1,5 +1,4 @@
 'use client'
-import * as S from '../styles'
 
 import { CURRENTUSER } from '@/actions/user'
 import UserSecurityPage from './security'

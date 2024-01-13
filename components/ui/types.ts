@@ -65,6 +65,7 @@ export type ALIGNCONTENT =
 export type COLORS = keyof Omit<DefaultTheme['palette'], 'text'>
 export type FONT_SIZE = keyof DefaultTheme['font']['size']
 export type FONT_WEIGHT = keyof Omit<DefaultTheme['font'], 'size' | 'family'>
+export type FONT_ALIGN = 'left' | 'right' | 'center' | 'justify'
 
 export type PADDING = keyof DefaultTheme['spacing']
 export type POSITION =
@@ -93,3 +94,12 @@ export type TYPOGRAPHY_TYPES =
   | 'p'
   | 'span'
   | 'label'
+
+export type BREAK_WORD =
+  | 'break-word'
+  | 'normal'
+  | 'break-all'
+  | 'keep-all'
+  | 'initial'
+  | 'inherit'
+  | 'unset'

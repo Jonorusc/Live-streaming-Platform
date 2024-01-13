@@ -57,7 +57,7 @@ const Grid = styled.div<{
     ${!!$justify && `justify-content: ${$justify};`}
     ${!!$align && `align-items: ${$align};`}
 
-    @media screen and (max-width: 414px) {
+    @media screen and (max-width: 425px) {
       width: 100%;
     }
   `}

@@ -22,6 +22,18 @@ const CustomScrollBar = ({
         autoHeight
         height={height}
         autoHeightMax="100vh"
+        renderThumbHorizontal={({ style, ...props }) => {
+          const thumbStyle = {
+            backgroundColor: `rgba(255,255,255,0.3)`
+          }
+          return <div style={{ ...style, ...thumbStyle }} {...props} />
+        }}
+        renderThumbVertical={({ style, ...props }) => {
+          const thumbStyle = {
+            backgroundColor: `rgba(255,255,255,0.3)`
+          }
+          return <div style={{ ...style, ...thumbStyle }} {...props} />
+        }}
         renderView={({ style, ...props }) => {
           return (
             <div

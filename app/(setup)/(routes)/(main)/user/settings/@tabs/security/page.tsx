@@ -1,8 +1,9 @@
+'use client'
 import SecurityPage from '@/components/screens/settings/security'
-import { getCurrentUser, CURRENTUSER } from '@/actions/user'
+import { useUser } from '@/hooks/use-user'
 
-export default async function Page() {
-  const user = (await getCurrentUser()) as CURRENTUSER
-
+export default function Page() {
+  const { user } = useUser()
+  if (!user) return null
   return <SecurityPage user={user} />
 }

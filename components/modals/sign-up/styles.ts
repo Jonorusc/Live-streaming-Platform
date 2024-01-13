@@ -22,10 +22,6 @@ export const ModalSignUp = styled(motion.div).attrs({
     position: relative;
     box-sizing: border-box;
 
-    @media (max-width: 414px) {
-      width: 100%;
-    }
-
     form {
       ${Button}:not([type='submit']) {
         &:hover {
@@ -34,7 +30,7 @@ export const ModalSignUp = styled(motion.div).attrs({
         }
       }
       & > ${Flex} {
-        @media (max-width: 414px) {
+        @media (max-width: 425px) {
           flex-direction: column;
           row-gap: 1.3rem;
           ${Button} {

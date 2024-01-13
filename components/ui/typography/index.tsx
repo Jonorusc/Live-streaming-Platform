@@ -8,7 +8,9 @@ import type {
   FONT_SIZE,
   FONT_WEIGHT,
   POSITION,
-  TYPOGRAPHY_TYPES
+  TYPOGRAPHY_TYPES,
+  BREAK_WORD,
+  FONT_ALIGN
 } from '@/components/ui/types'
 import NoSsr from '@/components/NoSsr'
 
@@ -17,13 +19,17 @@ export type TyprographyProps = {
   $hoverColor?: COLORS | undefined
   $color?: COLORS
   $border?: boolean
-  $borderColor?: COLORS | undefined
-  $borderSize?: number | undefined
+  $borderColor?: COLORS
+  $borderSize?: number
   $fontSize?: FONT_SIZE
   $fontWeight?: FONT_WEIGHT
+  $align?: FONT_ALIGN
   $type?: TYPOGRAPHY_TYPES
   $width?: string
-  $margin?: string | undefined
+  $breakWord?: BREAK_WORD
+  $radius?: string
+  $margin?: string
+  $padding?: string
   $position?: POSITION
   $top?: string
   $right?: string
@@ -49,10 +55,14 @@ const Typrography = ({
   $borderSize = undefined,
   $fontSize = 'medium',
   $fontWeight = 'normal',
+  $align = 'left',
   $type,
   $width = 'auto',
+  $breakWord,
+  $radius = undefined,
   $margin = undefined,
-  $position = 'unset',
+  $padding = undefined,
+  $position,
   $top = 'unset',
   $right = 'unset',
   $left = 'unset',
@@ -74,8 +84,12 @@ const Typrography = ({
         $borderSize={$borderSize}
         $fontSize={$fontSize}
         $fontWeight={$fontWeight}
+        $align={$align}
         $width={$width}
+        $radius={$radius}
+        $breakWord={$breakWord}
         $margin={$margin}
+        $padding={$padding}
         $position={$position}
         $top={$top}
         $right={$right}

@@ -14,6 +14,7 @@ export async function GET(req: Request) {
   try {
     const user = await db.user.findUnique({
       select: {
+        id: true,
         username: true,
         username_updated_at: true,
         email: true,
@@ -30,7 +31,7 @@ export async function GET(req: Request) {
         updated_at: true
       },
       where: {
-        firebase_id: firebase_id
+        firebase_id
       }
     })
     if (!user) {

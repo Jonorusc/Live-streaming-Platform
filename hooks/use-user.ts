@@ -1,21 +1,14 @@
 import useSWR from 'swr'
 import { getFetcher } from '@/utils/axios-fetcher'
-import { Profile, User, Channel, Follower, Subscriber } from '@prisma/client'
+import { CURRENTUSER } from '@/actions/user'
 
 const options = {
   revalidateOnReconnect: true,
   shouldRetryOnError: false
 }
 
-type UserProps = Omit<User, 'firebase_id' | 'id'> & {
-  profile?: Profile | null
-  channel?: Channel | null
-  follows?: Follower[]
-  subscribers?: Subscriber[]
-}
-
 export function useUser(): {
-  user: UserProps | null
+  user: CURRENTUSER | null
   isValidating: boolean
   isLoading: boolean
   userError: any
