@@ -1,8 +1,10 @@
+'use client'
+import SettingsLoading from '@/components/screens/settings/loading'
 import ProfilePage from '@/components/screens/settings/profile'
-import { getCurrentUser, CURRENTUSER } from '@/actions/user'
+import { useUser } from '@/hooks/use-user'
 
-export default async function Page() {
-  const user = (await getCurrentUser()) as CURRENTUSER
-
+export default function Page() {
+  const { user, isValidating } = useUser()
+  if (!user || isValidating) return <SettingsLoading />
   return <ProfilePage user={user} />
 }

@@ -1,8 +1,10 @@
-import { getCurrentUser, CURRENTUSER } from '@/actions/user'
+'use client'
 import ChannelPage from '@/components/screens/settings/channel'
+import SettingsLoading from '@/components/screens/settings/loading'
+import { useUser } from '@/hooks/use-user'
 
-export default async function Page() {
-  const user = (await getCurrentUser()) as CURRENTUSER
-
+export default function Page() {
+  const { user, isValidating } = useUser()
+  if (!user || isValidating) return <SettingsLoading />
   return <ChannelPage user={user} />
 }

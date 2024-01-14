@@ -3,10 +3,7 @@ import { Tabs } from '@/components/ui/tab'
 import Typrography from '@/components/ui/typography'
 import CustomScrollBar from '@/components/ui/custombar'
 
-import SettingsLoading from '@/components/screens/settings/loading'
-
 import Link from 'next/link'
-import { Suspense } from 'react'
 import { redirect } from 'next/navigation'
 import { getCurrentUser } from '@/actions/user'
 
@@ -40,15 +37,9 @@ export default async function UserSettingsLayout({
       </Flex>
       <CustomScrollBar>
         <Flex $direction="column" $gapX="1rem" $padding="2rem 3rem 3rem 3rem">
-          <Suspense fallback={<SettingsLoading />}>
-            <Flex
-              $direction="column"
-              $gapX="1rem"
-              $height="calc(100dvh - 20rem)"
-            >
-              {tabs}
-            </Flex>
-          </Suspense>
+          <Flex $direction="column" $gapX="1rem" $height="calc(100dvh - 20rem)">
+            {tabs}
+          </Flex>
         </Flex>
       </CustomScrollBar>
     </>
