@@ -12,6 +12,7 @@
     "format": "prettier --write .",
     "storybook": "storybook dev -s ../public -p 6006",
     "build-storybook": "storybook build",
+    "postinstall": "prisma generate",
     "db:generate": "npx prisma generate",
     "db:push": "npx prisma db push"
   },
