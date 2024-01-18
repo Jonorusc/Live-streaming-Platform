@@ -1,5 +1,5 @@
 // screen
-import Nav from '@/components/screens/nav'
+import Nav from './_components'
 import { Suspense } from 'react'
 
 export const metadata = {

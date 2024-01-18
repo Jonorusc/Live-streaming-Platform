@@ -14,6 +14,7 @@ import Button from '@/components/ui/button'
 import Card from '@/components/ui/sidenav/card'
 import { Video } from 'lucide-react'
 import { COLORS } from '@/components/ui/types'
+import { useUser } from '@/hooks/use-user'
 
 const ChannelColor = ({ user }: { user: CURRENTUSER }) => {
   const theme: DefaultTheme | null = useReadLocalStorage('theme')
@@ -22,11 +23,12 @@ const ChannelColor = ({ user }: { user: CURRENTUSER }) => {
   )
   const [boxColor, setBoxColor] = useState<COLORS>(
     (Object.keys(theme!.palette).find(
-      (key) => theme!.palette[key as COLORS] === color
+      (key) => theme?.palette[key as COLORS] === color
     ) as COLORS) || 'primary'
   )
   const [isPending, startTransition] = useTransition()
   const [saved, setSaved] = useState(false)
+  const { userMutate } = useUser()
 
   // here I'm creating an array of theme palette colours without the text key to pass to the circle picker component
   const invalidKeys = [
@@ -68,6 +70,7 @@ const ChannelColor = ({ user }: { user: CURRENTUSER }) => {
         }
       })
       setSaved(true)
+      userMutate()
     })
   }
 

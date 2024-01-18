@@ -1,6 +1,6 @@
 'use client'
-import SettingsLoading from '@/components/screens/settings/loading'
-import SecurityPage from '@/components/screens/settings/security'
+import SettingsLoading from '../../_components/loading'
+import SecurityPage from '../../_components/security'
 
 import { useUser } from '@/hooks/use-user'
 

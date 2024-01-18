@@ -1,6 +1,6 @@
 'use client'
-import SettingsLoading from '@/components/screens/settings/loading'
-import ProfilePage from '@/components/screens/settings/profile'
+import SettingsLoading from '../../_components/loading'
+import ProfilePage from '../../_components/profile'
 import { useUser } from '@/hooks/use-user'
 
 export default function Page() {

@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import ChannelSkeleton from '@/components/screens/channel/loading'
+import ChannelLoading from './_components/loading'
 
 export type Props = {
   children: React.ReactNode
@@ -9,5 +9,5 @@ export type Props = {
 }
 
 export default async function ChannelLayout({ children }: Props) {
-  return <Suspense fallback={<ChannelSkeleton />}>{children}</Suspense>
+  return <Suspense fallback={<ChannelLoading />}>{children}</Suspense>
 }
