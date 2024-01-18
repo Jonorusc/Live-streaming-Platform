@@ -4,7 +4,7 @@ import SettingsLoading from '@/components/screens/settings/loading'
 import { useUser } from '@/hooks/use-user'
 
 export default function Page() {
-  const { user, isValidating } = useUser()
-  if (!user || isValidating) return <SettingsLoading />
+  const { user, isLoading } = useUser()
+  if (!user || isLoading) return <SettingsLoading />
   return <ChannelPage user={user} />
 }

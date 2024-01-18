@@ -7,6 +7,7 @@ import Flex from '@/components/ui/flex'
 import Avatar from '@/components/ui/image'
 import { Title } from '@/components/ui/toast/styles'
 import NoSsr from '@/components/NoSsr'
+import { formateHighNumber } from '@/utils/text'
 
 export type CardProps = {
   title: string
@@ -14,15 +15,17 @@ export type CardProps = {
   streamer: {
     name: string
     picture: string
-    islive: boolean
-    viewers: number
+    islive?: boolean
+    viewers?: number
   }
+  disabled?: boolean
 }
 
-const Card = ({ title, message, streamer }: CardProps) => {
+const Card = ({ title, message, streamer, disabled }: CardProps) => {
   const router = useRouter()
 
   const onClickHandler = () => {
+    if (disabled) return
     setTimeout(() => {
       // redirects to profile streaming page
       // removes the spaces from the channel name for example? John Doe -> JohnDoe
@@ -46,10 +49,12 @@ const Card = ({ title, message, streamer }: CardProps) => {
               <Title>{title}</Title>
               <S.Message>{message}</S.Message>
             </Flex>
-            <S.Counter>
-              <i aria-label="redball"></i>
-              <span>{streamer.viewers}</span>
-            </S.Counter>
+            {streamer.viewers && (
+              <S.Counter>
+                <i aria-label="redball"></i>
+                <span>{formateHighNumber(streamer.viewers)}</span>
+              </S.Counter>
+            )}
           </Flex>
         </Flex>
       </S.Wrapper>

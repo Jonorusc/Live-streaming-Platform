@@ -117,7 +117,7 @@ export const Search = styled.div<{ $active?: boolean }>`
         input {
           height: 100% !important;
           border-radius: 0.6rem 0 0 0.6rem;
-          font-weight: ${theme.font.semiBold} !important;
+          /* font-weight: ${theme.font.semiBold} !important; */
           font-size: calc(${theme.font.size.xsmall} + 0.1rem) !important;
         }
       }

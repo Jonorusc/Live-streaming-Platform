@@ -2,6 +2,22 @@
 
 import styled, { css } from 'styled-components'
 import { Wrapper as TextField } from '@/components/ui/text/styles'
+import { Wrapper as Card } from '@/components/ui/sidenav/card/styles'
+
+export const Preview = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    width: 30rem;
+    height: 19rem;
+    justify-content: center;
+    align-items: center;
+    background-color: ${theme.palette.grey};
+
+    svg {
+      filter: drop-shadow(-0.7rem 0.8rem 0.3rem ${theme.palette.darker});
+    }
+  `}
+`
 
 export const Section = styled.div`
   ${({ theme }) => css`
@@ -28,6 +44,29 @@ export const Section = styled.div`
 
         @media screen and (max-width: 425px) {
           width: 100%;
+        }
+      }
+    }
+
+    div[aria-label='expanded'] {
+      width: 100%;
+      margin-bottom: 8rem;
+
+      @media screen and (max-width: 425px) {
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        row-gap: 2rem;
+
+        ${Preview} {
+          width: 100%;
+          height: 15rem;
+        }
+      }
+
+      @media screen and (max-width: 325px) {
+        ${Card} {
+          display: none;
         }
       }
     }

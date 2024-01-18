@@ -1,16 +1,17 @@
 import styled, { css } from 'styled-components/'
 import { COLORS } from '@/components/ui/types'
 
-export const Wrapper = styled.div.attrs({
-  tabIndex: 0
-})<{ $active?: boolean; $color: COLORS }>`
+export const Box = styled.div<{ $active?: boolean; $color: COLORS }>`
   ${({ theme, $active, $color }) => css`
+    transition-property: transform;
+    transition-timing-function: ease;
+    transition-duration: 100ms;
     background-color: ${theme.palette[$color]};
+    z-index: 2;
     position: relative;
-    border: 0;
-    display: grid;
 
-    & > div:nth-child(1) {
+    &::after {
+      content: '';
       position: absolute;
       top: 0;
       left: 0;
@@ -20,13 +21,19 @@ export const Wrapper = styled.div.attrs({
       border-bottom: 0.6rem solid transparent;
       border-right: 0.6rem solid ${theme.palette[$color]};
       transform-origin: left center;
-      transform: ${$active ? 'translate(0.06rem, -0.6rem)' : 'translate(0)'}
-        scale(0);
+      ${$active
+        ? css`
+            transform: translate(0.06rem, -0.6rem) scale(1);
+          `
+        : css`
+            transform: translate(0) scale(0);
+          `}
       transition-property: transform;
       transition-timing-function: ease;
       transition-duration: 100ms;
     }
-    & > div:nth-child(2) {
+    &::before {
+      content: '';
       position: absolute;
       bottom: 0px;
       right: 0px;
@@ -36,33 +43,29 @@ export const Wrapper = styled.div.attrs({
       border-right: 0.6rem solid transparent;
       border-top: 0.6rem solid ${theme.palette[$color]};
       transform-origin: center bottom;
-      transform: translateX(0.6rem) scale(${$active ? '1' : '0'});
+      transform: translateX(0.6rem) scale(${$active ? 1 : 0});
       transition-property: transform;
       transition-timing-function: ease;
       transition-duration: 100ms;
     }
-    & > div:nth-child(3) {
-      background-color: inherit;
-      position: absolute;
-      inset: 0;
-      width: fit-content;
-      height: fit-content;
 
-      transition-property: transform;
-      transition-timing-function: ease;
-      transition-duration: 100ms;
-    }
+    ${$active &&
+    css`
+      & > div:nth-child(1) {
+        transform: translate3d(0.6rem, -0.6rem, 0px);
+      }
+    `}
 
     &:hover {
-      & > div:nth-child(1) {
+      &::after {
         transform: translate(0.06rem, -0.6rem) scale(1);
         transition-delay: 75ms;
       }
-      & > div:nth-child(2) {
+      &::before {
         transform: translate(0.6rem, -0.06rem) scale(1);
         transition-delay: 75ms;
       }
-      & > div:nth-child(3) {
+      & > div:nth-child(1) {
         transform: translate3d(0.6rem, -0.6rem, 0px);
         transition-delay: 75ms;
         z-index: 1;

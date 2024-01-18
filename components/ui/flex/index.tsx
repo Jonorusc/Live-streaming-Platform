@@ -47,9 +47,18 @@ const Flex = styled.div<{
   }) => css`
     display: flex;
     flex-direction: ${$direction || 'row'};
-    gap: ${$gap || '0'};
-    row-gap: ${$gapX || '0'};
-    column-gap: ${$gapY || '0'};
+    ${$gapY &&
+    css`
+      column-gap: ${$gapY};
+    `};
+    ${$gapX &&
+    css`
+      row-gap: ${$gapX};
+    `};
+    ${$gap &&
+    css`
+      gap: ${$gap};
+    `};
     padding: ${$padding || '0'};
     margin: ${$margin || '0'};
     width: ${$width || 'auto'};
