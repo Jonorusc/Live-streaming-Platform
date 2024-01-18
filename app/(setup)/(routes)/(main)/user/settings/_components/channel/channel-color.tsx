@@ -22,7 +22,7 @@ const ChannelColor = ({ user }: { user: CURRENTUSER }) => {
     user.profile!.color || theme?.palette?.primary
   )
   const [boxColor, setBoxColor] = useState<COLORS>(
-    (Object.keys(theme!.palette).find(
+    (Object.keys(theme?.palette || {}).find(
       (key) => theme?.palette[key as COLORS] === color
     ) as COLORS) || 'primary'
   )
