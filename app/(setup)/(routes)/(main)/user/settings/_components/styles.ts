@@ -52,11 +52,11 @@ export const Section = styled.div`
       width: 100%;
       margin-bottom: 8rem;
 
+      flex-flow: row wrap;
+      row-gap: 2rem;
       @media screen and (max-width: 425px) {
+        place-content: center;
         width: 100%;
-        flex-direction: column;
-        align-items: center;
-        row-gap: 2rem;
 
         ${Preview} {
           width: 100%;

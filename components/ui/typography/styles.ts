@@ -31,6 +31,7 @@ export const Wrapper = styled.span<WrapperProps>`
     $breakWord,
     $radius
   }) => css`
+    user-select: text;
     border: none;
     display: block;
     margin: 0;

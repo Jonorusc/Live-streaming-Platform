@@ -3,8 +3,7 @@ import * as S from '../styles'
 
 import { CURRENTUSER, updateUser } from '@/actions/user'
 import { CirclePicker } from 'react-color'
-import { useReadLocalStorage } from 'usehooks-ts'
-import { DefaultTheme } from 'styled-components'
+import { useLocalStorage } from 'usehooks-ts'
 import { useState, useTransition } from 'react'
 import Typrography from '@/components/ui/typography'
 import Flex from '@/components/ui/flex'
@@ -15,15 +14,16 @@ import Card from '@/components/ui/sidenav/card'
 import { Video } from 'lucide-react'
 import { COLORS } from '@/components/ui/types'
 import { useUser } from '@/hooks/use-user'
+import { defaultTheme } from '@/styles/themes/default-theme'
 
 const ChannelColor = ({ user }: { user: CURRENTUSER }) => {
-  const theme: DefaultTheme | null = useReadLocalStorage('theme')
+  const [theme] = useLocalStorage('theme', defaultTheme)
   const [color, setColor] = useState(
     user.profile!.color || theme?.palette?.primary
   )
   const [boxColor, setBoxColor] = useState<COLORS>(
-    (Object.keys(theme?.palette || {}).find(
-      (key) => theme?.palette[key as COLORS] === color
+    (Object.keys(theme.palette).find(
+      (key) => theme.palette[key as COLORS] === color
     ) as COLORS) || 'primary'
   )
   const [isPending, startTransition] = useTransition()
@@ -44,17 +44,15 @@ const ChannelColor = ({ user }: { user: CURRENTUSER }) => {
     'darkerGrey',
     'triadic2'
   ]
-  const themeColours =
-    theme?.palette &&
-    (
-      Object.entries(theme.palette)
-        .map(([key, value]) => {
-          if (!invalidKeys.includes(key)) return value
-        })
-        .filter((value) => value !== undefined) as string[]
-    )
-      // filter for equal values to remove duplicates
-      .filter((value, index, self) => self.indexOf(value) === index)
+  const themeColours = (
+    Object.entries(theme.palette)
+      .map(([key, value]) => {
+        if (!invalidKeys.includes(key)) return value
+      })
+      .filter((value) => value !== undefined) as string[]
+  )
+    // filter for equal values to remove duplicates
+    .filter((value, index, self) => self.indexOf(value) === index)
 
   const handleSaveChanges = () => {
     startTransition(() => {
@@ -101,13 +99,14 @@ const ChannelColor = ({ user }: { user: CURRENTUSER }) => {
             <CirclePicker
               colors={themeColours}
               color={color}
-              onChangeComplete={(color) => {
-                setColor(color.hex)
+              onChangeComplete={($color) => {
+                if ($color.hex === color) return
+                setColor($color.hex)
                 setSaved(false)
                 // set box color as the color.hex value theme.palette key value
                 setBoxColor(
                   Object.keys(theme!.palette).find(
-                    (key) => theme!.palette[key as COLORS] === color.hex
+                    (key) => theme!.palette[key as COLORS] === $color.hex
                   ) as COLORS
                 )
               }}
