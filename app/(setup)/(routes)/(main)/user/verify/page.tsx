@@ -7,11 +7,9 @@ import { useEffect, useRef } from 'react'
 import { useToast } from '@/hooks/use-toast'
 import { useUser } from '@/hooks/use-user'
 import ReactLoading from 'react-loading'
-import Grid from '@/components/ui/grid'
 import { useModal } from '@/hooks/use-modal'
-
-import { verifyEmail } from './verify-email'
 import Flex from '@/components/ui/flex'
+import { verifyEmail } from './verify-email'
 
 export default function AuthPage() {
   const searchParams = useSearchParams()
@@ -39,20 +37,15 @@ export default function AuthPage() {
   async function actions(actionCode: string, mode: string) {
     switch (mode) {
       case 'verifyEmail':
-        {
-          await verifyEmail(actionCode)
-            .then(() => {
-              notify('success', 'Your email has been verified.')
-              userMutate()
-            })
-            .catch((error) => {
-              notify('error', error)
-            })
-            .finally(() => {
-              // redirect('/')
-              router.push('/')
-            })
-        }
+        await verifyEmail(actionCode)
+          .then(() => {
+            notify('success', 'Your email has been verified!')
+            userMutate()
+          })
+          .catch((error) => {
+            notify('error', error.message)
+          })
+        router.push('/')
         break
       case 'resetPassword':
         onOpen('forgot-password', { actionCode })

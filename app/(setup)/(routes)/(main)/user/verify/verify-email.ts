@@ -13,11 +13,10 @@ export const verifyEmail = async (actionCode: string) => {
     await handleverifyemail(actionCode)
     if (firebaseUser.email) {
       await updateUserEmailStatus(firebaseUser.email)
+      return 'Your email has been verified.'
     } else {
       throw new Error('Something went wrong. Please try again later.')
     }
-
-    return 'Your email has been verified.'
   } catch (error: any) {
     throw new Error(error || 'Something went wrong. Please try again later.')
   }
