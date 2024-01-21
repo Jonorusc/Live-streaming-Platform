@@ -2,6 +2,7 @@
 
 import * as S from './styles'
 
+import { motion } from 'framer-motion'
 import React from 'react'
 import { usePathname } from 'next/navigation'
 import NoSsr from '@/components/NoSsr'
@@ -18,9 +19,14 @@ export const Tabs = ({
         <ul>
           {React.Children.map(children, (child, index) => (
             <li key={index}>
-              {child.props.href === selectedId
-                ? React.cloneElement(child, { className: 'active' })
-                : child}
+              {child.props.href === selectedId ? (
+                <>
+                  {React.cloneElement(child, { className: 'active' })}
+                  <motion.div className="underline" layoutId="underline" />
+                </>
+              ) : (
+                child
+              )}
             </li>
           ))}
         </ul>

@@ -14,6 +14,16 @@ export const TabContainer = styled.div`
       li {
         margin-right: 2rem;
         list-style: none;
+        position: relative;
+
+        .underline {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background-color: ${theme.palette.primary};
+        }
       }
     }
 
@@ -29,12 +39,12 @@ export const TabContainer = styled.div`
 
       &:hover {
         text-decoration: none;
-        box-shadow: inset 0px -1px 0px ${theme.palette.accent};
+        /* box-shadow: inset 0px -1px 0px ${theme.palette.accent}; */
         color: ${theme.palette.accent};
       }
 
       &.active {
-        box-shadow: inset 0px -1px 0px ${theme.palette.primary};
+        /* box-shadow: inset 0px -1px 0px ${theme.palette.primary}; */
         color: ${theme.palette.primary};
       }
     }
