@@ -3,7 +3,7 @@
 import { redirect, useRouter } from 'next/navigation'
 import { app_config } from '@/utils/firebase'
 import { useSearchParams } from 'next/navigation'
-import { useEffect, useRef } from 'react'
+import { Suspense, useEffect, useRef } from 'react'
 import { useToast } from '@/hooks/use-toast'
 import { useUser } from '@/hooks/use-user'
 import ReactLoading from 'react-loading'
@@ -11,7 +11,7 @@ import { useModal } from '@/hooks/use-modal'
 import Flex from '@/components/ui/flex'
 import { verifyEmail } from './verify-email'
 
-export default function AuthPage() {
+function Auth() {
   const searchParams = useSearchParams()
   const actionCode = searchParams.get('oobCode')
   const mode = searchParams.get('mode')
@@ -100,5 +100,13 @@ export default function AuthPage() {
       {mode === 'verifyEmail' && <h1>Verifying email</h1>}
       <ReactLoading type="spin" color="#B4BDc7" height={60} width={60} />
     </Flex>
+  )
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense>
+      <Auth />
+    </Suspense>
   )
 }
