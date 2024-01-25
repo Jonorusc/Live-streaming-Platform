@@ -5,32 +5,35 @@ import * as S from './styles'
 import Flex from '@/components/ui/flex'
 import { User } from 'lucide-react'
 import Avatar from '@/components/ui/image'
-import Button from '@/components/ui/button'
 import { CURRENTUSER } from '@/actions/user'
-import { useModal } from '@/hooks/use-modal'
 import { Separator } from '@/components/ui/separator'
 import Typrography from '@/components/ui/typography'
 import useClickOutside from '@/hooks/use-clickoutside'
 import ThemeSwitcher from '@/components/ui/theme'
 
-import { DropdownItem, dropdownItems } from './dropdown-items'
+import { DropdownItem, dropdownItems } from './dropdown-menu-items'
 
 import React, { useState, useRef, Dispatch, SetStateAction } from 'react'
 import Link from 'next/link'
+import { getLayout } from '@/utils/layout'
 
 const Item = ({
   title,
+  id,
   Icon,
   link,
   separator,
   click,
   auth,
   user,
+  view,
   setShowDp,
+  layoutView,
   ...props
 }: DropdownItem & {
   user: CURRENTUSER | null
   setShowDp?: Dispatch<SetStateAction<boolean>>
+  layoutView: 'creator' | 'user'
 } & React.HTMLAttributes<HTMLElement>) => {
   const handleItemClick = async () => {
     setShowDp && setShowDp(false)
@@ -57,6 +60,9 @@ const Item = ({
   }
 
   const $link = redirect()
+  if (view && view !== layoutView) {
+    return null
+  }
   return (
     <>
       {auth && user && (
@@ -112,80 +118,40 @@ const Item = ({
   )
 }
 
-export const DropDown = ({ user }: { user: CURRENTUSER | null }) => {
-  const { onClose, onOpen } = useModal()
+export const Dropdown = ({ user }: { user: CURRENTUSER | null }) => {
   const dropdownRef = useRef<HTMLDivElement>(null)
   const [showDp, setShowDp] = useState(false)
-
+  const viewType = getLayout()
   useClickOutside(dropdownRef, () => setShowDp(false))
-
   return (
     <>
-      <Flex
-        $align="center"
-        $gapY="1rem"
-        $padding="0 0.5rem 0 0"
-        $justify="flex-end"
-        $width="max-content!important"
-      >
-        {!user && (
-          <>
-            <Button
-              $bgcolor="triadic1"
-              $color="triadic2"
-              $fontSize="small"
-              $fontWeight="bold"
-              onClick={() => {
-                onClose()
-                onOpen('signin')
-              }}
-            >
-              Log In
-            </Button>
-            <Button
-              $bgcolor="primary"
-              $hoverColor="primary"
-              $color="whiteSmoke"
-              $fontSize="small"
-              $fontWeight="bold"
-              onClick={() => {
-                onClose()
-                onOpen('signup')
-              }}
-            >
-              Sign Up
-            </Button>
-          </>
+      <S.DropDown ref={dropdownRef} onClick={() => setShowDp((prev) => !prev)}>
+        {user && user?.profile ? (
+          <Avatar
+            $url={user.profile.avatar}
+            alt={user.username}
+            $size={30}
+            $rounded
+          />
+        ) : (
+          <S.Avatar>
+            <User size={20} />
+          </S.Avatar>
         )}
-        <S.DropDown
-          ref={dropdownRef}
-          onClick={() => setShowDp((prev) => !prev)}
-        >
-          {user && user?.profile ? (
-            <Avatar
-              $url={user.profile.avatar}
-              alt={user.username}
-              $size={30}
-              $rounded
-            />
-          ) : (
-            <S.Avatar>
-              <User size={20} />
-            </S.Avatar>
-          )}
-          {showDp && (
-            <S.DropDownBody onClick={(e) => e.stopPropagation()}>
-              {user && user?.profile && (
-                <>
-                  <Flex $align="center" $gapY="1rem" $padding="0.5rem">
-                    <Link href="/user/settings">
-                      <Avatar
-                        $url={user.profile.avatar}
-                        alt={user.username}
-                        $size={40}
-                        $rounded
-                      />
-                    </Link>
+        {showDp && (
+          <S.DropDownBody onClick={(e) => e.stopPropagation()}>
+            {user && user?.profile && (
+              <>
+                <Flex $align="center" $gapY="1rem" $padding="0.5rem">
+                  <Link href="/user/settings">
+                    <Avatar
+                      $url={user.profile.avatar}
+                      alt={user.username}
+                      $size={40}
+                      $rounded
+                    />
+                  </Link>
+                  <Flex $direction="column">
                     <Typrography
                       $lineHeight="1.5"
                       $text={user.username}
@@ -193,36 +159,50 @@ export const DropDown = ({ user }: { user: CURRENTUSER | null }) => {
                       $color="triadic2"
                       $fontWeight="semiBold"
                     />
+                    {viewType === 'creator' && (
+                      <Typrography
+                        $lineHeight="1.5"
+                        $text="Creator"
+                        $fontSize="xsmall"
+                        $color="grey"
+                        $fontWeight="light"
+                      />
+                    )}
                   </Flex>
-                  <Separator />
-                </>
-              )}
-              {!user && (
-                <>
-                  <Flex $align="center" $gapY="1rem" $padding="0.5rem">
-                    <S.Avatar>
-                      <User size={20} />
-                    </S.Avatar>
-                    <Typrography
-                      $lineHeight="1.5"
-                      $text="Guest"
-                      $fontSize="xsmall"
-                      $color="triadic2"
-                      $fontWeight="semiBold"
-                    />
-                  </Flex>
-                  <Separator />
-                </>
-              )}
-              {dropdownItems.map((item) => (
-                <React.Fragment key={item.id}>
-                  <Item {...item} user={user} setShowDp={setShowDp} />
-                </React.Fragment>
-              ))}
-            </S.DropDownBody>
-          )}
-        </S.DropDown>
-      </Flex>
+                </Flex>
+                <Separator />
+              </>
+            )}
+            {!user && (
+              <>
+                <Flex $align="center" $gapY="1rem" $padding="0.5rem">
+                  <S.Avatar>
+                    <User size={20} />
+                  </S.Avatar>
+                  <Typrography
+                    $lineHeight="1.5"
+                    $text="Guest"
+                    $fontSize="xsmall"
+                    $color="triadic2"
+                    $fontWeight="semiBold"
+                  />
+                </Flex>
+                <Separator />
+              </>
+            )}
+            {dropdownItems.map((item) => (
+              <React.Fragment key={item.id}>
+                <Item
+                  {...item}
+                  layoutView={viewType}
+                  user={user}
+                  setShowDp={setShowDp}
+                />
+              </React.Fragment>
+            ))}
+          </S.DropDownBody>
+        )}
+      </S.DropDown>
     </>
   )
 }

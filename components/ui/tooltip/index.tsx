@@ -4,7 +4,7 @@ import * as S from './styles'
 
 import { COLORS } from '@/components/ui/types'
 import NoSsr from '@/components/NoSsr'
-import { useEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import { computePosition, flip, offset, autoUpdate } from '@floating-ui/dom'
 
 export type ToolTipProps = {
@@ -24,15 +24,14 @@ const ToolTip = ({
   $arrow,
   $show = true
 }: ToolTipProps) => {
+  if (window === undefined) {
+    return null
+  }
   const anchor = useRef<HTMLDivElement>(null)
   const tooltip = useRef<HTMLDivElement>(null)
   const [positions, setPositions] = useState({ left: '0px', top: '0px' })
 
-  if (!window) {
-    return null
-  }
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!anchor.current || !tooltip.current) return
     const updatePosition = () => {
       if (!anchor.current || !tooltip.current) return
@@ -47,8 +46,8 @@ const ToolTip = ({
       })
     }
 
-    const clean = autoUpdate(anchor.current, tooltip.current, updatePosition)
-  }, [])
+    autoUpdate(anchor.current, tooltip.current, updatePosition)
+  }, [anchor, tooltip, $position])
   return (
     <NoSsr>
       <S.Wrapper ref={anchor}>

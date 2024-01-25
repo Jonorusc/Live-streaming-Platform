@@ -7,15 +7,21 @@ import React from 'react'
 import { usePathname } from 'next/navigation'
 import NoSsr from '@/components/NoSsr'
 
-export const Tabs = ({
-  children
-}: {
+export type TabsProps = {
   children: React.ReactElement<HTMLLinkElement>[]
-}) => {
+  $separator?: boolean
+  $fontSize?: 'small' | 'medium'
+}
+
+export const Tabs = ({
+  children,
+  $separator = true,
+  $fontSize = 'small'
+}: TabsProps) => {
   const selectedId = usePathname().split('/').pop()
   return (
     <NoSsr>
-      <S.TabContainer>
+      <S.TabContainer $separator={$separator} $fontSize={$fontSize}>
         <ul>
           {React.Children.map(children, (child, index) => (
             <li key={index}>

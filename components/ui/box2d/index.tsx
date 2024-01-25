@@ -4,7 +4,7 @@ import * as S from './styles'
 
 import { COLORS } from '@/components/ui/types'
 
-interface Box2DProps {
+type Box2DProps = {
   $active?: boolean
   $color?: COLORS
   children: React.ReactNode

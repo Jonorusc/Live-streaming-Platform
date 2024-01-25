@@ -17,12 +17,8 @@ const CustomScrollBar = ({
 
   const renderThumb = ({ style, ...props }: { style: React.CSSProperties }) => {
     const thumbStyle = {
-      backgroundColor:
-        theme?.name === 'light'
-          ? theme?.palette?.lightGrey
-          : theme?.palette?.surface,
-      borderRadius: '0.5rem',
-      cursor: 'pointer'
+      backgroundColor: theme?.palette?.grey,
+      borderRadius: '0.5rem'
     }
     return <div style={{ ...style, ...thumbStyle }} {...props} />
   }
@@ -35,14 +31,12 @@ const CustomScrollBar = ({
         autoHideDuration={200}
         thumbMinSize={30}
         universal
+        hideTracksWhenNotNeeded={true}
         autoHeight
         height={height}
         autoHeightMax="100vh"
         renderThumbHorizontal={renderThumb}
         renderThumbVertical={renderThumb}
-        renderView={({ style, ...props }) => (
-          <div style={{ ...style }} {...props} />
-        )}
       >
         {children}
       </Scrollbars>

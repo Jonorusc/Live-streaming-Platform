@@ -1,19 +1,49 @@
+import { darken } from 'polished'
 import styled, { css } from 'styled-components'
 import { Message as $Message } from '@/components/ui/toast/styles'
-
-export const Wrapper = styled.div`
-  ${({ theme }) => css`
+import { Wrapper as Aside } from '@/components/ui/aside/styles'
+export const Wrapper = styled.div<{ disabled?: boolean }>`
+  ${({ theme, disabled }) => css`
     width: 100%;
-    min-width: 24.2rem;
+    min-width: 24rem;
     padding: 0.5rem 1rem;
     background-color: ${theme.palette.surface};
     cursor: pointer;
+
+    &:hover {
+      ${!disabled &&
+      css`
+        background-color: ${darken(0.05, theme.palette.surface)};
+      `}
+    }
+
+    @container aside (width <= 63px) {
+      width: 4rem;
+      min-width: unset;
+      padding: 0;
+      ${Aside} {
+        padding: 0.5rem 0 !important;
+      }
+      &:hover {
+        background-color: unset;
+      }
+      > div {
+        justify-content: center;
+      }
+      div[aria-label='stream-description'] {
+        display: none;
+      }
+    }
   `}
 `
 
 export const Message = styled($Message)`
   ${({ theme }) => css`
     color: ${theme.palette.grey};
+
+    @media (max-width: 425px) {
+      font-size: 2.7dvw;
+    }
   `}
 `
 export const Counter = styled.div`

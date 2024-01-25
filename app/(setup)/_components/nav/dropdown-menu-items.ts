@@ -1,6 +1,14 @@
 'use client'
 
-import { UserMinus2, Settings, LogOut, LucideIcon, SunMoon } from 'lucide-react'
+import {
+  UserMinus2,
+  Settings,
+  LucideIcon,
+  SunMoon,
+  Home,
+  PlusSquare,
+  ArrowLeftFromLine
+} from 'lucide-react'
 
 import { signOutUser } from '@/actions/user'
 import { signout } from '@/lib/firebase/auth'
@@ -15,9 +23,18 @@ export type DropdownItem = {
   link?: string
   click?: () => void
   auth: boolean
+  view?: 'creator' | 'user'
 }
 
 export const dropdownItems: DropdownItem[] = [
+  {
+    id: '0',
+    title: 'Back to Twitch',
+    Icon: Home,
+    link: '/',
+    auth: true,
+    view: 'creator'
+  },
   {
     id: '1',
     title: 'Channel',
@@ -26,22 +43,31 @@ export const dropdownItems: DropdownItem[] = [
   },
   {
     id: '2',
+    title: 'Creator Dashboard',
+    Icon: PlusSquare,
+    link: '/u',
+    auth: true,
+    view: 'user'
+  },
+
+  {
+    id: '3',
     title: 'Settings',
     Icon: Settings,
     link: '/user/settings',
     auth: true
   },
   {
-    id: '3',
+    id: '4',
     title: 'Theme',
     Icon: SunMoon,
     auth: false
   },
   {
     separator: true,
-    id: '4',
+    id: '5',
     title: 'Logout',
-    Icon: LogOut,
+    Icon: ArrowLeftFromLine,
     click: async () => {
       try {
         await signout()

@@ -5,10 +5,10 @@ export const Box = styled.div<{ $active?: boolean; $color: COLORS }>`
   ${({ theme, $active, $color }) => css`
     transition-property: transform;
     transition-timing-function: ease;
-    transition-duration: 100ms;
+    transition-duration: 150ms;
     background-color: ${theme.palette[$color]};
-    z-index: 2;
     position: relative;
+    z-index: 2;
 
     &::after {
       content: '';
@@ -30,7 +30,9 @@ export const Box = styled.div<{ $active?: boolean; $color: COLORS }>`
           `}
       transition-property: transform;
       transition-timing-function: ease;
+      transform-origin: left center;
       transition-duration: 100ms;
+      z-index: 1;
     }
     &::before {
       content: '';
@@ -46,9 +48,16 @@ export const Box = styled.div<{ $active?: boolean; $color: COLORS }>`
       transform: translateX(0.6rem) scale(${$active ? 1 : 0});
       transition-property: transform;
       transition-timing-function: ease;
+      transform-origin: center bottom;
       transition-duration: 100ms;
+      z-index: 1;
     }
 
+    & > div:nth-child(1) {
+      transition-property: transform;
+      transition-timing-function: ease;
+      transition-duration: 100ms;
+    }
     ${$active &&
     css`
       & > div:nth-child(1) {
@@ -67,8 +76,7 @@ export const Box = styled.div<{ $active?: boolean; $color: COLORS }>`
       }
       & > div:nth-child(1) {
         transform: translate3d(0.6rem, -0.6rem, 0px);
-        transition-delay: 75ms;
-        z-index: 1;
+        transition-delay: 80ms;
       }
     }
   `}

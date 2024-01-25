@@ -10,7 +10,20 @@ const meta: Meta<typeof Box2D> = {
   tags: ['autodocs'],
   args: {
     $active: false,
-    $color: 'primary'
+    $color: 'primary',
+    children: (
+      <div
+        style={{
+          height: '15rem',
+          width: '20rem',
+          background: 'red',
+          display: 'grid',
+          placeItems: 'center'
+        }}
+      >
+        hover me
+      </div>
+    )
   },
   argTypes: {
     $color: {

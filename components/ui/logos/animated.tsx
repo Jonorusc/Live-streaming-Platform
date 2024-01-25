@@ -28,33 +28,33 @@ export const TwitchAnimated = ({
 
     setTimeout(() => {
       const animations = element.querySelectorAll('animate, animateTransform')
-
+      const outerSvg = element.querySelector(
+        '#twitch-animated-brand'
+      ) as SVGSVGElement
       const playAnimation = (animation: SVGAnimationElement) => {
         animation.beginElementAt(0)
       }
 
       const playAnimations = () => {
         animations.forEach((animation: any) => {
+          outerSvg!.unpauseAnimations()
           const animationElement = animation as SVGAnimationElement
           animation.setAttribute('fill', 'freeze')
-          animation.setAttribute('end', 'indefinite')
           playAnimation(animationElement)
         })
       }
 
       const pauseAnimations = () => {
         animations.forEach((animation: any) => {
-          const animationElement = animation
-          animationElement.endElement()
           animation.setAttribute('fill', 'remove')
-          animation.setAttribute('end', '150ms')
-          playAnimation(animationElement)
+          outerSvg!.pauseAnimations()
+          animation.beginElementAt(0)
         })
       }
 
       element.addEventListener('mouseenter', playAnimations)
       element.addEventListener('mouseleave', pauseAnimations)
-    }, 500) // Delay the execution by 1 second
+    }, 500)
     loaded.current = true
   }, [])
 
@@ -67,6 +67,7 @@ export const TwitchAnimated = ({
             width={width}
             height={height}
             viewBox="0 0 40 40"
+            id="twitch-animated-brand"
             x="0px"
             y="0px"
             $animateonhover={animateonhover}
@@ -78,6 +79,7 @@ export const TwitchAnimated = ({
                 <animate
                   dur="150ms"
                   begin="indefinite"
+                  end="indefinite"
                   fill="freeze"
                   calcMode="spline"
                   keyTimes="0; 1"
@@ -89,6 +91,7 @@ export const TwitchAnimated = ({
                 <animate
                   dur="250ms"
                   begin="indefinite"
+                  end="indefinite"
                   fill="freeze"
                   calcMode="spline"
                   keyTimes="0; 1"
@@ -100,6 +103,7 @@ export const TwitchAnimated = ({
                 <animate
                   dur="50ms"
                   begin="indefinite"
+                  end="indefinite"
                   fill="freeze"
                   calcMode="spline"
                   keyTimes="0; 1"
@@ -111,6 +115,7 @@ export const TwitchAnimated = ({
                 <animate
                   dur="75ms"
                   begin="indefinite"
+                  end="indefinite"
                   fill="freeze"
                   calcMode="spline"
                   keyTimes="0; 1"
@@ -128,6 +133,7 @@ export const TwitchAnimated = ({
                 <animateTransform
                   dur="150ms"
                   begin="indefinite"
+                  end="indefinite"
                   fill="freeze"
                   calcMode="spline"
                   keyTimes="0; 1"
@@ -140,6 +146,7 @@ export const TwitchAnimated = ({
                 <animateTransform
                   dur="250ms"
                   begin="indefinite"
+                  end="indefinite"
                   fill="freeze"
                   calcMode="spline"
                   keyTimes="0; 1"
@@ -152,6 +159,7 @@ export const TwitchAnimated = ({
                 <animateTransform
                   dur="50ms"
                   begin="indefinite"
+                  end="indefinite"
                   fill="freeze"
                   calcMode="spline"
                   keyTimes="0; 1"
@@ -164,6 +172,7 @@ export const TwitchAnimated = ({
                 <animateTransform
                   dur="75ms"
                   begin="indefinite"
+                  end="indefinite"
                   fill="freeze"
                   calcMode="spline"
                   keyTimes="0; 1"
@@ -179,6 +188,7 @@ export const TwitchAnimated = ({
                   <animateTransform
                     dur="150ms"
                     begin="indefinite"
+                    end="indefinite"
                     fill="freeze"
                     calcMode="spline"
                     keyTimes="0; 1"
@@ -191,6 +201,7 @@ export const TwitchAnimated = ({
                   <animateTransform
                     dur="250ms"
                     begin="indefinite"
+                    end="indefinite"
                     fill="freeze"
                     calcMode="spline"
                     keyTimes="0; 1"
@@ -203,6 +214,7 @@ export const TwitchAnimated = ({
                   <animateTransform
                     dur="50ms"
                     begin="indefinite"
+                    end="indefinite"
                     fill="freeze"
                     calcMode="spline"
                     keyTimes="0; 1"
@@ -215,6 +227,7 @@ export const TwitchAnimated = ({
                   <animateTransform
                     dur="75ms"
                     begin="indefinite"
+                    end="indefinite"
                     fill="freeze"
                     calcMode="spline"
                     keyTimes="0; 1"

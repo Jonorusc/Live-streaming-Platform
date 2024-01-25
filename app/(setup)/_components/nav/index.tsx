@@ -8,7 +8,7 @@ import NoSsr from '@/components/NoSsr'
 import Flex from '@/components/ui/flex'
 
 import { Searcher } from './search'
-import { DropDown } from './dropdown'
+import { UserSection } from './user-section'
 
 const Nav = async () => {
   const user = await getCurrentUser()
@@ -31,7 +31,7 @@ const Nav = async () => {
           </Link>
         </Flex>
         <Searcher />
-        <DropDown user={user} />
+        <UserSection user={user} />
       </S.Wrapper>
     </NoSsr>
   )

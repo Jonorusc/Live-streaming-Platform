@@ -1,6 +1,9 @@
-// screen
-import Nav from './_components'
+import Flex from '@/components/ui/flex'
+import Nav from '../../_components/nav'
 import { Suspense } from 'react'
+import LoadingAside from '../../_components/aside/loading'
+import LoadingNav from '../../_components/nav/loading'
+import UserAside from '../../_components/aside'
 
 export const metadata = {
   title: 'Twitch Clone',
@@ -17,17 +20,24 @@ export const metadata = {
   }
 }
 
-export default function MainLayout({
+export default async function MainLayout({
   children
 }: {
   children: React.ReactNode
 }) {
   return (
     <>
-      <Suspense fallback={<div>Loading nav...</div>}>
+      <Suspense fallback={<LoadingNav />}>
         <Nav />
       </Suspense>
-      <main>{children}</main>
+      <main>
+        <Flex>
+          <Suspense fallback={<LoadingAside />}>
+            <UserAside />
+          </Suspense>
+          {children}
+        </Flex>
+      </main>
     </>
   )
 }

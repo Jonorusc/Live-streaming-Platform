@@ -1,14 +1,10 @@
-'use client'
+import { getCurrentUser } from '@/actions/user'
 import { redirect } from 'next/navigation'
-import { useEffect, useRef } from 'react'
 
-export default function TabsIndex() {
-  const done = useRef(false)
+export default async function UserTabsIndex() {
+  const user = await getCurrentUser()
 
-  useEffect(() => {
-    if (!done.current) {
-      done.current = true
-      redirect('/user/settings/profile')
-    }
-  }, [])
+  if (!user) return redirect('/')
+
+  redirect(`/user/settings/profile`)
 }

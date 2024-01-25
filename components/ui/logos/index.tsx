@@ -1,3 +1,4 @@
+'use client'
 import NoSsr from '@/components/NoSsr'
 import { Figure } from './styles'
 

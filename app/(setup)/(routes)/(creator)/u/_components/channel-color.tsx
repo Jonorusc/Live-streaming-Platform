@@ -1,5 +1,5 @@
 'use client'
-import * as S from '../styles'
+import * as S from './styles'
 
 import { CURRENTUSER, updateUser } from '@/actions/user'
 import { CirclePicker } from 'react-color'
@@ -10,7 +10,7 @@ import Flex from '@/components/ui/flex'
 import Box2D from '@/components/ui/box2d'
 import ReactLoading from 'react-loading'
 import Button from '@/components/ui/button'
-import Card from '@/components/ui/sidenav/card'
+import Card from '@/components/ui/card'
 import { Video } from 'lucide-react'
 import { COLORS } from '@/components/ui/types'
 import { useUser } from '@/hooks/use-user'
@@ -76,7 +76,7 @@ const ChannelColor = ({ user }: { user: CURRENTUSER }) => {
     <>
       <Typrography
         $color="triadic2"
-        $text="Channel Colour"
+        $text="Profile Accent Colour"
         $type="h5"
         $fontSize="small"
         $fontWeight="semiBold"

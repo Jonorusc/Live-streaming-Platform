@@ -4,7 +4,7 @@ import ProfileSettingsPage from './profile-settings'
 import { CURRENTUSER } from '@/actions/user'
 import DeactivateAccountPage from './deactivate-account'
 
-const ProfilePage = async ({ user }: { user: CURRENTUSER }) => {
+const ProfilePage = ({ user }: { user: CURRENTUSER }) => {
   return (
     <section>
       <ProfilePicturePage user={user} />
