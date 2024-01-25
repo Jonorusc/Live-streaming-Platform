@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import ToolTip from '.'
-import Card from '@/components/ui/sidenav/card'
+import Card from '@/components/ui/card'
 
 const CardProps = {
   title: 'DevByLucas',

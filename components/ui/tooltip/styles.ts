@@ -5,8 +5,12 @@ export const ToolTip = styled.div<
   Pick<ToolTipProps, '$background' | '$position' | '$arrow'>
 >`
   ${({ theme, $background, $position, $arrow }) => css`
-    display: none;
-    position: absolute;
+    display: block;
+    pointer-events: none;
+    scale: 0.8;
+    visibility: hidden;
+    translate-z: 0;
+    position: fixed;
     max-height: 10.2rem;
     min-height: fit-content;
     min-width: fit-content;
@@ -16,13 +20,16 @@ export const ToolTip = styled.div<
     padding: ${theme.spacing.small};
     border-radius: 0.6rem;
     box-shadow: ${theme.shadow.box.small} rgba(0, 0, 0, 0.45);
-    transition: all 150ms ease-in;
-
+    transition:
+      scale 100ms cubic-bezier(0.4, 0, 0.2, 1),
+      visibility 80ms ease;
+    transition-delay: 80ms;
+    transform-origin: center center;
     ${$position === 'top' &&
     css`
-      bottom: calc((100% + 1.5rem));
-      left: 50%;
-      translate: -50%;
+      // bottom: calc((100% + 1.5rem));
+      // left: 50%;
+      // translate: -50%;
       // arrow at bottom of tooltip
       &:after {
         content: '';
@@ -39,9 +46,9 @@ export const ToolTip = styled.div<
     `}
     ${$position === 'bottom' &&
     css`
-      top: calc((100% + 1.5rem));
-      left: 50%;
-      translate: -50%;
+      // top: calc((100% + 1.5rem));
+      // left: 50%;
+      // translate: -50%;
       // arrow at top of tooltip
       &:after {
         content: '';
@@ -59,9 +66,9 @@ export const ToolTip = styled.div<
 
     ${$position === 'left' &&
     css`
-      top: 50%;
-      right: calc((100% + 1.5rem));
-      translate: 0 -50%;
+      // top: 50%;
+      // right: calc((100% + 1.5rem));
+      // translate: 0 -50%;
       // arrow to the right of the tooltip
       &:after {
         content: '';
@@ -78,9 +85,9 @@ export const ToolTip = styled.div<
     `}
     ${$position === 'right' &&
     css`
-      top: 50%;
-      left: calc((100% + 1.5rem));
-      translate: 0 -50%;
+      // top: 50%;
+      // left: calc((100% + 1.5rem));
+      // translate: 0 -50%;
       // arrow to the left of the tooltip
       &:after {
         content: '';
@@ -109,9 +116,13 @@ export const ToolTip = styled.div<
 export const Wrapper = styled.div`
   ${({ theme }) => css`
     position: relative;
+
     &:hover {
+      z-index: ${theme.layers.alwaysOnTop};
       ${ToolTip} {
-        display: block;
+        scale: 1;
+        visibility: visible;
+        pointer-events: all;
       }
     }
   `};
