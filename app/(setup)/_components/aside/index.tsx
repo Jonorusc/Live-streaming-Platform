@@ -12,16 +12,21 @@ const UserAside = async () => {
       skip: 0,
       take: 10
     }),
-    getFollowedChannels({
-      userId: user?.id!
-    })
+    async () => {
+      if (!user) return Promise.resolve(null)
+      return await getFollowedChannels({
+        userId: user?.id!
+      })
+    }
   ])
+
+  const follows = await followedChannels()
 
   return (
     <>
       <AsideWrapper
         vewedChannels={vewedChannels}
-        followedChannels={followedChannels}
+        followedChannels={follows || null}
       />
     </>
   )
