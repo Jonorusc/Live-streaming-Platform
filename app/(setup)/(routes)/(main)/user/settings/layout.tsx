@@ -20,7 +20,7 @@ export default async function UserSettingsLayout({
   if (!user) return redirect('/')
 
   return (
-    <>
+    <Flex $direction="column" $width="100%">
       <Flex $direction="column" $gapX="1rem" $padding="3rem 3rem 0 3rem">
         <Typrography
           $color="triadic2"
@@ -42,6 +42,6 @@ export default async function UserSettingsLayout({
           </Flex>
         </Flex>
       </CustomScrollBar>
-    </>
+    </Flex>
   )
 }

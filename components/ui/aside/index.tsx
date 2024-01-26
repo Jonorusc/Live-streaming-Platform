@@ -3,9 +3,10 @@ import * as S from './styles'
 import NoSsr from '@/components/NoSsr'
 import Typrography from '@/components/ui/typography'
 import { ArrowLeftFromLine, ArrowRightFromLine } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ToolTip from '../tooltip'
 import CustomScrollBar from '../custombar'
+import { useLocalStorage } from 'usehooks-ts'
 
 export type AsideProps = {
   $width?: string
@@ -15,6 +16,7 @@ export type AsideProps = {
   $title: string
   $reverse?: boolean
   children?: React.ReactNode
+  onChange?: (collapsed: boolean) => void
 }
 
 const Aside = ({
@@ -24,14 +26,22 @@ const Aside = ({
   $collapsed,
   $title,
   $reverse,
+  onChange,
   children
 }: AsideProps) => {
-  const [collapsed, setCollapsed] = useState($collapsed)
+  const [collapsed, setCollapsed] = useLocalStorage('aside-collapsed', false)
+
+  useEffect(() => {
+    if (onChange) {
+      onChange(collapsed || false)
+    }
+  }, [collapsed])
+
   return (
     <>
       <NoSsr>
         <S.Wrapper
-          $collapsed={collapsed}
+          $collapsed={collapsed || $collapsed}
           $height={$height}
           $width={$width}
           $collapsedWidth={$collapsedWidth}
@@ -60,7 +70,7 @@ const Aside = ({
                       <Typrography
                         $color="background"
                         $fontSize="xsmall"
-                        $fontWeight="semiBold"
+                        $fontWeight="bold"
                       >
                         <span>Expand</span>
                       </Typrography>
@@ -68,9 +78,9 @@ const Aside = ({
                   >
                     <>
                       {$reverse ? (
-                        <ArrowLeftFromLine size={22} />
+                        <ArrowLeftFromLine size={20} />
                       ) : (
-                        <ArrowRightFromLine size={22} />
+                        <ArrowRightFromLine size={20} />
                       )}
                     </>
                   </ToolTip>
@@ -88,7 +98,7 @@ const Aside = ({
                       <Typrography
                         $color="background"
                         $fontSize="xsmall"
-                        $fontWeight="semiBold"
+                        $fontWeight="bold"
                       >
                         <span>Collapse</span>
                       </Typrography>
@@ -96,9 +106,9 @@ const Aside = ({
                   >
                     <>
                       {$reverse ? (
-                        <ArrowRightFromLine size={22} />
+                        <ArrowRightFromLine size={20} />
                       ) : (
-                        <ArrowLeftFromLine size={22} />
+                        <ArrowLeftFromLine size={20} />
                       )}
                     </>
                   </ToolTip>

@@ -59,7 +59,7 @@ export const Searcher = () => {
 
   const handleClick = async () => {
     // if screen is mobile, always show search box
-    if (width <= 600) {
+    if (width <= 968) {
       setActive(true)
       return
     }
@@ -96,7 +96,7 @@ export const Searcher = () => {
           $handleChange={handleChange}
         />
         <button
-          disabled={width <= 600 && !active ? false : search.length < 2}
+          disabled={width <= 968 && !active ? false : search.length < 2}
           onClick={handleSearchClick}
         >
           <Search size={18} />

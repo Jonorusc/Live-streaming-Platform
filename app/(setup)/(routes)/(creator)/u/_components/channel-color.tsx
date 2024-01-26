@@ -10,7 +10,7 @@ import Flex from '@/components/ui/flex'
 import Box2D from '@/components/ui/box2d'
 import ReactLoading from 'react-loading'
 import Button from '@/components/ui/button'
-import Card from '@/components/ui/card'
+import Avatar from '@/components/ui/image'
 import { Video } from 'lucide-react'
 import { COLORS } from '@/components/ui/types'
 import { useUser } from '@/hooks/use-user'
@@ -124,17 +124,31 @@ const ChannelColor = ({ user }: { user: CURRENTUSER }) => {
                 <Video size={50} color={theme?.palette.lightGrey} />
               </S.Preview>
             </Box2D>
-            <Card
-              disabled
-              title={user.username}
-              message="Playing league of legends"
-              streamer={{
-                islive: false,
-                name: user.username,
-                picture: user!.profile!.avatar,
-                viewers: 1300
-              }}
-            />
+            <Flex $align="flex-start" $gap="1rem">
+              <Avatar
+                $size={35}
+                $url={user.profile!.avatar!}
+                alt="user avatar"
+                $rounded
+              />
+              <Flex $direction="column">
+                <Typrography
+                  aria-label="stream-title"
+                  $color="triadic2"
+                  $text="The best things in life are free"
+                  $type="h5"
+                  $fontSize="small"
+                  $fontWeight="semiBold"
+                />
+                <Typrography
+                  aria-label="stream-game"
+                  $color="triadic2"
+                  $text="Just Chatting"
+                  $type="span"
+                  $fontSize="xsmall"
+                />
+              </Flex>
+            </Flex>
           </Flex>
           <Flex
             $justify="flex-end"

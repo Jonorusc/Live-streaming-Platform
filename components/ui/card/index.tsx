@@ -1,8 +1,6 @@
 'use client'
 import * as S from './styles'
 
-import { useRouter } from 'next/navigation'
-
 import Flex from '@/components/ui/flex'
 import Avatar from '@/components/ui/image'
 import { Title } from '@/components/ui/toast/styles'
@@ -10,6 +8,7 @@ import NoSsr from '@/components/NoSsr'
 import { formateHighNumber } from '@/utils/text'
 import ToolTip from '../tooltip'
 import Typrography from '../typography'
+import Link from 'next/link'
 
 export type CardProps = {
   title: string
@@ -25,22 +24,10 @@ export type CardProps = {
 }
 
 const Card = ({ title, message, streamer, disabled }: CardProps) => {
-  const router = useRouter()
-
-  const onClickHandler = () => {
-    if (disabled) return
-    setTimeout(() => {
-      // redirects to profile streaming page
-      // removes the spaces from the channel name for example? John Doe -> JohnDoe
-      const channel_name = streamer.name.replace(/\s/g, '')
-      router.push(`/${channel_name}`)
-    }, 200)
-  }
-
   return (
     <NoSsr>
       <ToolTip
-        $show={!disabled}
+        $show={streamer.islive && !disabled}
         $background="surface"
         $content={
           <Typrography $color="triadic2" $fontSize="xsmall">
@@ -49,32 +36,44 @@ const Card = ({ title, message, streamer, disabled }: CardProps) => {
         }
         $position="right"
       >
-        <S.Wrapper onClick={onClickHandler} disabled={disabled}>
-          <Flex $gapY="1rem" $align="center">
-            <Avatar
-              $size={30}
-              $url={streamer.picture}
-              alt={streamer.name}
-              $rounded
-            />
-            <Flex
-              $justify="space-between"
-              $width="100%"
-              aria-label="stream-description"
-            >
-              <Flex $direction="column" $align="flex-start">
-                <Title>{title}</Title>
-                <S.Message>{message}</S.Message>
+        <Link href={`/${streamer.name}`} style={{ textDecoration: 'none' }}>
+          <S.Wrapper disabled={!streamer.islive || disabled}>
+            <Flex $gapY="1rem" $align="center">
+              <Avatar
+                $size={30}
+                $url={streamer.picture}
+                alt={streamer.name}
+                $rounded
+              />
+              <Flex
+                $justify="space-between"
+                $width="100%"
+                aria-label="stream-description"
+              >
+                <Flex $direction="column" $align="flex-start">
+                  <Title>{title}</Title>
+                  <S.Message>{message}</S.Message>
+                </Flex>
+                {streamer.islive ? (
+                  <>
+                    {streamer.viewers && (
+                      <S.Counter>
+                        <i aria-label="redball"></i>
+                        <span>{formateHighNumber(streamer.viewers)}</span>
+                      </S.Counter>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <Typrography $color="triadic2" $fontSize="xsmall">
+                      <span>Offline</span>
+                    </Typrography>
+                  </>
+                )}
               </Flex>
-              {streamer.viewers && (
-                <S.Counter>
-                  <i aria-label="redball"></i>
-                  <span>{formateHighNumber(streamer.viewers)}</span>
-                </S.Counter>
-              )}
             </Flex>
-          </Flex>
-        </S.Wrapper>
+          </S.Wrapper>
+        </Link>
       </ToolTip>
     </NoSsr>
   )

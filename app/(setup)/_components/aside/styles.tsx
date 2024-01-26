@@ -60,3 +60,13 @@ export const Menu = styled.div`
     }
   `}
 `
+
+export const SkeleletonWrapper = styled.div`
+  ${({ theme }) => css`
+    border-right: 0.2rem solid
+      ${theme.name === 'light' ? 'rgba(0,0,0,.13)' : theme.palette.black};
+    box-shadow:
+      0px 1px 2px rgba(0, 0, 0, 0.13),
+      0px 0px 2px rgba(0, 0, 0, 0.08);
+  `};
+`

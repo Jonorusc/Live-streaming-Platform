@@ -1,29 +1,28 @@
+import {
+  getFollowedChannels,
+  getMostViewedChannels
+} from '@/actions/(routes)/main'
 import { getCurrentUser } from '@/actions/user'
-import Aside from '@/components/ui/aside'
-import Card from '@/components/ui/card'
+import AsideWrapper from './wrapper'
 
 const UserAside = async () => {
   const user = await getCurrentUser()
+  const [vewedChannels, followedChannels] = await Promise.all([
+    getMostViewedChannels({
+      skip: 0,
+      take: 10
+    }),
+    getFollowedChannels({
+      userId: user?.id!
+    })
+  ])
 
   return (
     <>
-      <Aside
-        $title="For You"
-        $collapsed={false}
-        $width="24rem"
-        $collapsedWidth="4rem"
-      >
-        <Card
-          title={user?.username || 'John Doe'}
-          message="League of legends"
-          streamer={{
-            islive: false,
-            name: user?.username || 'John Doe',
-            picture: user!.profile!.avatar,
-            viewers: 1300
-          }}
-        />
-      </Aside>
+      <AsideWrapper
+        vewedChannels={vewedChannels}
+        followedChannels={followedChannels}
+      />
     </>
   )
 }

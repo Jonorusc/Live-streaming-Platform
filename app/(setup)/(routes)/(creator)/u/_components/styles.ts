@@ -48,6 +48,21 @@ export const Section = styled.div`
       }
     }
 
+    [aria-label='stream-title'] {
+      @media screen and (max-width: 375px) {
+        font-size: 3.2vw;
+      }
+
+      @media screen and (max-width: 320px) {
+        font-size: 2.9vw;
+      }
+    }
+    [aria-label='stream-game'] {
+      @media screen and (max-width: 320px) {
+        font-size: 2.8vw;
+      }
+    }
+
     div[aria-label='expanded'] {
       width: 100%;
       margin-bottom: 8rem;

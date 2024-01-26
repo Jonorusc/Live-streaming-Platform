@@ -50,7 +50,8 @@ export const Wrapper = styled.nav`
       width: max-content;
     }
 
-    @media (max-width: 600px) {
+    /* @media (max-width: 600px) { */
+    @media (max-width: 968px) {
       justify-content: flex-end;
 
       /* first child */
@@ -89,7 +90,8 @@ export const SearchBox = styled.div<{ $active?: boolean }>`
       top: unset;
       box-shadow: unset;
 
-      @media (max-width: 600px) {
+      /* @media (max-width: 600px) { */
+      @media (max-width: 968px) {
         position: static;
         translate: unset;
         left: unset;
@@ -144,10 +146,10 @@ export const Search = styled.div<{ $active?: boolean }>`
       }
     }
 
-    @media (max-width: 768px) {
+    /* @media (max-width: 768px) {
       width: 35vw;
-    }
-    @media (max-width: 600px) {
+    } */
+    @media (max-width: 968px) {
       width: fit-content;
       ${!$active &&
       css`
@@ -255,5 +257,17 @@ export const DropDownItem = styled.div`
       background-color: ${theme.palette.surface};
       border-radius: 0.5rem;
     }
+  `};
+`
+export const SkeleletonWrapper = styled.div`
+  ${({ theme }) => css`
+    background-color: ${theme.name === 'light'
+      ? theme.palette.white
+      : theme.palette.dark};
+    border-bottom: 0.2rem solid
+      ${theme.name === 'light' ? 'rgba(0,0,0,.13)' : theme.palette.black};
+    box-shadow:
+      0px 1px 2px rgba(0, 0, 0, 0.13),
+      0px 0px 2px rgba(0, 0, 0, 0.08);
   `};
 `

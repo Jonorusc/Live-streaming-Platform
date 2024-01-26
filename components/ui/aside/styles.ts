@@ -44,10 +44,6 @@ export const Wrapper = styled(motion.aside).attrs({
     container-name: aside;
     container-type: size;
     z-index: ${theme.layers.menu};
-
-    @container aside (max-width: 63px) {
-      padding: 1rem 0.5rem;
-    }
   `}
 `
 
@@ -83,6 +79,7 @@ export const Header = styled.div<Pick<AsideProps, '$reverse'>>`
 
     @container aside (width <= 63px) {
       padding: 0;
+      margin-top: 0.5rem;
       button {
         width: 100%;
         height: 3.5rem;
@@ -95,6 +92,8 @@ export const Header = styled.div<Pick<AsideProps, '$reverse'>>`
     @container aside (width > 222px) {
       h4 {
         font-size: 1.8rem !important;
+        font-weight: 600 !important;
+        line-height: 1.2 !important;
       }
     }
   `}

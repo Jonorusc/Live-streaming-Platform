@@ -7,7 +7,7 @@ export const Wrapper = styled.div<{ disabled?: boolean }>`
     width: 100%;
     min-width: 24rem;
     padding: 0.5rem 1rem;
-    background-color: ${theme.palette.surface};
+    /* background-color: ${theme.palette.surface}; */
     cursor: pointer;
 
     &:hover {
@@ -16,6 +16,11 @@ export const Wrapper = styled.div<{ disabled?: boolean }>`
         background-color: ${darken(0.05, theme.palette.surface)};
       `}
     }
+
+    ${disabled &&
+    css`
+      opacity: 0.5;
+    `}
 
     @container aside (width <= 63px) {
       width: 4rem;
@@ -40,7 +45,6 @@ export const Wrapper = styled.div<{ disabled?: boolean }>`
 export const Message = styled($Message)`
   ${({ theme }) => css`
     color: ${theme.palette.grey};
-
     @media (max-width: 425px) {
       font-size: 2.7dvw;
     }
