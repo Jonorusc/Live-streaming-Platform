@@ -7,6 +7,6 @@ import { redirect } from 'next/navigation'
 const ChannelPage = ({ user }: { user: CURRENTUSER }) => {
   if (!user.email_verified) return <NotVerified />
 
-  redirect(`/u/${user.username}/`)
+  redirect(`/u/`)
 }
 export default ChannelPage
