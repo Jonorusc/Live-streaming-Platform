@@ -23,7 +23,7 @@ const AsideWrapper = ({
         $title="For You"
         $collapsed={collapsed}
         $width="24rem"
-        $collapsedWidth="4rem"
+        $collapsedWidth="5rem"
       >
         <FollowedChanels channels={followedChannels} collapsed={collapsed} />
         <MostViewed channels={vewedChannels} collapsed={collapsed} />

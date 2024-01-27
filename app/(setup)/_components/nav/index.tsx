@@ -26,7 +26,7 @@ const Nav = async () => {
             </Link>
           )}
 
-          <Link href="browse">
+          <Link href="/browse">
             <h5>Browse</h5>
           </Link>
         </Flex>
