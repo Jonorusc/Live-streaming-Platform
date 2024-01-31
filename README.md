@@ -1,5 +1,14 @@
 `I'm still building this project, so I'll update this README as I go along.`
 
+### use's settings
+![image](https://github.com/Jonorusc/twitch-clone/assets/56327459/dd2ea37b-624f-45a4-8d69-1fdc7adaeaab)
+
+### creator's settings
+![image](https://github.com/Jonorusc/twitch-clone/assets/56327459/87bcccd7-8913-4b4d-bcf3-1d9a963938ac)
+![image](https://github.com/Jonorusc/twitch-clone/assets/56327459/d8489777-cd58-4834-af09-b45b567cf068)
+
+
+
 ## Environment Variables Required
 
 ### .env
