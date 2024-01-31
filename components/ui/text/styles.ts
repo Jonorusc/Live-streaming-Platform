@@ -36,14 +36,29 @@ export const Wrapper = styled.div<{ $error?: boolean; $bgColor?: COLORS }>`
     & > div[aria-label='action-button'] {
       position: relative;
 
-      svg {
+      .icons {
+        height: 80%;
+        background-color: ${
+          theme.name === 'light'
+            ? theme.palette.lightGrey
+            : theme.palette.background
+        };
+        padding: 0 0.5rem;
         position: absolute;
+        border-top-right-radius: 0.3rem;
+        border-bottom-right-radius: 0.3rem;
         top: 50%;
-        right: 1rem;
+        right: 0.3rem;
         transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
         cursor: pointer;
-        opacity: 0.5;
-        z-index: ${theme.layers.overlay};
+        z-index: ${theme.layers.menu};
+
+        svg {
+          stroke: ${theme.palette.text.base};
+        }
       }
     }
     

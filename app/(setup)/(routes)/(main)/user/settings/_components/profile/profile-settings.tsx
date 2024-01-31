@@ -43,7 +43,6 @@ const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
       }
       return
     }
-    setCanUpdateUsername(true)
   }, [usernameUpdatedAt])
 
   const { addToast } = useToast()

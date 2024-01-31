@@ -1,7 +1,10 @@
 'use client'
 
 import styled, { css } from 'styled-components'
-import { Wrapper as TextField } from '@/components/ui/text/styles'
+import {
+  Wrapper as TextField,
+  Top as TextFieldTop
+} from '@/components/ui/text/styles'
 import { Wrapper as Button } from '@/components/ui/button/styles'
 
 export const Wrapper = styled.nav`
@@ -113,6 +116,9 @@ export const Search = styled.div<{ $active?: boolean }>`
     }
 
     ${TextField} {
+      ${TextFieldTop} {
+        display: none;
+      }
       margin-bottom: 0;
 
       div {

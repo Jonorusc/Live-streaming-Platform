@@ -12,22 +12,8 @@ import { debounce } from 'lodash'
 
 import * as S from './styles'
 import NoSsr from '@/components/NoSsr'
-
-// Define the props for the TextField component
-export type TextFieldProps = {
-  label?: string
-  name: string
-  type?: TEXTFIELD_TYPES
-  $error?: string
-  $success?: boolean
-  disabled?: boolean
-  placeholder?: string
-  $response?: boolean
-  $bgColor?: COLORS
-  required?: boolean
-  $handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
-  $debounce?: number
-}
+import { TextFieldProps } from '.'
+import { CheckCheck, Copy, Eye, EyeOff } from 'lucide-react'
 
 const TextField = React.memo(
   ({
@@ -36,18 +22,21 @@ const TextField = React.memo(
     type = 'text',
     $error = '',
     $success = false,
+    $value,
     disabled = false,
     placeholder = '',
     $response = false,
     required = false,
     $bgColor = 'transparent',
     $handleChange = () => {},
-    $debounce = 1000
+    $debounce = 1000,
+    $copy = false
   }: TextFieldProps) => {
     // State for loading
     const [loading, setLoading] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
-    const [value, setValue] = useState('')
+    const [value, setValue] = useState($value || '')
+    const [isCopied, setIsCopied] = useState(false)
 
     // Determine the response status
     const responseStatus = useMemo(() => {
@@ -75,15 +64,16 @@ const TextField = React.memo(
     }, [loading, $error, $success, $response])
 
     const eyes = useMemo(() => {
+      const clickHandler = () => setShowPassword(!showPassword)
       if (type === 'password') {
         return (
-          <Icon
-            name={showPassword ? 'eye-off' : 'eye'}
-            size={18}
-            onClick={() => {
-              setShowPassword(!showPassword)
-            }}
-          />
+          <>
+            {showPassword ? (
+              <EyeOff size={18} onClick={clickHandler} />
+            ) : (
+              <Eye size={18} onClick={clickHandler} />
+            )}
+          </>
         )
       }
       return null
@@ -92,26 +82,33 @@ const TextField = React.memo(
     // Debounce the setLoading function
     const debouncedSetLoading = debounce(() => setLoading(false), $debounce)
 
+    const onCopy = () => {
+      if (!value) return
+
+      setIsCopied(true)
+      navigator.clipboard.writeText(value)
+      setTimeout(() => {
+        setIsCopied(false)
+      }, 1000)
+    }
+
+    const Icon = isCopied ? CheckCheck : Copy
+
     // Render the TextField component
     return (
       <NoSsr>
         <S.Wrapper $error={!!$error} $bgColor={$bgColor}>
-          {$response && (
-            <S.Top>
-              {label && <label htmlFor={name}>{label}</label>}
-              {responseStatus}
-            </S.Top>
-          )}
-          <Flex
-            $align="center"
-            $gapY="0.1rem"
-            {...(type === 'password' ? { 'aria-label': 'action-button' } : {})}
-          >
+          <S.Top>
+            {label && <label htmlFor={name}>{label}</label>}
+            {responseStatus}
+          </S.Top>
+          <Flex $align="center" $gapY="0.1rem" aria-label="action-button">
             <input
               type={type === 'password' && showPassword ? 'text' : type}
               id={name}
               required={required}
               name={name}
+              value={value}
               onChange={(e) => {
                 $handleChange(e)
                 setValue(e.target.value)
@@ -128,7 +125,12 @@ const TextField = React.memo(
               disabled={disabled}
               placeholder={placeholder}
             />
-            {eyes}
+            {type === 'password' || $copy ? (
+              <div className="icons">
+                {eyes}
+                {$copy && <Icon size={18} onClick={onCopy} />}
+              </div>
+            ) : null}
           </Flex>
           {$error?.length > 1 && <S.Error>{$error}</S.Error>}
         </S.Wrapper>

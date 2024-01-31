@@ -1,11 +1,16 @@
 import { CURRENTUSER } from '@/actions/user'
+import StreamKeyPreferences from './stream-key-preferences'
+import CreateIngress from './create-ingress'
 
 const StreamPage = ({ user }: { user: CURRENTUSER }) => {
+  const { channel } = user
   return (
     <section>
-      <code>
-        <var>{JSON.stringify(user.channel)}</var>
-      </code>
+      {!channel!.stream_key ? (
+        <CreateIngress channel={channel!} />
+      ) : (
+        <StreamKeyPreferences channel={channel!} />
+      )}
     </section>
   )
 }

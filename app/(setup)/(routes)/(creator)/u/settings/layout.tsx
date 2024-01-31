@@ -27,7 +27,7 @@ export default async function UserSettingsLayout({
             </Tabs>
           </Flex>
           <Flex $direction="column" $gapX="1rem" $padding="2rem 3rem 3rem 3rem">
-            <Flex $direction="column" $gapX="1rem" $height="100%">
+            <Flex $direction="column" $gapX="1rem" $height="100dvh">
               {tabs}
             </Flex>
           </Flex>

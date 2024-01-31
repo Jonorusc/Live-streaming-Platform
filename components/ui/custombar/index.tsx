@@ -10,7 +10,7 @@ export type CustomScrollBarProps = {
 }
 
 const CustomScrollBar = ({
-  height = '100%',
+  height = '100vh',
   children
 }: CustomScrollBarProps) => {
   const theme: DefaultTheme | null = useReadLocalStorage('theme')

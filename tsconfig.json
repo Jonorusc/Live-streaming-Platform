@@ -19,7 +19,9 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@creator/*": ["./app/(setup)/(routes)/(creator)/*"],
+      "@main/*": ["./app/(setup)/(routes)/(main)/*"]
     }
   },
   "include": [

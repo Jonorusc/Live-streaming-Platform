@@ -1,6 +1,6 @@
 'use client'
 import { useUser } from '@/hooks/use-user'
-import SettingsLoading from '@/app/(setup)/(routes)/(main)/user/settings/_components/loading'
+import SettingsLoading from '@main/user/settings/_components/loading'
 import BrandPage from '../../_components/brand'
 
 export default function Page() {

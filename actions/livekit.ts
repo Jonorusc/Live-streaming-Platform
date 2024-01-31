@@ -1,5 +1,5 @@
 'use server'
-
+import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
 import {
   AccessToken,
@@ -56,6 +56,7 @@ export const createViewerToken = async (
 
 export const createIngress = async (
   channelName: string,
+  ownerId: string,
   ingressType: IngressInput
 ) => {
   const options: CreateIngressOptions = {
@@ -82,20 +83,22 @@ export const createIngress = async (
 
   try {
     await db.channel.update({
-      where: { name: channelName },
+      where: { ownerId },
       data: {
         stream_ingress_id: ingress.ingressId,
         stream_key: ingress.streamKey,
         stream_server_url: ingress.url
       }
     })
-  } catch {
+  } catch (error) {
     if (ingress.ingressId) {
       await ingressClient.deleteIngress(ingress.ingressId)
     }
     throw new Error('Failed to save ingress')
   }
-
+  revalidatePath(`/${channelName}`)
+  revalidatePath(`/u/`)
+  revalidatePath(`/`)
   return ingress
 }
 
