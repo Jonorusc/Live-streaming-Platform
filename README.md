@@ -5,7 +5,8 @@
 
 ### creator's settings
 ![image](https://github.com/Jonorusc/twitch-clone/assets/56327459/87bcccd7-8913-4b4d-bcf3-1d9a963938ac)
-![image](https://github.com/Jonorusc/twitch-clone/assets/56327459/d8489777-cd58-4834-af09-b45b567cf068)
+![image](https://github.com/Jonorusc/twitch-clone/assets/56327459/21296b0b-a26f-4c8e-bcb0-f3fb76280c16)
+
 
 
 
