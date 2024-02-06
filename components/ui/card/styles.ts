@@ -2,7 +2,23 @@ import { darken } from 'polished'
 import styled, { css } from 'styled-components'
 import { Message as $Message } from '@/components/ui/toast/styles'
 import { Wrapper as Aside } from '@/components/ui/aside/styles'
-export const Wrapper = styled.div<{ disabled?: boolean }>`
+export const Wrapper = styled.div`
+  ${({ theme }) => css`
+    a {
+      text-decoration: none !important;
+      &:hover {
+        text-decoration: none !important;
+      }
+    }
+    @container aside (width <= 63px) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  `}
+`
+
+export const Content = styled.div<{ disabled?: boolean }>`
   ${({ theme, disabled }) => css`
     width: 100%;
     min-width: 24rem;

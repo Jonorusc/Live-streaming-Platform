@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { pusherClient } from '@/lib/pusher'
 import { useUser } from './use-user'
 import {
@@ -17,6 +17,7 @@ export function useChannels({
   initial_followedChannels: CHANNELS
   initial_mostViewedChannels: CHANNELS
 }) {
+  const loaded = useRef(false)
   const [followedChannels, setFollowedChannels] = useState<CHANNELS>(
     initial_followedChannels
   )
@@ -26,13 +27,15 @@ export function useChannels({
   const { user } = useUser()
 
   const handleEvents = async (data: Channel) => {
-    if (!user) return
     try {
-      // takes followed channels and update the state
-      const $followedChannels = await getFollowedChannels({
-        userId: user.id
-      })
-      if ($followedChannels) setFollowedChannels($followedChannels)
+      if (user) {
+        // takes followed channels and update the state
+        const $followedChannels = await getFollowedChannels({
+          userId: user.id
+        })
+        if ($followedChannels) setFollowedChannels($followedChannels)
+      }
+
       // takes most viewed channels and update the state
       const $mostViewed = await getMostViewedChannels({
         skip: 0,
@@ -45,10 +48,12 @@ export function useChannels({
   }
 
   useEffect(() => {
+    if (loaded.current) return
     pusherClient.subscribe('channel')
 
     pusherClient.bind('live', handleEvents)
     pusherClient.bind('live_ended', handleEvents)
+    loaded.current = true
   }, [])
 
   return {

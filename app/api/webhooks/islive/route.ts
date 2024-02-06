@@ -1,7 +1,5 @@
-import { headers } from 'next/headers'
 import { WebhookReceiver } from 'livekit-server-sdk'
 import { pusherServer } from '@/lib/pusher'
-import { revalidatePath } from 'next/cache'
 
 import { db } from '@/lib/db'
 
@@ -12,14 +10,13 @@ const receiver = new WebhookReceiver(
 
 export async function POST(req: Request) {
   const body = await req.text()
-  const headerPayload = headers()
-  const authorization = headerPayload.get('Authorization')
+  const authorization = req.headers.get('Authorization')
 
   if (!authorization) {
-    return new Response('No authorization', { status: 400 })
+    return new Response('No authorization header', { status: 400 })
   }
 
-  const event = receiver.receive(body, authorization)
+  const event = receiver.receive(body, authorization, true)
 
   if (!event) {
     return new Response('Invalid signature', { status: 400 })
@@ -71,4 +68,6 @@ export async function POST(req: Request) {
       }
     })
   }
+
+  return new Response('Received', { status: 200 })
 }
