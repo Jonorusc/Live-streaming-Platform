@@ -1,8 +1,15 @@
 'use server'
 import { db } from '@/lib/db'
-// import { cookies } from 'next/headers'
-// import { revalidatePath } from 'next/cache'
-import { Channel, GAMES_CATEGORIES, Profile, User } from '@prisma/client'
+import { cookies } from 'next/headers'
+import { revalidatePath } from 'next/cache'
+import {
+  Channel,
+  GAMES_CATEGORIES,
+  Profile,
+  User,
+  Subscriber,
+  Follower
+} from '@prisma/client'
 
 type Pagination = {
   skip?: number
@@ -10,7 +17,6 @@ type Pagination = {
 }
 
 export type CHANNELS = {
-  id: string | null
   name: string | null
   description: string | null
   owner: Omit<User, 'firebase_id' | 'id'> & {
@@ -19,6 +25,12 @@ export type CHANNELS = {
   streaming_viewers: number | null
   streaming_title: string | null
   streaming_game: string | null
+  streaming_thumbnail: string | null
+  streaming_started_at: Date | null
+  streaming_ended_at: Date | null
+  subscribers: Subscriber[] | null
+  followers: Follower[] | null
+  categories: GAMES_CATEGORIES[] | null
   streaming_category: GAMES_CATEGORIES | null
   live: boolean
 }[]
@@ -42,7 +54,7 @@ export const getFollowedChannels = async ({
   skip = 0,
   take = 10,
   userId
-}: FollowedProps): Promise<CHANNELS | null> => {
+}: FollowedProps): Promise<CHANNELS | []> => {
   if (!userId) throw new Error('No user id provided')
   // Get the user's followed channels
   try {
@@ -58,19 +70,24 @@ export const getFollowedChannels = async ({
       select: {
         channel: {
           select: {
-            id: true,
-            name: true,
-            description: true,
             owner: {
               include: {
                 profile: true
               }
             },
-            streaming_viewers: true,
-            streaming_title: true,
-            streaming_game: true,
+            live: true,
+            name: true,
             streaming_category: true,
-            live: true
+            description: true,
+            subscribers: true,
+            streaming_title: true,
+            streaming_viewers: true,
+            streaming_game: true,
+            streaming_thumbnail: true,
+            streaming_started_at: true,
+            streaming_ended_at: true,
+            followers: true,
+            categories: true
           }
         }
       },
@@ -83,7 +100,7 @@ export const getFollowedChannels = async ({
       }
     })
 
-    if (!channels || channels.length === 0) return null
+    if (!channels || channels.length === 0) return []
     const followedChannels = channels.map((channel) => channel.channel)
 
     return followedChannels
@@ -122,7 +139,7 @@ export const getFollowedChannels = async ({
 export const getMostViewedChannels = async ({
   skip = 0,
   take = 10
-}: Pagination): Promise<CHANNELS | null> => {
+}: Pagination): Promise<CHANNELS | []> => {
   try {
     const viewedChannels = await db.channel.findMany({
       take,
@@ -134,23 +151,28 @@ export const getMostViewedChannels = async ({
         live: true
       },
       select: {
-        id: true,
-        name: true,
-        description: true,
         owner: {
           include: {
             profile: true
           }
         },
-        streaming_viewers: true,
-        streaming_title: true,
-        streaming_game: true,
+        live: true,
+        name: true,
         streaming_category: true,
-        live: true
+        description: true,
+        subscribers: true,
+        streaming_title: true,
+        streaming_viewers: true,
+        streaming_game: true,
+        streaming_thumbnail: true,
+        streaming_started_at: true,
+        streaming_ended_at: true,
+        followers: true,
+        categories: true
       }
     })
 
-    if (!viewedChannels || viewedChannels.length === 0) return null
+    if (!viewedChannels || viewedChannels.length === 0) return []
 
     return viewedChannels
   } catch (error) {

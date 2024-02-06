@@ -1,6 +1,6 @@
 import { headers } from 'next/headers'
 import { WebhookReceiver } from 'livekit-server-sdk'
-// import { pusherServer } from '@/lib/pusher'
+import { pusherServer } from '@/lib/pusher'
 import { revalidatePath } from 'next/cache'
 
 import { db } from '@/lib/db'
@@ -26,15 +26,9 @@ export async function POST(req: Request) {
   }
 
   if (event.event === 'ingress_started') {
-    console.log(
-      'ingress started',
-      event.ingressInfo?.ingressId,
-      event.ingressInfo?.roomName
-    )
     const channel = await db.channel.update({
       where: {
-        stream_ingress_id: event.ingressInfo?.ingressId,
-        name: event.ingressInfo?.roomName
+        stream_ingress_id: event.ingressInfo?.ingressId
       },
       data: {
         live: true
@@ -56,32 +50,25 @@ export async function POST(req: Request) {
       }
     })
 
-    revalidatePath('/')
-    revalidatePath(`/${channel.name}`)
-
-    // pusherServer.trigger('channel', 'live', {
-    //   channel
-    // })
+    pusherServer.trigger('channel', 'live', {
+      channel
+    })
   }
 
   if (event.event === 'ingress_ended') {
     const channel = await db.channel.update({
       where: {
-        stream_ingress_id: event.ingressInfo?.ingressId,
-        name: event.ingressInfo?.roomName
+        stream_ingress_id: event.ingressInfo?.ingressId
       },
       data: {
         live: false
       }
     })
 
-    revalidatePath('/')
-    revalidatePath(`/${channel.name}`)
-
-    // pusherServer.trigger('channel', 'live_ended', {
-    //   channel: {
-    //     name: channel.name
-    //   }
-    // })
+    pusherServer.trigger('channel', 'live_ended', {
+      channel: {
+        name: channel.name
+      }
+    })
   }
 }

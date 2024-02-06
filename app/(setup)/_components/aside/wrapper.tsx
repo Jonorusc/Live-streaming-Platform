@@ -6,16 +6,22 @@ import Aside from '@/components/ui/aside'
 import MostViewed from './most-viewed'
 import FollowedChanels from './followed-channels'
 import { useReadLocalStorage } from 'usehooks-ts'
+import { useChannels } from '@/hooks/use-channels'
 
 const AsideWrapper = ({
-  vewedChannels,
-  followedChannels
+  initial_followedChannels,
+  initial_mostViewedChannels
 }: {
-  vewedChannels: CHANNELS | null
-  followedChannels: CHANNELS | null
+  initial_mostViewedChannels: CHANNELS | []
+  initial_followedChannels: CHANNELS | []
   user?: CURRENTUSER | null
 }) => {
   const collapsed = useReadLocalStorage<boolean>('aside-collapsed') || false
+
+  const { followedChannels, mostViewed } = useChannels({
+    initial_followedChannels,
+    initial_mostViewedChannels
+  })
 
   return (
     <>
@@ -26,7 +32,7 @@ const AsideWrapper = ({
         $collapsedWidth="5rem"
       >
         <FollowedChanels channels={followedChannels} collapsed={collapsed} />
-        <MostViewed channels={vewedChannels} collapsed={collapsed} />
+        <MostViewed channels={mostViewed} collapsed={collapsed} />
       </Aside>
     </>
   )

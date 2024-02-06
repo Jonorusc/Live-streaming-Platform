@@ -12,9 +12,10 @@ const FollowedChanels = ({
   channels,
   collapsed
 }: {
-  channels: CHANNELS | null
+  channels: CHANNELS
   collapsed: boolean
 }) => {
+  const hasChannels = channels.length > 0
   return (
     <>
       <Flex
@@ -35,12 +36,12 @@ const FollowedChanels = ({
                 $width="max-content"
               >
                 <span>
-                  {channels ? 'FOLLOWED CHANNELS' : 'NO FOLLOWED CHANNELS'}
+                  {hasChannels ? 'FOLLOWED CHANNELS' : 'NO FOLLOWED CHANNELS'}
                 </span>
               </Typrography>
             }
           >
-            {channels ? <Heart size={20} /> : <HeartOff size={20} />}
+            {hasChannels ? <Heart size={20} /> : <HeartOff size={20} />}
           </ToolTip>
         ) : (
           <Typrography
@@ -54,10 +55,10 @@ const FollowedChanels = ({
         )}
       </Flex>
       <Flex $direction="column" {...(collapsed ? { $gapX: '1rem' } : {})}>
-        {channels ? (
+        {hasChannels ? (
           <>
             {channels.map((channel) => (
-              <React.Fragment key={channel.id}>
+              <React.Fragment key={channel.name}>
                 <Card
                   message={channel.streaming_game!}
                   title={channel.owner.username}

@@ -12,9 +12,10 @@ const MostViewed = ({
   channels,
   collapsed
 }: {
-  channels: CHANNELS | null
+  channels: CHANNELS
   collapsed: boolean
 }) => {
+  const hasChannels = channels.length > 0
   return (
     <>
       <Flex
@@ -35,12 +36,12 @@ const MostViewed = ({
                 $width="max-content"
               >
                 <span>
-                  {channels ? 'STREAMING NOW' : "THERE'S NO ONE LIVE"}
+                  {hasChannels ? 'STREAMING NOW' : "THERE'S NO ONE LIVE"}
                 </span>
               </Typrography>
             }
           >
-            {channels ? <Radio size={20} /> : <ShieldX size={20} />}
+            {hasChannels ? <Radio size={20} /> : <ShieldX size={20} />}
           </ToolTip>
         ) : (
           <Typrography
@@ -54,10 +55,10 @@ const MostViewed = ({
         )}
       </Flex>
       <Flex $direction="column" {...(collapsed ? { $gapX: '1rem' } : {})}>
-        {channels ? (
+        {hasChannels ? (
           <>
             {channels?.map((channel) => (
-              <React.Fragment key={channel.id}>
+              <React.Fragment key={channel.name}>
                 <Card
                   message={channel.streaming_game!}
                   title={channel.owner.username}

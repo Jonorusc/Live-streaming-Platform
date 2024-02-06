@@ -62,7 +62,7 @@ model Channel {
   categories           GAMES_CATEGORIES[]
   stream_key           String?
   stream_server_url    String?
-  stream_ingress_id    String?
+  stream_ingress_id    String?            @unique
   streaming_title      String?
   streaming_thumbnail  String?
   streaming_game       String?
