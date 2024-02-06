@@ -1,7 +1,7 @@
 'use server'
 import { db } from '@/lib/db'
-import { cookies } from 'next/headers'
-import { revalidatePath } from 'next/cache'
+// import { cookies } from 'next/headers'
+// import { revalidatePath } from 'next/cache'
 import { Channel, GAMES_CATEGORIES, Profile, User } from '@prisma/client'
 
 type Pagination = {
