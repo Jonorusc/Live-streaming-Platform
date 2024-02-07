@@ -1,7 +1,6 @@
 'use server'
+
 import { db } from '@/lib/db'
-import { cookies } from 'next/headers'
-import { revalidatePath } from 'next/cache'
 import {
   Channel,
   GAMES_CATEGORIES,
@@ -10,18 +9,20 @@ import {
   Subscriber,
   Follower
 } from '@prisma/client'
+import { getCurrentUser } from '@/actions/user'
 
-type Pagination = {
+export type Pagination = {
   skip?: number
   take?: number
 }
 
-export type CHANNELS = {
+export type CHANNEL = {
   name: string | null
   description: string | null
   owner: Omit<User, 'firebase_id' | 'id'> & {
     profile: Profile | null
   }
+  ownerId: string | null
   streaming_viewers: number | null
   streaming_title: string | null
   streaming_game: string | null
@@ -33,37 +34,39 @@ export type CHANNELS = {
   categories: GAMES_CATEGORIES[] | null
   streaming_category: GAMES_CATEGORIES | null
   live: boolean
-}[]
+}
 
-export type FollowedProps = {
-  userId: string
-} & Pagination
+export type CHANNELS = CHANNEL[]
 
 /*
-
   returns the user's followed channels in order of most viewers
 
   @example
   ```javascript s
     const channels = await getFollowedChannels({ userId: '123' })
   ```
-
 */
 
 export const getFollowedChannels = async ({
   skip = 0,
-  take = 10,
-  userId
-}: FollowedProps): Promise<CHANNELS | []> => {
-  if (!userId) throw new Error('No user id provided')
+  take = 10
+}: Pagination): Promise<CHANNELS | []> => {
   // Get the user's followed channels
+  const currentUser = await getCurrentUser()
+
+  if (!currentUser) {
+    return []
+  }
+
   try {
     const channels = await db.follower.findMany({
       where: {
-        id: userId,
-        AND: {
+        id: currentUser.id,
+        NOT: {
           channel: {
-            live: true
+            owner: {
+              deactivated: true
+            }
           }
         }
       },
@@ -75,6 +78,7 @@ export const getFollowedChannels = async ({
                 profile: true
               }
             },
+            ownerId: true,
             live: true,
             name: true,
             streaming_category: true,
@@ -93,11 +97,23 @@ export const getFollowedChannels = async ({
       },
       take,
       skip: skip * take,
-      orderBy: {
-        channel: {
-          streaming_viewers: 'desc'
+      orderBy: [
+        {
+          channel: {
+            streaming_viewers: 'desc'
+          }
+        },
+        {
+          channel: {
+            streaming_started_at: 'desc'
+          }
+        },
+        {
+          channel: {
+            live: 'desc'
+          }
         }
-      }
+      ]
     })
 
     if (!channels || channels.length === 0) return []
@@ -110,7 +126,6 @@ export const getFollowedChannels = async ({
 }
 
 /*
-
   returns the most viewed channels
 
   @example
@@ -133,7 +148,6 @@ export const getFollowedChannels = async ({
     live: boolean,
   }
   ```
-
 */
 
 export const getMostViewedChannels = async ({
@@ -141,14 +155,32 @@ export const getMostViewedChannels = async ({
   take = 10
 }: Pagination): Promise<CHANNELS | []> => {
   try {
+    const currentUser = await getCurrentUser()
+
     const viewedChannels = await db.channel.findMany({
       take,
       skip: skip * take,
-      orderBy: {
-        streaming_viewers: 'desc'
-      },
+      orderBy: [
+        {
+          streaming_viewers: 'desc'
+        }
+      ],
       where: {
-        live: true
+        live: true,
+        AND: [
+          {
+            NOT: {
+              name: currentUser?.username || undefined
+            }
+          },
+          {
+            NOT: {
+              owner: {
+                deactivated: true
+              }
+            }
+          }
+        ]
       },
       select: {
         owner: {
@@ -156,6 +188,7 @@ export const getMostViewedChannels = async ({
             profile: true
           }
         },
+        ownerId: true,
         live: true,
         name: true,
         streaming_category: true,

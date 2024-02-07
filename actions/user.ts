@@ -11,24 +11,32 @@ import { separateByUppercase } from '@/utils/text'
 export type UserProps = Omit<User, 'firebase_id' | 'id'> & {
   profile?: Profile | null
   channel?: Channel | null
-  follows?: Follower[]
-  subscribers?: Subscriber[]
+  follows?: Follower[] | null
+  subscribers?: Subscriber[] | null
+}
+
+async function getUserCookie() {
+  const cookieData = cookies().get('user_token_id')
+  return new Promise((resolve) =>
+    setTimeout(() => {
+      resolve(cookieData)
+    }, 1000)
+  )
 }
 
 export type CURRENTUSER = UserProps & { id: string }
 
 export const getCurrentUser = async (): Promise<CURRENTUSER | null> => {
-  let user = null
-  const token = cookies().get('user_token_id')
-
-  if (!token) {
-    return null
-  }
-
-  const firebase_id = token.value
-
   try {
-    user = await db.user.findUnique({
+    const token = cookies().get('user_token_id')
+    // const token = (await getUserCookie()) as { value: string }
+
+    if (!token) {
+      return null
+    }
+
+    const firebase_id = token.value
+    const user = await db.user.findUnique({
       select: {
         id: true,
         username: true,
@@ -50,15 +58,11 @@ export const getCurrentUser = async (): Promise<CURRENTUSER | null> => {
         firebase_id
       }
     })
-  } catch {
-    null
-  }
 
-  if (!user) {
+    return user
+  } catch {
     return null
   }
-
-  return user
 }
 
 // I'm using an object here to make it easier to add more props later if needed.
@@ -158,6 +162,11 @@ export const authenticateUser = async (firebase_id: string) => {
       path: '/'
     })
 
+    revalidatePath('/')
+    revalidatePath(`/${user.username}`)
+    revalidatePath(`/user/settings/`)
+    revalidatePath(`/u/`)
+
     return user
   } catch (error) {
     throw new Error('Internal Error')
@@ -170,7 +179,11 @@ export const signOutUser = async () => {
     if (!success) {
       throw new Error('Internal Error')
     }
+
     cookies().delete('user_token_id')
+
+    revalidatePath('/')
+    revalidatePath(`/user/settings/`)
 
     return success
   } catch {
@@ -478,6 +491,7 @@ export const updateUser = async ({
     revalidatePath('/')
     revalidatePath(`/${username}`)
     revalidatePath(`/user/settings/`)
+    revalidatePath(`/u/`)
     return user
   } catch (error) {
     throw new Error(String(error))

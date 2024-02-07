@@ -15,7 +15,7 @@ const FollowedChanels = ({
   channels: CHANNELS
   collapsed: boolean
 }) => {
-  const hasChannels = channels.length > 0
+  const hasChannels = channels?.length > 0
   return (
     <>
       <Flex

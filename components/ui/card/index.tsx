@@ -55,7 +55,7 @@ const Card = ({ title, message, streamer, disabled }: CardProps) => {
                   $width="100%"
                   aria-label="stream-description"
                 >
-                  <Flex $direction="column" $align="flex-start">
+                  <Flex $direction="column" $justify="flex-start">
                     <Title>{title}</Title>
                     <S.Message>{message}</S.Message>
                   </Flex>

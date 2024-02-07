@@ -69,6 +69,7 @@ export const updateChannel = async ({
     revalidatePath('/')
     revalidatePath(`/${channel_name}`)
     revalidatePath(`/user/settings/`)
+    revalidatePath(`/u/`)
     return channel
   } catch (error) {
     throw new Error(String(error))

@@ -11,6 +11,7 @@ import GlobalStyles from '@/styles/themes/global-styles'
 
 import { ModalProvider } from '@/components/providers/modal-provider'
 import { ToastProvider } from '@/components/providers/toast-provider'
+import { WatcherProvider } from '@/components/providers/watcher-provider'
 
 const font = Inter({ subsets: ['latin'] })
 export default function RootLayout({
@@ -27,6 +28,7 @@ export default function RootLayout({
           <body className={font.className}>
             <GlobalStyles />
             <ModalProvider />
+            <WatcherProvider />
             <ToastProvider />
             {children}
           </body>
