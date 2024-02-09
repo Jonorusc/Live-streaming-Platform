@@ -1,25 +1,23 @@
 'use client'
 
-import { CHANNELS } from '@/actions/(routes)/main'
+import { ChannelsReturn } from '@/lib/channels'
 import Card from '@/components/ui/card'
 import Flex from '@/components/ui/flex'
 import ToolTip from '@/components/ui/tooltip'
 import Typrography from '@/components/ui/typography'
 import { Heart, HeartOff } from 'lucide-react'
 import React from 'react'
+import { useFollowedChannels } from '@/hooks/use-followed-channels'
+import { Paginate } from './styles'
 
-const FollowedChanels = ({
-  channels,
-  collapsed
-}: {
-  channels: CHANNELS
-  collapsed: boolean
-}) => {
-  const hasChannels = channels?.length > 0
+const FollowedChanels = ({ collapsed }: { collapsed: boolean }) => {
+  const { channels, setPage, page, pageSize, isLoadingMore, isReachingEnd } =
+    useFollowedChannels()
+  const hasChannels = channels.length > 0
   return (
     <>
       <Flex
-        $margin="0 0 1rem 0"
+        $margin={collapsed && !hasChannels ? '0' : '0 0 1rem 0'}
         $align="center"
         $justify={collapsed ? 'center' : 'space-between'}
       >
@@ -60,18 +58,43 @@ const FollowedChanels = ({
             {channels.map((channel) => (
               <React.Fragment key={channel.name}>
                 <Card
-                  message={channel.streaming_game!}
                   title={channel.owner.username}
                   streamer={{
+                    stream_game: channel.stream_game!,
                     name: channel.owner.username,
                     picture: channel.owner.profile!.avatar!,
+                    stream_title: channel.stream_title!,
                     islive: channel.live!,
-                    viewers: channel.streaming_viewers!,
+                    viewers: channel.stream_viewers!,
                     description: channel.description!
                   }}
                 />
               </React.Fragment>
             ))}
+            {!collapsed && (
+              <>
+                <Flex
+                  $align="center"
+                  $justify="space-between"
+                  $padding="0.5rem 1rem"
+                >
+                  <Paginate
+                    disabled={isLoadingMore || isReachingEnd}
+                    onClick={() => setPage(page + 1)}
+                  >
+                    {isReachingEnd ? '' : 'See more'}
+                  </Paginate>
+                  <Paginate
+                    disabled={isLoadingMore || !isReachingEnd}
+                    onClick={() => setPage(page - 1)}
+                  >
+                    {!isReachingEnd && channels.length > pageSize
+                      ? 'See less'
+                      : ''}
+                  </Paginate>
+                </Flex>
+              </>
+            )}
           </>
         ) : (
           <>

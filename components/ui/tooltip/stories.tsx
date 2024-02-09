@@ -4,11 +4,12 @@ import Card from '@/components/ui/card'
 
 const CardProps = {
   title: 'DevByLucas',
-  message: 'League of Legends',
   streamer: {
+    stream_game: 'League of Legends',
     picture:
       'https://res.cloudinary.com/jaumlu/image/upload/v1688753296/c7av9escep1rga52nxup.png',
     name: 'DevByLucas',
+    stream_title: "Let's talk about Typescript, are you ready?",
     islive: true,
     viewers: 300
   }

@@ -70,3 +70,20 @@ export const SkeleletonWrapper = styled.div`
       0px 0px 2px rgba(0, 0, 0, 0.08);
   `};
 `
+
+export const Paginate = styled.button.attrs({
+  tabIndex: 0
+})`
+  ${({ theme }) => css`
+    outline: none;
+    border: none;
+    color: ${theme.palette.primary};
+    font-size: ${theme.font.size.xsmall};
+    font-weight: ${theme.font.light};
+    cursor: pointer;
+    background-color: transparent;
+    &:hover {
+      text-decoration: underline;
+    }
+  `}
+`

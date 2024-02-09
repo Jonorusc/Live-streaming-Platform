@@ -1,22 +1,15 @@
-import {
-  getFollowedChannels,
-  getMostViewedChannels
-} from '@/actions/(routes)/main'
+import { getMostViewedChannels } from '@/lib/channels'
 import AsideWrapper from './wrapper'
 
 const UserAside = async () => {
   const pagination = { skip: 0, take: 10 }
-  const [mostViewedChannels, followedChannels] = await Promise.all([
-    getMostViewedChannels(pagination),
-    getFollowedChannels(pagination)
+  const [mostViewedChannels] = await Promise.all([
+    getMostViewedChannels(pagination)
   ])
 
   return (
     <>
-      <AsideWrapper
-        mostViewedChannels={mostViewedChannels}
-        followedChannels={followedChannels}
-      />
+      <AsideWrapper mostViewedChannels={mostViewedChannels} />
     </>
   )
 }

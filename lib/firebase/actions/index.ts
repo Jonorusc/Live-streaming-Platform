@@ -11,7 +11,7 @@ import {
   confirmPasswordReset,
   deleteUser
 } from 'firebase/auth'
-import { app_config } from '@/utils/firebase'
+import { app_config } from '@/lib/firebase'
 
 const app = initializeApp(app_config)
 const auth = getAuth(app)

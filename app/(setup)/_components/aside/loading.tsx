@@ -1,14 +1,17 @@
+'use client'
 import Flex from '@/components/ui/flex'
 import { Skeleton } from '@/components/ui/skeleton'
 import { SkeleletonWrapper } from './styles'
+import { useReadLocalStorage } from 'usehooks-ts'
 
 export default function LoadingAside() {
+  const collapsed = useReadLocalStorage<boolean>('aside-collapsed') || false
   return (
     <SkeleletonWrapper>
       <Flex
         $height="100dvh"
         $background="surface"
-        $width="22rem"
+        $width={collapsed ? '5rem' : '22rem'}
         $align="flex-start"
         $direction="column"
         $padding="1rem"

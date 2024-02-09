@@ -1,7 +1,7 @@
 'use client'
 
 import { redirect, useRouter } from 'next/navigation'
-import { app_config } from '@/utils/firebase'
+import { app_config } from '@/lib/firebase'
 import { useSearchParams } from 'next/navigation'
 import { Suspense, useEffect, useRef } from 'react'
 import { useToast } from '@/hooks/use-toast'

@@ -1,6 +1,6 @@
 'use client'
 
-import { watchChannels } from '@/hooks/watch-channels'
+import { watchChannels } from '@/lib/pusher/watch-channels'
 import { useEffect, useState } from 'react'
 
 export const WatcherProvider = () => {

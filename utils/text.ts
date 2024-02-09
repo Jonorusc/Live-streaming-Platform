@@ -40,3 +40,10 @@ export const formateHighNumber = (number: number) => {
   }
   return number
 }
+
+export const truncate = (text: string, length: number) => {
+  if (text.length > length) {
+    return text.substring(0, length) + '...'
+  }
+  return text
+}

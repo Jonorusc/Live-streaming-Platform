@@ -28,10 +28,10 @@ export async function POST(req: Request) {
       },
       data: {
         live: true,
-        streaming_title: 'Master player playing league of legends',
-        streaming_game: 'League of Legends',
-        streaming_started_at: new Date(),
-        streaming_viewers: 40200
+        stream_title: 'Master player playing league of legends',
+        stream_game: 'League of Legends',
+        stream_started_at: new Date(),
+        stream_viewers: 40200
       },
       select: {
         live: true,
@@ -45,15 +45,15 @@ export async function POST(req: Request) {
             }
           }
         },
-        streaming_category: true,
+        stream_category: true,
         description: true,
         subscribers: true,
-        streaming_title: true,
-        streaming_viewers: true,
-        streaming_game: true,
-        streaming_thumbnail: true,
-        streaming_started_at: true,
-        streaming_ended_at: true,
+        stream_title: true,
+        stream_viewers: true,
+        stream_game: true,
+        stream_thumbnail: true,
+        stream_started_at: true,
+        stream_ended_at: true,
         followers: true,
         categories: true
       }
@@ -71,10 +71,10 @@ export async function POST(req: Request) {
       },
       data: {
         live: false,
-        streaming_thumbnail: null,
-        streaming_viewers: 0,
-        streaming_ended_at: new Date(),
-        streaming_game: null
+        stream_thumbnail: null,
+        stream_viewers: 0,
+        stream_ended_at: new Date(),
+        stream_game: null
       }
     })
 

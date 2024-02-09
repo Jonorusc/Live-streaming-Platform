@@ -1,6 +1,6 @@
 'use client'
 
-import { CHANNELS } from '@/actions/(routes)/main'
+import { ChannelsReturn } from '@/lib/channels'
 import Card from '@/components/ui/card'
 import Flex from '@/components/ui/flex'
 import ToolTip from '@/components/ui/tooltip'
@@ -12,14 +12,14 @@ const MostViewed = ({
   channels,
   collapsed
 }: {
-  channels: CHANNELS
+  channels: ChannelsReturn
   collapsed: boolean
 }) => {
-  const hasChannels = channels?.length > 0
+  const hasChannels = channels.data.length > 0
   return (
     <>
       <Flex
-        $margin="0 0 1rem 0"
+        $margin={collapsed ? '1rem 0' : '0 0 1rem 0'}
         $align="center"
         $justify={collapsed ? 'center' : 'space-between'}
       >
@@ -57,16 +57,17 @@ const MostViewed = ({
       <Flex $direction="column" {...(collapsed ? { $gapX: '1rem' } : {})}>
         {hasChannels ? (
           <>
-            {channels?.map((channel) => (
+            {channels.data.map((channel) => (
               <React.Fragment key={channel.name}>
                 <Card
-                  message={channel.streaming_game!}
                   title={channel.owner.username}
                   streamer={{
+                    stream_game: channel.stream_game!,
                     name: channel.owner.username,
                     picture: channel.owner.profile!.avatar!,
+                    stream_title: channel.stream_title!,
                     islive: channel.live!,
-                    viewers: channel.streaming_viewers!,
+                    viewers: channel.stream_viewers!,
                     description: channel.description!
                   }}
                 />

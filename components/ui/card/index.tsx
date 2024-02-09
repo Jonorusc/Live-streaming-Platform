@@ -5,17 +5,19 @@ import Flex from '@/components/ui/flex'
 import Avatar from '@/components/ui/image'
 import { Title } from '@/components/ui/toast/styles'
 import NoSsr from '@/components/NoSsr'
-import { formateHighNumber } from '@/utils/text'
+import { formateHighNumber, truncate } from '@/utils/text'
 import ToolTip from '../tooltip'
 import Typrography from '../typography'
 import Link from 'next/link'
+import { useReadLocalStorage } from 'usehooks-ts'
 
 export type CardProps = {
   title: string
-  message: string
   streamer: {
     name: string
     description?: string
+    stream_title: string
+    stream_game: string
     picture: string
     islive?: boolean
     viewers?: number
@@ -23,22 +25,15 @@ export type CardProps = {
   disabled?: boolean
 }
 
-const Card = ({ title, message, streamer, disabled }: CardProps) => {
+const Card = (props: CardProps) => {
+  const { title, streamer, disabled } = props
   return (
     <NoSsr>
       <S.Wrapper>
         <ToolTip
           $show={streamer.islive && !disabled}
           $background="surface"
-          $content={
-            <Typrography
-              $color="triadic2"
-              $fontSize="xsmall"
-              $width="max-content"
-            >
-              <span>{streamer.islive ? 'Live! Watch now' : 'Offline'}</span>
-            </Typrography>
-          }
+          $content={<CardTooltip {...props} />}
           $position="right"
         >
           <Link href={`/${streamer.name}`}>
@@ -57,16 +52,14 @@ const Card = ({ title, message, streamer, disabled }: CardProps) => {
                 >
                   <Flex $direction="column" $justify="flex-start">
                     <Title>{title}</Title>
-                    <S.Message>{message}</S.Message>
+                    <S.Message>{streamer.stream_game}</S.Message>
                   </Flex>
                   {streamer.islive ? (
                     <>
-                      {streamer.viewers && (
-                        <S.Counter>
-                          <i aria-label="redball"></i>
-                          <span>{formateHighNumber(streamer.viewers)}</span>
-                        </S.Counter>
-                      )}
+                      <S.Counter>
+                        <i aria-label="redball"></i>
+                        <span>{formateHighNumber(streamer.viewers!)}</span>
+                      </S.Counter>
                     </>
                   ) : (
                     <>
@@ -82,6 +75,61 @@ const Card = ({ title, message, streamer, disabled }: CardProps) => {
         </ToolTip>
       </S.Wrapper>
     </NoSsr>
+  )
+}
+
+const CardTooltip = ({ title, streamer }: CardProps) => {
+  const collapsed = useReadLocalStorage<boolean>('aside-collapsed') || false
+
+  return (
+    <>
+      {!collapsed ? (
+        <Typrography
+          $color="triadic2"
+          $type="span"
+          $text={`${streamer.islive ? streamer.stream_title : 'Offline'}`}
+          $fontSize="xsmall"
+          $fontWeight="light"
+          $width="min(22rem, 24rem)"
+        />
+      ) : (
+        <Flex
+          $align="flex-start"
+          $gap="0.3rem"
+          $direction="column"
+          $width="min(24rem,30rem)"
+        >
+          {streamer.islive && (
+            <>
+              <Typrography
+                $color="primary"
+                $text={`${streamer.name} ∙ ${streamer.stream_game}`}
+                $type="span"
+                $fontSize="xsmall"
+                $fontWeight="light"
+                $breakWord="break-all"
+              />
+              <Typrography
+                $color="triadic2"
+                $type="p"
+                $text={truncate(streamer.stream_title, 50)}
+                $fontSize="xsmall"
+                $fontWeight="light"
+                $breakWord="break-all"
+              />
+              <S.Counter>
+                <i aria-label="redball"></i>
+                <span>
+                  <S.Message>
+                    Live | {formateHighNumber(streamer.viewers!)} viewers
+                  </S.Message>
+                </span>
+              </S.Counter>
+            </>
+          )}
+        </Flex>
+      )}
+    </>
   )
 }
 

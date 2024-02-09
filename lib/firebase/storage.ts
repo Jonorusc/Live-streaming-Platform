@@ -7,7 +7,7 @@ import {
   listAll
 } from 'firebase/storage'
 import { initializeApp } from 'firebase/app'
-import { app_config } from '@/utils/firebase'
+import { app_config } from '@/lib/firebase'
 
 const app = initializeApp(app_config)
 
