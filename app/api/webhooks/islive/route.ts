@@ -31,7 +31,8 @@ export async function POST(req: Request) {
         stream_title: 'Master player playing league of legends',
         stream_game: 'League of Legends',
         stream_started_at: new Date(),
-        stream_viewers: 40200
+        stream_viewers: 40200,
+        live: true
       },
       select: {
         live: true,
