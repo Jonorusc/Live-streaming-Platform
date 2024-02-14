@@ -1,5 +1,4 @@
 'use client'
-import { Channel } from '@prisma/client'
 import { createIngress } from '@/actions/livekit'
 import Button from '@/components/ui/button'
 import Flex from '@/components/ui/flex'
@@ -14,7 +13,14 @@ import { Section } from '@creator/u/_components/styles'
 import { useToast } from '@/hooks/use-toast'
 import { useUser } from '@/hooks/use-user'
 
-export const Ingress = ({ channel }: { channel: Channel }) => {
+type Props = {
+  channel: {
+    id: string
+    name: string
+  }
+}
+
+export const Ingress = ({ channel }: Props) => {
   const RTMP = String(IngressInput.RTMP_INPUT)
   const WHIP = String(IngressInput.WHIP_INPUT)
   const [ingressType, setIngressType] = useState(RTMP)
@@ -66,8 +72,8 @@ export const Ingress = ({ channel }: { channel: Channel }) => {
             startTransition(async () => {
               try {
                 await createIngress(
+                  channel.name,
                   channel.id,
-                  channel.ownerId,
                   parseInt(ingressType)
                 )
                 userMutate()
@@ -104,7 +110,7 @@ export const Ingress = ({ channel }: { channel: Channel }) => {
   )
 }
 
-const CreateIngress = ({ channel }: { channel: Channel }) => {
+const CreateIngress = ({ channel }: Props) => {
   return (
     <Flex $direction="column" $gap="1rem">
       You didn't create a Stream Key yet, want to create one now?

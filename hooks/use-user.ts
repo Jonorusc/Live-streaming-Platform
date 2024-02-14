@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import { getFetcher } from '@/utils/axios-fetcher'
+import { getFetcher } from '@/lib/utils/axios-fetcher'
 import { CURRENTUSER } from '@/actions/user'
 
 const options = {

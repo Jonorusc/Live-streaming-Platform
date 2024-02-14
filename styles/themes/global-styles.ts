@@ -24,6 +24,10 @@ const GlobalStyles = createGlobalStyle`
       list-style: none;
     }
 
+    section {
+      width: 100%;
+    }
+
     body {
       background-color: ${theme.palette.background};
       transition: all 0.5s ease;

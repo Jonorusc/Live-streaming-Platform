@@ -15,7 +15,7 @@ import { DropdownItem, dropdownItems } from './dropdown-menu-items'
 
 import React, { useState, useRef, Dispatch, SetStateAction } from 'react'
 import Link from 'next/link'
-import { getLayout } from '@/utils/layout'
+import { getLayout } from '@/lib/utils/layout'
 
 const Item = ({
   title,

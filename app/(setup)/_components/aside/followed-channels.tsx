@@ -60,12 +60,12 @@ const FollowedChanels = ({ collapsed }: { collapsed: boolean }) => {
                 <Card
                   title={channel.owner.username}
                   streamer={{
-                    stream_game: channel.stream_game!,
+                    stream_game: channel.stream!.stream_game!,
                     name: channel.owner.username,
                     picture: channel.owner.profile!.avatar!,
-                    stream_title: channel.stream_title!,
-                    islive: channel.live!,
-                    viewers: channel.stream_viewers!,
+                    stream_title: channel.stream!.stream_title!,
+                    islive: channel.stream!.live!,
+                    viewers: channel.stream!.stream_viewers!,
                     description: channel.description!
                   }}
                 />

@@ -10,7 +10,7 @@ import Flex from '@/components/ui/flex'
 import NoSsr from '@/components/NoSsr'
 
 import { handlepasswordreset } from '@/lib/firebase/actions'
-import passwordStrength from '@/utils/password-strength'
+import passwordStrength from '@/lib/utils/password-strength'
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'

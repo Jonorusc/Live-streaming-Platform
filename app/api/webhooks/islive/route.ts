@@ -22,12 +22,12 @@ export async function POST(req: Request) {
     return new Response('Invalid signature', { status: 400 })
   }
   if (event.event === 'ingress_started') {
-    const channel = await db.channel.update({
+    const ingress_id = event.ingressInfo?.ingressId as string
+    const channel = await db.stream.update({
       where: {
-        stream_ingress_id: event.ingressInfo?.ingressId
+        stream_ingress_id: ingress_id
       },
       data: {
-        live: true,
         stream_title: 'Master player playing league of legends',
         stream_game: 'League of Legends',
         stream_started_at: new Date(),
@@ -35,37 +35,31 @@ export async function POST(req: Request) {
       },
       select: {
         live: true,
-        name: true,
-        owner: {
+        channel: {
           include: {
-            profile: {
+            owner: {
               select: {
-                avatar: true
+                profile: true
               }
             }
           }
         },
         stream_category: true,
-        description: true,
-        subscribers: true,
         stream_title: true,
         stream_viewers: true,
         stream_game: true,
         stream_thumbnail: true,
         stream_started_at: true,
-        stream_ended_at: true,
-        followers: true,
-        categories: true
+        stream_ended_at: true
       }
     })
-
     if (channel) {
       pusherServer.trigger('channel', 'live', channel)
     }
   }
 
   if (event.event === 'ingress_ended') {
-    const channel = await db.channel.update({
+    const channel = await db.stream.update({
       where: {
         stream_ingress_id: event.ingressInfo?.ingressId
       },
@@ -77,7 +71,6 @@ export async function POST(req: Request) {
         stream_game: null
       }
     })
-
     if (channel) pusherServer.trigger('channel', 'live_ended', channel)
   }
 

@@ -48,7 +48,7 @@ export function watchChannels() {
                 name: data.name as string
               },
               title: `${data.name} is live now!`,
-              message: `Playing ${data.stream_game}`
+              message: `Playing ${data.stream?.stream_game}`
             }
           })
           mutateFollowed()

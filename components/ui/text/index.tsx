@@ -4,7 +4,7 @@ import { useFormContext } from 'react-hook-form'
 
 import { COLORS, TEXTFIELD_TYPES } from '@/components/ui/types'
 import { Responses } from '@/components/ui/logos/svg'
-import passwordStrength from '@/utils/password-strength'
+import passwordStrength from '@/lib/utils/password-strength'
 import Flex from '@/components/ui/flex'
 
 import ReactLoading from 'react-loading'

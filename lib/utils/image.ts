@@ -36,7 +36,7 @@ export const generateUserBackgroundImage = async (
   return imageDataURL
 }
 
-// see how i created that: https://devbylucas.vercel.app/project/dynamic-username-background
+// see how I created that: https://devbylucas.vercel.app/project/dynamic-username-background
 
 export const toDataUrl = (url: string, callback: (data: string) => void) => {
   var xhr = new XMLHttpRequest()

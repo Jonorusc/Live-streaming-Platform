@@ -7,7 +7,8 @@ import {
   Profile,
   User,
   Subscriber,
-  Follower
+  Follower,
+  Stream
 } from '@prisma/client'
 import { getCurrentUser } from '@/actions/user'
 
@@ -16,24 +17,25 @@ export type Pagination = {
   take?: number
 }
 
+export type CLIENT_CHANNEL = Channel & {
+  owner: User & { profile: Profile | null }
+} & {
+  stream: Omit<
+    Stream,
+    'stream_key' | 'stream_server_url' | 'stream_ingress_id'
+  > | null
+}
+
 export type CHANNEL = {
+  id: string
   name: string | null
   description: string | null
-  owner: Omit<User, 'firebase_id' | 'id'> & {
-    profile: Profile | null
-  }
+  owner: User & { profile: Profile | null }
   ownerId: string | null
-  stream_viewers: number | null
-  stream_title: string | null
-  stream_game: string | null
-  stream_thumbnail: string | null
-  stream_started_at: Date | null
-  stream_ended_at: Date | null
+  stream: Stream | null
   subscribers: Subscriber[] | null
   followers: Follower[] | null
   categories: GAMES_CATEGORIES[] | null
-  stream_category: GAMES_CATEGORIES | null
-  live: boolean
 }
 
 export type CHANNELS = CHANNEL[]
@@ -76,25 +78,19 @@ export const getFollowedChannels = async ({
         select: {
           channel: {
             select: {
+              id: true,
+              name: true,
+              description: true,
+              ownerId: true,
+              stream: true,
+              subscribers: true,
+              followers: true,
+              categories: true,
               owner: {
                 include: {
                   profile: true
                 }
-              },
-              ownerId: true,
-              live: true,
-              name: true,
-              stream_category: true,
-              description: true,
-              subscribers: true,
-              stream_title: true,
-              stream_viewers: true,
-              stream_game: true,
-              stream_thumbnail: true,
-              stream_started_at: true,
-              stream_ended_at: true,
-              followers: true,
-              categories: true
+              }
             }
           }
         },
@@ -103,17 +99,23 @@ export const getFollowedChannels = async ({
         orderBy: [
           {
             channel: {
-              live: 'desc'
+              stream: {
+                live: 'desc'
+              }
             }
           },
           {
             channel: {
-              stream_viewers: 'desc'
+              stream: {
+                stream_viewers: 'desc'
+              }
             }
           },
           {
             channel: {
-              stream_started_at: 'desc'
+              stream: {
+                stream_started_at: 'desc'
+              }
             }
           }
         ]
@@ -178,18 +180,22 @@ export const getMostViewedChannels = async ({
         skip: skip * take,
         orderBy: [
           {
-            stream_viewers: 'desc'
+            stream: {
+              stream_viewers: 'desc'
+            }
           }
         ],
         where: {
-          live: true,
+          stream: {
+            live: true
+          },
           AND: [
             {
               NOT: {
-                ownerId: currentUser?.id || undefined,
                 owner: {
                   deactivated: true
                 },
+                ownerId: currentUser?.id || undefined,
                 followers: {
                   some: {
                     id: currentUser?.id || undefined
@@ -200,30 +206,26 @@ export const getMostViewedChannels = async ({
           ]
         },
         select: {
+          id: true,
           owner: {
             include: {
               profile: true
             }
           },
           ownerId: true,
-          live: true,
           name: true,
-          stream_category: true,
+          stream: true,
           description: true,
           subscribers: true,
-          stream_title: true,
-          stream_viewers: true,
-          stream_game: true,
-          stream_thumbnail: true,
-          stream_started_at: true,
-          stream_ended_at: true,
           followers: true,
           categories: true
         }
       }),
       db.channel.count({
         where: {
-          live: true,
+          stream: {
+            live: true
+          },
           AND: [
             {
               NOT: {
@@ -264,7 +266,9 @@ export const getAllLiveChannels = async ({
         take,
         skip: skip * take,
         where: {
-          live: true,
+          stream: {
+            live: true
+          },
           AND: [
             {
               NOT: {
@@ -277,30 +281,26 @@ export const getAllLiveChannels = async ({
           ]
         },
         select: {
+          id: true,
           owner: {
             include: {
               profile: true
             }
           },
           ownerId: true,
-          live: true,
           name: true,
-          stream_category: true,
           description: true,
           subscribers: true,
-          stream_title: true,
-          stream_viewers: true,
-          stream_game: true,
-          stream_thumbnail: true,
-          stream_started_at: true,
-          stream_ended_at: true,
+          stream: true,
           followers: true,
           categories: true
         }
       }),
       db.channel.count({
         where: {
-          live: true,
+          stream: {
+            live: true
+          },
           AND: [
             {
               NOT: {

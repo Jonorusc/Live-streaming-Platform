@@ -1,10 +1,13 @@
-'use client'
-import { useUser } from '@/hooks/use-user'
 import SettingsLoading from '@main/user/settings/_components/loading'
 import StreamPage from '../../_components/stream'
+import { Suspense } from 'react'
 
-export default function Page() {
-  const { user, isLoading } = useUser()
-  if (!user || isLoading) return <SettingsLoading />
-  return <StreamPage user={user} />
+export default async function Page() {
+  return (
+    <>
+      <Suspense fallback={<SettingsLoading />}>
+        <StreamPage />
+      </Suspense>
+    </>
+  )
 }

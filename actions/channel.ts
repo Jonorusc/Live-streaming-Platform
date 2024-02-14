@@ -1,39 +1,46 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { Channel } from '@prisma/client'
-import { getCurrentUser } from './user'
 import { revalidatePath } from 'next/cache'
+import { CHANNEL } from '@/lib/channels'
+import { Channel } from '@prisma/client'
 
-export const fetchChannel = async (
+export const getChannelByName = async (
   channel_name: string
-): Promise<Channel | null> => {
+): Promise<CHANNEL | null> => {
   if (!channel_name) {
     throw new Error('Channel name is required')
   }
 
-  const currentUser = await getCurrentUser()
-
-  if (!currentUser) {
-    throw new Error('Internal Error')
-  }
-
-  let channel = null
   try {
-    channel = await db.channel.findUnique({
+    const channel = await db.channel.findUnique({
       where: {
         name: channel_name,
         NOT: {
-          ownerId: currentUser.id,
           owner: {
             deactivated: true
           }
         }
+      },
+      select: {
+        id: true,
+        owner: {
+          include: {
+            profile: true
+          }
+        },
+        ownerId: true,
+        stream: true,
+        name: true,
+        description: true,
+        subscribers: true,
+        followers: true,
+        categories: true
       }
     })
 
     if (!channel) {
-      return channel
+      return null
     }
 
     return channel

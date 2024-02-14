@@ -13,7 +13,7 @@ import NoSsr from '@/components/NoSsr'
 import Slider from '@/components/ui/slider'
 import Flex from '@/components/ui/flex'
 import Grid from '@/components/ui/grid'
-import { toDataUrl } from '@/utils/image'
+import { toDataUrl } from '@/lib/utils/image'
 
 const EditProfilePicture = ({
   file,

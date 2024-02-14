@@ -7,7 +7,7 @@ import { Search } from 'lucide-react'
 import React, { useState, useRef, useEffect } from 'react'
 import { debounce } from 'lodash'
 import useClickOutside from '@/hooks/use-clickoutside'
-import { useWidth } from '@/utils/screen'
+import { useWidth } from '@/lib/utils/screen'
 
 import { type RESULT, searchQuery } from '@/actions/user'
 import Avatar from '@/components/ui/image'
@@ -71,7 +71,7 @@ export const Searcher = () => {
   }
 
   const handleSearchClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log('clicked')
+    // console.log('clicked')
   }
 
   const output = (username: string) => {
@@ -103,49 +103,51 @@ export const Searcher = () => {
         </button>
       </S.Search>
       {active && (
-        <S.Results>
-          {result.map((user) => (
-            <Link href={`/${user.username}`} key={user.username}>
-              <Flex $align="center" $justify="space-between">
-                <Flex $align="center" $gapY="0.6rem" $padding="0.5rem">
-                  {user.channel ? (
-                    <Avatar
-                      $url={user.profile!.avatar}
-                      alt={user.username}
-                      $size={30}
-                      $rounded
-                    />
-                  ) : (
-                    <Search size={20} />
-                  )}
-                  <Typrography $color="triadic2" $fontSize="small">
-                    <span>
-                      <Flex $align="center">{output(user.username)}</Flex>
-                    </span>
-                  </Typrography>
-                </Flex>
-                {user.channel?.live && (
-                  <Flex $align="center">
-                    <S.Streaming>Live</S.Streaming>
+        <>
+          <S.Results>
+            {result.map((user) => (
+              <Link href={`/${user.username}`} key={user.username}>
+                <Flex $align="center" $justify="space-between">
+                  <Flex $align="center" $gapY="0.6rem" $padding="0.5rem">
+                    {user.channel ? (
+                      <Avatar
+                        $url={user.profile!.avatar}
+                        alt={user.username}
+                        $size={30}
+                        $rounded
+                      />
+                    ) : (
+                      <Search size={20} />
+                    )}
+                    <Typrography $color="triadic2" $fontSize="small">
+                      <span>
+                        <Flex $align="center">{output(user.username)}</Flex>
+                      </span>
+                    </Typrography>
                   </Flex>
-                )}
-              </Flex>
-            </Link>
-          ))}
-          {search.length >= 5 && (
-            <Link href={`/${search}`}>
-              <Flex $align="center" $gapY="0.5rem" $margin="0.5rem 0 0 0">
-                {/* I'm using 5 because it's the minimum to create a username, so if the user searches for a string with length less than 6 he will receive the 404 page */}
-                <Typrography
-                  $color="triadic2"
-                  $fontSize="small"
-                  $type="span"
-                  $text={`Go to "${search}"`}
-                />
-              </Flex>
-            </Link>
-          )}
-        </S.Results>
+                  {user.channel?.stream?.live && (
+                    <Flex $align="center">
+                      <S.Streaming>Live</S.Streaming>
+                    </Flex>
+                  )}
+                </Flex>
+              </Link>
+            ))}
+            {search.length >= 5 && (
+              <Link href={`/${search}`}>
+                <Flex $align="center" $gapY="0.5rem" $margin="0.5rem 0 0 0">
+                  {/* I'm using 5 because it's the minimum to create a username, so if the user searches for a string with length less than 6 he will receive the 404 page */}
+                  <Typrography
+                    $color="triadic2"
+                    $fontSize="small"
+                    $type="span"
+                    $text={`Go to "${search}"`}
+                  />
+                </Flex>
+              </Link>
+            )}
+          </S.Results>
+        </>
       )}
     </S.SearchBox>
   )

@@ -11,7 +11,7 @@ import ReactLoading from 'react-loading'
 import { useToast } from '@/hooks/use-toast'
 import { useForm, FormProvider } from 'react-hook-form'
 import { z } from 'zod'
-import { invalidUsernames } from '@/utils/invalid-things'
+import { invalidUsernames } from '@/lib/utils/invalid-things'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { CURRENTUSER, updateUser, verifyUserName } from '@/actions/user'
@@ -23,7 +23,7 @@ import { updatePathInStorage } from '@/lib/firebase/storage'
 const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
   const server = useFormStatus()
   const usernameUpdatedAt = user.username_updated_at
-  const [canUpdateUsername, setCanUpdateUsername] = useState(false)
+  const [canUpdateUsername, setCanUpdateUsername] = useState(true)
   const [areFieldsAble, setAreFieldsAble] = useState(false)
   const [daysLeft, setDaysLeft] = useState(0)
 
@@ -36,8 +36,8 @@ const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
         // adding 0.5 to the result before calling Math.floor effectively rounds the result to the nearest whole number. This means that if the username was updated less than 12 hours ago, daysSinceUpdate will be 0, and daysLeft will be 30. If the username was updated more than 12 hours ago, daysSinceUpdate will be 1, and daysLeft will be 29.
       )
 
-      if (daysSinceUpdate >= 30) {
-        setCanUpdateUsername(true)
+      if (daysSinceUpdate < 30) {
+        setCanUpdateUsername(false)
       } else {
         setDaysLeft(30 - daysSinceUpdate)
       }

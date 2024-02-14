@@ -28,9 +28,7 @@ export const Wrapper = styled(motion.aside).attrs({
     /* padding: 0.5rem; */
     flex-shrink: 0;
     background-color: ${theme.palette.surface};
-    transition:
-      background-color 150ms ease,
-      width 75ms ease;
+    transition: background-color 150ms ease;
 
     ${$collapsed &&
     css`

@@ -14,7 +14,7 @@ import { useToast } from '@/hooks/use-toast'
 
 import { CURRENTUSER, updateUserProfile } from '@/actions/user'
 import { deleteFromStorage } from '@/lib/firebase/storage'
-import { separateByUppercase } from '@/utils/text'
+import { separateByUppercase } from '@/lib/utils/text'
 
 const ProfilePicturePage = ({ user }: { user: CURRENTUSER }) => {
   const { onOpen } = useModal()

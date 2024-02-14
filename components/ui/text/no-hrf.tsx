@@ -3,7 +3,7 @@ import React, { useState, useMemo } from 'react'
 
 import { TEXTFIELD_TYPES, COLORS } from '@/components/ui/types'
 import { Responses } from '@/components/ui/logos/svg'
-import passwordStrength from '@/utils/password-strength'
+import passwordStrength from '@/lib/utils/password-strength'
 import Flex from '@/components/ui/flex'
 import Icon from '@/components/ui/icon'
 

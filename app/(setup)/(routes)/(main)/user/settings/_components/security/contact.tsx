@@ -9,7 +9,7 @@ import ReactLoading from 'react-loading'
 
 import { sendemailverification } from '@/lib/firebase/actions'
 import { useState, useTransition, useEffect } from 'react'
-import { emailMask } from '@/utils/masks'
+import { emailMask } from '@/lib/utils/masks'
 import { Eye, EyeOff, Pencil } from 'lucide-react'
 
 import EditUserEmail from './edit-email'

@@ -13,25 +13,6 @@ import { TrackSource } from 'livekit-server-sdk/dist/proto/livekit_models'
 
 const ingressClient = new IngressClient(process.env.LIVEKIT_API_URL!)
 
-export const createStreamerToken = async (channelName: string) => {
-  const token = new AccessToken(
-    process.env.LIVEKIT_API_KEY,
-    process.env.LIVEKIT_API_SECRET,
-    {
-      identity: channelName
-    }
-  )
-
-  token.addGrant({
-    room: channelName,
-    roomJoin: true,
-    canPublish: true,
-    canPublishData: true
-  })
-
-  return await Promise.resolve(token.toJwt())
-}
-
 export const createViewerToken = async (
   channelRoom: string,
   identity: string
@@ -47,7 +28,7 @@ export const createViewerToken = async (
   token.addGrant({
     room: channelRoom,
     roomJoin: true,
-    canPublish: false,
+    canPublish: channelRoom === identity,
     canPublishData: true
   })
 
@@ -56,7 +37,7 @@ export const createViewerToken = async (
 
 export const createIngress = async (
   channelName: string,
-  ownerId: string,
+  channelId: string,
   ingressType: IngressInput
 ) => {
   const options: CreateIngressOptions = {
@@ -82,14 +63,18 @@ export const createIngress = async (
   const ingress = await ingressClient.createIngress(ingressType, options)
 
   try {
-    await db.channel.update({
-      where: { ownerId },
+    const stream = await db.stream.create({
       data: {
-        stream_ingress_id: ingress.ingressId,
-        stream_key: ingress.streamKey,
-        stream_server_url: ingress.url
+        channelId,
+        stream_ingress_id: ingress.ingressId as string,
+        stream_key: ingress.streamKey as string,
+        stream_server_url: ingress.url as string
       }
     })
+
+    if (!stream) {
+      throw new Error('Failed to save stream')
+    }
   } catch (error) {
     if (ingress.ingressId) {
       await ingressClient.deleteIngress(ingress.ingressId)
@@ -110,4 +95,8 @@ export const resetIngresses = async () => {
       await ingressClient.deleteIngress(ingress.ingressId)
     }
   }
+}
+
+export const deleteIngress = async (ingressId: string) => {
+  await ingressClient.deleteIngress(ingressId)
 }

@@ -1,5 +1,5 @@
 import useSWRInfinite from 'swr/infinite'
-import { getFetcher } from '@/utils/axios-fetcher'
+import { getFetcher } from '@/lib/utils/axios-fetcher'
 import { CHANNELS } from '@/lib/channels'
 
 const options = {

@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import PlaySound from '@/utils/play-sound'
+import PlaySound from '@/lib/utils/play-sound'
 
 export type POSITION = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
 export type TYPE = 'success' | 'error' | 'warning' | 'info' | 'islive'

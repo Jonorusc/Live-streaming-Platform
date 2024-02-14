@@ -8,6 +8,7 @@ import StyledComponentsRegistry from '@/lib/styled_components/registry'
 
 import { defaultTheme } from '@/styles/themes/default-theme'
 import GlobalStyles from '@/styles/themes/global-styles'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 import { ModalProvider } from '@/components/providers/modal-provider'
 import { ToastProvider } from '@/components/providers/toast-provider'
@@ -31,6 +32,7 @@ export default function RootLayout({
             <WatcherProvider />
             <ToastProvider />
             {children}
+            <SpeedInsights />
           </body>
         </ThemeProvider>
       </StyledComponentsRegistry>

@@ -9,7 +9,7 @@ import ReactLoading from 'react-loading'
 
 import { sendpasswordresetemail } from '@/lib/firebase/actions'
 import { useState, useTransition, useEffect } from 'react'
-import { emailMask } from '@/utils/masks'
+import { emailMask } from '@/lib/utils/masks'
 import { Responses } from '@/components/ui/logos/svg'
 
 const UserSecurityPage = ({

@@ -5,8 +5,15 @@ import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
 import { signup, signout } from '@/lib/firebase/auth'
 import { sendemailverification } from '@/lib/firebase/actions'
-import { Profile, User, Channel, Follower, Subscriber } from '@prisma/client'
-import { separateByUppercase } from '@/utils/text'
+import {
+  Profile,
+  User,
+  Channel,
+  Follower,
+  Subscriber,
+  Stream
+} from '@prisma/client'
+import { separateByUppercase } from '@/lib/utils/text'
 
 export type UserProps = Omit<User, 'firebase_id' | 'id'> & {
   profile?: Profile | null
@@ -299,7 +306,9 @@ export type RESULT = {
   } | null
   channel: {
     name: string
-    live: boolean
+    stream: {
+      live: boolean
+    } | null
   } | null
 }[]
 
@@ -336,7 +345,11 @@ export const searchQuery = async (query: string): Promise<RESULT | null> => {
         channel: {
           select: {
             name: true,
-            live: true
+            stream: {
+              select: {
+                live: true
+              }
+            }
           }
         }
       },
