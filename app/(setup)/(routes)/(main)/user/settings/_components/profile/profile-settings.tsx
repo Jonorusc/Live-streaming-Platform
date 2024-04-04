@@ -19,6 +19,7 @@ import { useEffect, useState } from 'react'
 import { useFormStatus } from 'react-dom'
 import { updateChannel } from '@/actions/channel'
 import { updatePathInStorage } from '@/lib/firebase/storage'
+import { generateUserBackgroundImage } from '@/lib/utils/image'
 
 const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
   const server = useFormStatus()
@@ -116,6 +117,9 @@ const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
           newFileName: `${data.username}-avatar`
         })
 
+        // generate user background according to his username
+        const img = await generateUserBackgroundImage(data.username as string)
+
         if (paths.length < 0) {
           throw new Error('Something went wrong. Please try again later.')
         }
@@ -126,7 +130,8 @@ const ProfileSettingsPage = ({ user }: { user: CURRENTUSER }) => {
             username: data.username,
             profile: {
               update: {
-                avatar: paths[0]
+                avatar: paths[0],
+                background_img: img
               }
             }
           }

@@ -18,7 +18,7 @@ export default function Page({ channel_name }: { channel_name: string }) {
         token={storedToken}
         serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL}
       >
-        <Test channel_name={channel_name} />
+        <Test channel_name={channel_name} user={user} />
       </LiveKitRoom>
     </section>
   )

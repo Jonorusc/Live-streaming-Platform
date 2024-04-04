@@ -7,8 +7,6 @@ const UserAside = async () => {
     getMostViewedChannels(pagination)
   ])
 
-  console.log(mostViewedChannels)
-
   return (
     <>
       <AsideWrapper mostViewedChannels={mostViewedChannels} />

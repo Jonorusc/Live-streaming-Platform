@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
 import { jwtDecode } from 'jwt-decode'
-import { useLocalStorage } from 'usehooks-ts'
+import { useSessionStorage } from 'usehooks-ts'
 import { createViewerToken } from '@/actions/livekit'
 import { useToast } from './use-toast'
 
 export const useViewerToken = (channel_name: string, username: string) => {
-  const [storedToken, setStoredToken] = useLocalStorage(
+  const [storedToken, setStoredToken] = useSessionStorage(
     `${channel_name}-viewer-token`,
     ''
   )

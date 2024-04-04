@@ -15,6 +15,7 @@ import { Video } from 'lucide-react'
 import { COLORS } from '@/components/ui/types'
 import { useUser } from '@/hooks/use-user'
 import { defaultTheme } from '@/styles/themes/default-theme'
+import { generateUserBackgroundImage } from '@/lib/utils/image'
 
 const ChannelColor = ({ user }: { user: CURRENTUSER }) => {
   const [theme] = useLocalStorage('theme', defaultTheme)
@@ -55,20 +56,28 @@ const ChannelColor = ({ user }: { user: CURRENTUSER }) => {
     .filter((value, index, self) => self.indexOf(value) === index)
 
   const handleSaveChanges = () => {
-    startTransition(() => {
-      // save changes to db
-      updateUser({
-        username: user.username,
-        value: {
-          profile: {
-            update: {
-              color
+    startTransition(async () => {
+      try {
+        // generate user background according to his username
+        const img = await generateUserBackgroundImage(user.username, color)
+        // save changes to db
+        await updateUser({
+          username: user.username,
+          value: {
+            profile: {
+              update: {
+                color,
+                background_image: img
+              }
             }
           }
-        }
-      })
-      setSaved(true)
-      userMutate()
+        })
+        setSaved(true)
+        userMutate()
+      } catch {
+        setSaved(false)
+        // OBS: add error toast
+      }
     })
   }
 

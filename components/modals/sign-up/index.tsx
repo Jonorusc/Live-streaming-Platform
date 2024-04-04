@@ -27,6 +27,7 @@ import { useToast } from '@/hooks/use-toast'
 import useClickOutside from '@/hooks/use-clickoutside'
 import ReactLoading from 'react-loading'
 import NoSsr from '@/components/NoSsr'
+import { generateUserBackgroundImage } from '@/lib/utils/image'
 
 export type SignUpModalProps = {}
 const SignUpModal = (props: SignUpModalProps) => {
@@ -119,7 +120,15 @@ const SignUpModal = (props: SignUpModalProps) => {
 
   const onSubmit = async (data: z.infer<typeof schema>) => {
     try {
-      await createUser(data)
+      // generate user background according to his username
+      const img = await generateUserBackgroundImage(data.username)
+
+      await createUser({
+        ...data,
+        profile: {
+          background_image: img
+        }
+      })
       mutate('/api/user')
 
       addToast({
