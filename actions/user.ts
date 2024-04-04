@@ -76,11 +76,13 @@ export const getCurrentUser = async (): Promise<CURRENTUSER | null> => {
 export const createUser = async ({
   username,
   email,
-  password
+  password,
+  profile
 }: {
   username: string
   email: string
   password: string
+  profile?: Partial<Profile>
 }) => {
   if (!username || !email || !password) {
     throw new Error('Complete all fields')
@@ -105,6 +107,7 @@ export const createUser = async ({
         firebase_id: firebaseUser.uid,
         profile: {
           create: {
+            ...profile,
             // avatar generation api
             avatar: `https://api.dicebear.com/7.x/initials/png?seed=${initals}`
           }
